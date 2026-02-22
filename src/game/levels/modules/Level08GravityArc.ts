@@ -9,8 +9,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 33,
-      minDelay: 1.4,
-      maxDelay: 2,
+      minDelay: 0.28,
+      maxDelay: 0.4,
       enemies: [
         { enemyId: 'lane-jammer', weight: 0.75 },
         { enemyId: 'feign-retreat', weight: 0.75 },
@@ -20,8 +20,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 33,
       endAt: 66,
-      minDelay: 1.3,
-      maxDelay: 1.9,
+      minDelay: 0.26,
+      maxDelay: 0.38,
       enemies: [
         { enemyId: 'lane-jammer', weight: 0.7 },
         { enemyId: 'mine-layer', weight: 0.7 },
@@ -32,8 +32,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 66,
       endAt: 99,
-      minDelay: 1.2,
-      maxDelay: 1.8,
+      minDelay: 0.24,
+      maxDelay: 0.36,
       enemies: [
         { enemyId: 'gravity-well', weight: 0.6 },
         { enemyId: 'lane-jammer', weight: 0.65 },
@@ -45,8 +45,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 99,
       endAt: 132,
-      minDelay: 1.05,
-      maxDelay: 1.65,
+      minDelay: 0.21,
+      maxDelay: 0.33,
       enemies: [
         { enemyId: 'gravity-well', weight: 0.75 },
         { enemyId: 'lane-jammer', weight: 0.75 },
@@ -57,8 +57,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 132,
       endAt: 165,
-      minDelay: 0.95,
-      maxDelay: 1.55,
+      minDelay: 0.19,
+      maxDelay: 0.31,
       enemies: [
         { enemyId: 'gravity-well', weight: 0.95 },
         { enemyId: 'lane-jammer', weight: 0.8 },

@@ -9,8 +9,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 30,
-      minDelay: 1.4,
-      maxDelay: 2,
+      minDelay: 0.28,
+      maxDelay: 0.4,
       enemies: [
         { enemyId: 'mine-layer', weight: 0.75 },
         { enemyId: 'feign-retreat', weight: 0.7 },
@@ -20,8 +20,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 30,
       endAt: 60,
-      minDelay: 1.3,
-      maxDelay: 1.9,
+      minDelay: 0.26,
+      maxDelay: 0.38,
       enemies: [
         { enemyId: 'mine-layer', weight: 0.7 },
         { enemyId: 'feign-retreat', weight: 0.7 },
@@ -32,8 +32,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 60,
       endAt: 90,
-      minDelay: 1.2,
-      maxDelay: 1.8,
+      minDelay: 0.24,
+      maxDelay: 0.36,
       enemies: [
         { enemyId: 'lane-jammer', weight: 0.65 },
         { enemyId: 'mine-layer', weight: 0.65 },
@@ -45,8 +45,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 90,
       endAt: 120,
-      minDelay: 1.05,
-      maxDelay: 1.65,
+      minDelay: 0.21,
+      maxDelay: 0.33,
       enemies: [
         { enemyId: 'lane-jammer', weight: 0.8 },
         { enemyId: 'feign-retreat', weight: 0.7 },
@@ -57,8 +57,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 120,
       endAt: 150,
-      minDelay: 0.95,
-      maxDelay: 1.55,
+      minDelay: 0.19,
+      maxDelay: 0.31,
       enemies: [
         { enemyId: 'lane-jammer', weight: 1 },
         { enemyId: 'mine-layer', weight: 0.75 },

@@ -9,8 +9,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 30,
-      minDelay: 1.6,
-      maxDelay: 2.2,
+      minDelay: 0.32,
+      maxDelay: 0.44,
       enemies: [
         { enemyId: 'shield-front', weight: 0.7 },
         { enemyId: 'pulse-ram', weight: 0.65 },
@@ -20,8 +20,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 30,
       endAt: 60,
-      minDelay: 1.4,
-      maxDelay: 2,
+      minDelay: 0.28,
+      maxDelay: 0.4,
       enemies: [
         { enemyId: 'shield-front', weight: 0.65 },
         { enemyId: 'pulse-ram', weight: 0.7 },
@@ -32,8 +32,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 60,
       endAt: 90,
-      minDelay: 1.35,
-      maxDelay: 1.95,
+      minDelay: 0.27,
+      maxDelay: 0.39,
       enemies: [
         { enemyId: 'mine-layer', weight: 0.65 },
         { enemyId: 'feign-retreat', weight: 0.5 },
@@ -45,8 +45,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 90,
       endAt: 120,
-      minDelay: 1.25,
-      maxDelay: 1.85,
+      minDelay: 0.25,
+      maxDelay: 0.37,
       enemies: [
         { enemyId: 'mine-layer', weight: 0.7 },
         { enemyId: 'feign-retreat', weight: 0.7 },
@@ -57,8 +57,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 120,
       endAt: 150,
-      minDelay: 1.1,
-      maxDelay: 1.8,
+      minDelay: 0.22,
+      maxDelay: 0.36,
       enemies: [
         { enemyId: 'feign-retreat', weight: 0.9 },
         { enemyId: 'mine-layer', weight: 0.9 },

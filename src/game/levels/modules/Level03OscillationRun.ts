@@ -9,8 +9,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 24,
-      minDelay: 1.9,
-      maxDelay: 2.7,
+      minDelay: 0.38,
+      maxDelay: 0.54,
       enemies: [
         { enemyId: 'raider', weight: 0.8 },
         { enemyId: 'wave-eel', weight: 0.8 },
@@ -20,8 +20,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 24,
       endAt: 48,
-      minDelay: 1.8,
-      maxDelay: 2.5,
+      minDelay: 0.36,
+      maxDelay: 0.5,
       enemies: [
         { enemyId: 'wave-eel', weight: 0.8 },
         { enemyId: 'saw-drift', weight: 0.65 },
@@ -32,8 +32,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 48,
       endAt: 72,
-      minDelay: 1.7,
-      maxDelay: 2.3,
+      minDelay: 0.34,
+      maxDelay: 0.46,
       enemies: [
         { enemyId: 'wave-eel', weight: 0.75 },
         { enemyId: 'saw-drift', weight: 0.7 },
@@ -45,8 +45,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 72,
       endAt: 96,
-      minDelay: 1.5,
-      maxDelay: 2.1,
+      minDelay: 0.3,
+      maxDelay: 0.42,
       enemies: [
         { enemyId: 'hunter', weight: 0.7 },
         { enemyId: 'berserk-reaver', weight: 0.55 },
@@ -57,8 +57,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 96,
       endAt: 120,
-      minDelay: 1.4,
-      maxDelay: 2,
+      minDelay: 0.28,
+      maxDelay: 0.4,
       enemies: [
         { enemyId: 'yoyo-striker', weight: 0.95 },
         { enemyId: 'sniper-lock', weight: 0.8 },

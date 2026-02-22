@@ -10,15 +10,15 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 2.5,
-      minDelay: 1.2,
-      maxDelay: 1.5,
+      minDelay: 0.24,
+      maxDelay: 0.3,
       enemies: [{ enemyId: 'raider', weight: 1 }]
     },
     {
       startAt: 2.5,
       endAt: 4,
-      minDelay: 1,
-      maxDelay: 1.2,
+      minDelay: 0.2,
+      maxDelay: 0.24,
       enemies: [
         { enemyId: 'raider', weight: 0.7 },
         { enemyId: 'wave-eel', weight: 0.5 }
@@ -27,8 +27,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 3,
       endAt: 4,
-      minDelay: 0.85,
-      maxDelay: 1,
+      minDelay: 0.17,
+      maxDelay: 0.2,
       enemies: [
         { enemyId: 'wave-eel', weight: 0.7 },
         { enemyId: 'saw-drift', weight: 0.6 }

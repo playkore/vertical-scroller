@@ -9,8 +9,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 0,
       endAt: 33,
-      minDelay: 1.3,
-      maxDelay: 1.9,
+      minDelay: 0.26,
+      maxDelay: 0.38,
       enemies: [
         { enemyId: 'gravity-well', weight: 0.75 },
         { enemyId: 'lane-jammer', weight: 0.75 },
@@ -20,8 +20,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 33,
       endAt: 66,
-      minDelay: 1.2,
-      maxDelay: 1.7,
+      minDelay: 0.24,
+      maxDelay: 0.34,
       enemies: [
         { enemyId: 'gravity-well', weight: 0.7 },
         { enemyId: 'lane-jammer', weight: 0.7 },
@@ -32,8 +32,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 66,
       endAt: 99,
-      minDelay: 1.1,
-      maxDelay: 1.6,
+      minDelay: 0.22,
+      maxDelay: 0.32,
       enemies: [
         { enemyId: 'escort-core', weight: 0.62 },
         { enemyId: 'undercut-hunter', weight: 0.5 },
@@ -45,8 +45,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 99,
       endAt: 132,
-      minDelay: 1,
-      maxDelay: 1.5,
+      minDelay: 0.2,
+      maxDelay: 0.3,
       enemies: [
         { enemyId: 'escort-core', weight: 0.75 },
         { enemyId: 'undercut-hunter', weight: 0.72 },
@@ -57,8 +57,8 @@ export const levelModule: LevelDefinition = {
     {
       startAt: 132,
       endAt: 165,
-      minDelay: 0.9,
-      maxDelay: 1.4,
+      minDelay: 0.18,
+      maxDelay: 0.28,
       enemies: [
         { enemyId: 'escort-core', weight: 0.95 },
         { enemyId: 'undercut-hunter', weight: 0.9 },
