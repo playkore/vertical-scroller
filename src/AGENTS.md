@@ -59,6 +59,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id).
   - `LevelRegistry.ts`: Central registry for available levels.
   - `modules/Level01NeonFrontier.ts`: First level timeline and enemy rollout rules.
+  - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 
