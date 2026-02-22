@@ -29,7 +29,7 @@ export class ShipSelectorUI {
 
     ships.forEach((ship) => {
       const bg = this.scene.add
-        .rectangle(0, 0, 70, BUTTON_HEIGHT, CGA_NUM.black, 0.85)
+        .rectangle(0, 0, 70, BUTTON_HEIGHT, CGA_NUM.black, 1)
         .setStrokeStyle(2, CGA_NUM.cyan)
         .setDepth(100)
         .setScrollFactor(0)
@@ -85,7 +85,7 @@ export class ShipSelectorUI {
     this.buttons.forEach((button) => {
       const isActive = button.id === this.activeId;
       button.bg.setStrokeStyle(2, isActive ? CGA_NUM.white : CGA_NUM.cyan);
-      button.bg.setFillStyle(isActive ? CGA_NUM.magenta : CGA_NUM.black, isActive ? 0.95 : 0.85);
+      button.bg.setFillStyle(isActive ? CGA_NUM.magenta : CGA_NUM.black, 1);
       button.text.setColor(isActive ? CGA_HEX.white : CGA_HEX.cyan);
     });
   }

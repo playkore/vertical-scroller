@@ -3,9 +3,9 @@ import { BulletBehaviorDefinition } from '../../bullets/BulletBehavior';
 import { ShipDefinition } from '../ShipDefinition';
 
 const COLORS = {
-  yellow: 0xffff55,
+  cyan: 0x55ffff,
   white: 0xffffff,
-  amber: 0xffaa00
+  magenta: 0xff55ff
 };
 
 type SpiralState = {
@@ -101,16 +101,16 @@ export const shipModule: ShipDefinition = {
   registerAssets: (scene: Phaser.Scene) => {
     const g = scene.add.graphics();
 
-    g.fillStyle(COLORS.yellow, 1);
+    g.fillStyle(COLORS.cyan, 1);
     g.fillTriangle(8, 0, 1, 15, 15, 15);
     g.fillStyle(COLORS.white, 1);
     g.fillRect(7, 5, 2, 6);
-    g.fillStyle(COLORS.amber, 1);
+    g.fillStyle(COLORS.magenta, 1);
     g.fillRect(5, 12, 6, 2);
     g.generateTexture('ship-solar-spiral', 16, 16);
     g.clear();
 
-    g.fillStyle(COLORS.yellow, 1);
+    g.fillStyle(COLORS.cyan, 1);
     g.fillRect(1, 1, 4, 4);
     g.fillStyle(COLORS.white, 1);
     g.fillRect(2, 2, 2, 2);

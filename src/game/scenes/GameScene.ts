@@ -1,17 +1,17 @@
-import Phaser from 'phaser';
-import { AutoFireSystem } from '../components/AutoFireSystem';
-import { CollisionSystem } from '../components/CollisionSystem';
-import { EnemySpawner } from '../components/EnemySpawner';
-import { ShipSelectorUI } from '../components/ShipSelectorUI';
-import { TouchController } from '../components/TouchController';
-import { EnemyShip } from '../objects/EnemyShip';
-import { PlayerBullet } from '../objects/PlayerBullet';
-import { PlayerShip } from '../objects/PlayerShip';
-import { StarfieldLayer } from '../objects/StarfieldLayer';
-import { getPlayfieldBounds } from '../layout/Playfield';
-import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
-import { ShipDefinition } from '../ships/ShipDefinition';
-import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
+import Phaser from "phaser";
+import { AutoFireSystem } from "../components/AutoFireSystem";
+import { CollisionSystem } from "../components/CollisionSystem";
+import { EnemySpawner } from "../components/EnemySpawner";
+import { ShipSelectorUI } from "../components/ShipSelectorUI";
+import { TouchController } from "../components/TouchController";
+import { EnemyShip } from "../objects/EnemyShip";
+import { PlayerBullet } from "../objects/PlayerBullet";
+import { PlayerShip } from "../objects/PlayerShip";
+import { StarfieldLayer } from "../objects/StarfieldLayer";
+import { getPlayfieldBounds } from "../layout/Playfield";
+import { getDefaultShip, SHIP_REGISTRY } from "../ships/ShipRegistry";
+import { ShipDefinition } from "../ships/ShipDefinition";
+import { CGA_HEX, CGA_NUM } from "../style/CgaPalette";
 
 export class GameScene extends Phaser.Scene {
   private player!: PlayerShip;
@@ -25,7 +25,7 @@ export class GameScene extends Phaser.Scene {
   private starLayers: StarfieldLayer[] = [];
 
   constructor() {
-    super('GameScene');
+    super("GameScene");
   }
 
   create() {
@@ -35,23 +35,23 @@ export class GameScene extends Phaser.Scene {
 
     this.starLayers = [
       new StarfieldLayer(this, {
-        texture: 'star-small',
+        texture: "star-small",
         count: 80,
         minSpeed: 15,
-        maxSpeed: 30
+        maxSpeed: 30,
       }),
       new StarfieldLayer(this, {
-        texture: 'star-medium',
+        texture: "star-medium",
         count: 40,
         minSpeed: 35,
-        maxSpeed: 65
+        maxSpeed: 65,
       }),
       new StarfieldLayer(this, {
-        texture: 'star-large',
+        texture: "star-large",
         count: 18,
         minSpeed: 80,
-        maxSpeed: 130
-      })
+        maxSpeed: 130,
+      }),
     ];
 
     const defaultShip = getDefaultShip();
@@ -60,23 +60,37 @@ export class GameScene extends Phaser.Scene {
       this,
       this.scale.width * 0.5,
       this.scale.height * 0.78,
-      defaultShip.textureKey
+      defaultShip.textureKey,
     );
 
-    this.touchController = new TouchController(this, this.player, ShipSelectorUI.reservedHeight);
+    this.touchController = new TouchController(
+      this,
+      this.player,
+      ShipSelectorUI.reservedHeight,
+    );
     this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
 
-    new CollisionSystem(this, this.player, this.autoFire.getGroup(), this.enemySpawner.getGroup());
+    new CollisionSystem(
+      this,
+      this.player,
+      this.autoFire.getGroup(),
+      this.enemySpawner.getGroup(),
+    );
 
-    this.shipSelector = new ShipSelectorUI(this, SHIP_REGISTRY, defaultShip.id, (ship) => {
-      this.applyShip(ship);
-    });
+    this.shipSelector = new ShipSelectorUI(
+      this,
+      SHIP_REGISTRY,
+      defaultShip.id,
+      (ship) => {
+        this.applyShip(ship);
+      },
+    );
 
     this.applyShip(defaultShip);
 
-    this.scale.on('resize', this.onResize, this);
-    this.events.once('shutdown', this.shutdown, this);
+    this.scale.on("resize", this.onResize, this);
+    this.events.once("shutdown", this.shutdown, this);
   }
 
   update(_time: number, delta: number) {
@@ -95,7 +109,7 @@ export class GameScene extends Phaser.Scene {
     this.touchController.destroy();
     this.shipSelector.destroy();
     this.arenaFrame.destroy();
-    this.scale.off('resize', this.onResize, this);
+    this.scale.off("resize", this.onResize, this);
   }
 
   private applyShip(ship: ShipDefinition) {
@@ -106,11 +120,15 @@ export class GameScene extends Phaser.Scene {
   private onResize(gameSize: Phaser.Structs.Size) {
     const bounds = getPlayfieldBounds(gameSize.width, gameSize.height);
 
-    this.player.x = Phaser.Math.Clamp(this.player.x, bounds.left + 16, bounds.right - 16);
+    this.player.x = Phaser.Math.Clamp(
+      this.player.x,
+      bounds.left + 16,
+      bounds.right - 16,
+    );
     this.player.y = Phaser.Math.Clamp(
       this.player.y,
       gameSize.height * 0.45,
-      gameSize.height - ShipSelectorUI.reservedHeight
+      gameSize.height - ShipSelectorUI.reservedHeight,
     );
 
     this.shipSelector.layout(gameSize.width, gameSize.height);
@@ -138,19 +156,20 @@ export class GameScene extends Phaser.Scene {
 
     this.arenaFrame.clear();
 
-    this.arenaFrame.fillStyle(CGA_NUM.black, 0.9);
+    this.arenaFrame.fillStyle(CGA_NUM.black, 1);
     this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth, height);
     this.arenaFrame.fillRect(bounds.right, 0, bounds.sidePanelWidth, height);
 
-    this.arenaFrame.fillStyle(CGA_NUM.magenta, 0.2);
+    this.arenaFrame.fillStyle(CGA_NUM.magenta, 1);
     this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth * 0.2, height);
-    this.arenaFrame.fillRect(width - bounds.sidePanelWidth * 0.2, 0, bounds.sidePanelWidth * 0.2, height);
+    this.arenaFrame.fillRect(
+      width - bounds.sidePanelWidth * 0.2,
+      0,
+      bounds.sidePanelWidth * 0.2,
+      height,
+    );
 
-    this.arenaFrame.lineStyle(3, CGA_NUM.cyan, 0.85);
+    this.arenaFrame.lineStyle(3, CGA_NUM.cyan, 1);
     this.arenaFrame.strokeRect(bounds.left, 0, bounds.width, height);
-
-    this.arenaFrame.lineStyle(1, CGA_NUM.white, 0.6);
-    this.arenaFrame.lineBetween(bounds.left + 4, 0, bounds.left + 4, height);
-    this.arenaFrame.lineBetween(bounds.right - 4, 0, bounds.right - 4, height);
   }
 }
