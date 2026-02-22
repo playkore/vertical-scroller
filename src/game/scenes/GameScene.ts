@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { AutoFireSystem } from '../components/AutoFireSystem';
+import { BossHealthBar } from '../components/BossHealthBar';
 import { BossSpawner } from '../components/BossSpawner';
 import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
@@ -29,6 +30,7 @@ export class GameScene extends Phaser.Scene {
   private bossSpawner!: BossSpawner;
   private levelDirector!: LevelDirector;
   private levelProgressBar!: LevelProgressBar;
+  private bossHealthBar!: BossHealthBar;
   private shipSelector!: ShipSelectorUI;
   private arenaFrame!: Phaser.GameObjects.Graphics;
   private menuButtonBg!: Phaser.GameObjects.Rectangle;
@@ -48,6 +50,7 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(CGA_HEX.black);
     this.arenaFrame = this.add.graphics().setDepth(80).setScrollFactor(0);
     this.levelProgressBar = new LevelProgressBar(this);
+    this.bossHealthBar = new BossHealthBar(this);
     this.drawArenaFrame();
 
     this.starLayers = [
@@ -108,6 +111,7 @@ export class GameScene extends Phaser.Scene {
 
     this.applyShip(defaultShip);
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
 
     this.scale.on('resize', this.onResize, this);
     this.events.once('shutdown', this.shutdown, this);
@@ -124,6 +128,7 @@ export class GameScene extends Phaser.Scene {
     this.autoFire.update(deltaSeconds);
     this.levelDirector.update(deltaSeconds);
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
   }
 
   shutdown() {
@@ -131,6 +136,7 @@ export class GameScene extends Phaser.Scene {
     this.shipSelector.destroy();
     this.levelDirector.destroy();
     this.levelProgressBar.destroy();
+    this.bossHealthBar.destroy();
     this.menuButtonBg.destroy();
     this.menuButtonIcon.destroy();
     this.arenaFrame.destroy();
@@ -179,6 +185,7 @@ export class GameScene extends Phaser.Scene {
 
     this.drawArenaFrame();
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
   }
 
   private drawArenaFrame() {

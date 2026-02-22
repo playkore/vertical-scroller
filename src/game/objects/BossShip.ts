@@ -6,6 +6,7 @@ export class BossShip extends Phaser.Physics.Arcade.Sprite {
   private definition: BossDefinition | null = null;
   private movementState: unknown = null;
   private ageSeconds = 0;
+  private maxHealth = 0;
   private health = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -21,6 +22,7 @@ export class BossShip extends Phaser.Physics.Arcade.Sprite {
 
   spawn(definition: BossDefinition, x: number, y: number) {
     this.definition = definition;
+    this.maxHealth = definition.health;
     this.health = definition.health;
     this.ageSeconds = 0;
 
@@ -63,7 +65,17 @@ export class BossShip extends Phaser.Physics.Arcade.Sprite {
     this.definition = null;
     this.movementState = null;
     this.ageSeconds = 0;
+    this.maxHealth = 0;
+    this.health = 0;
     return true;
+  }
+
+  getHealthRatio(): number {
+    if (!this.active || this.maxHealth <= 0) {
+      return 0;
+    }
+
+    return Phaser.Math.Clamp(this.health / this.maxHealth, 0, 1);
   }
 
   preUpdate(_time: number, delta: number): void {
@@ -94,6 +106,8 @@ export class BossShip extends Phaser.Physics.Arcade.Sprite {
       this.definition = null;
       this.movementState = null;
       this.ageSeconds = 0;
+      this.maxHealth = 0;
+      this.health = 0;
     }
   }
 }

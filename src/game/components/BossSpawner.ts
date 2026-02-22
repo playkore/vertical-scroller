@@ -34,4 +34,36 @@ export class BossSpawner {
   hasActiveBoss(): boolean {
     return this.bosses.countActive(true) > 0;
   }
+
+  getVisibleBossHealthRatio(): number | null {
+    const visibleBoss = this.findVisibleBoss();
+    if (!visibleBoss) {
+      return null;
+    }
+
+    return visibleBoss.getHealthRatio();
+  }
+
+  private findVisibleBoss(): BossShip | null {
+    const screenHeight = this.scene.scale.height;
+    let match: BossShip | null = null;
+
+    this.bosses.children.each((child) => {
+      const boss = child as BossShip;
+      if (!boss.active || !boss.visible) {
+        return true;
+      }
+
+      const top = boss.y - boss.displayHeight * 0.5;
+      const bottom = boss.y + boss.displayHeight * 0.5;
+      if (bottom <= 0 || top >= screenHeight) {
+        return true;
+      }
+
+      match = boss;
+      return false;
+    });
+
+    return match;
+  }
 }

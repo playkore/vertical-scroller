@@ -25,6 +25,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `Playfield.ts`: Defines gameplay viewport/playfield geometry.
 - `components/`: Game systems and UI controllers that run within scene update loops.
   - `MenuButton.ts`: Reusable menu button UI element for front-end scenes.
+  - `BossHealthBar.ts`: Right-side vertical boss health indicator shown during boss fights.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
   - `BossSpawner.ts`: Boss spawn lifecycle and active boss group management.
   - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
