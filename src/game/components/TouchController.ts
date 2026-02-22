@@ -3,7 +3,6 @@ import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
 
 export class TouchController {
-  private readonly fingerOffsetY = 56;
   private readonly scene: Phaser.Scene;
   private readonly player: PlayerShip;
   private readonly bottomPadding: number;
@@ -31,10 +30,17 @@ export class TouchController {
     const width = this.scene.scale.width;
     const height = this.scene.scale.height;
     const bounds = getPlayfieldBounds(width, height);
-    const shipTargetY = pointer.worldY - this.fingerOffsetY;
 
-    this.targetX = Phaser.Math.Clamp(pointer.worldX, bounds.left + 12, bounds.right - 12);
-    this.targetY = Phaser.Math.Clamp(shipTargetY, height * 0.45, height - this.bottomPadding);
+    // X mapping: distance from screen center is amplified by 2.
+    const screenMidX = width * 0.5;
+    const shipTargetX = screenMidX + (pointer.worldX - screenMidX) * 2;
+
+    // Y mapping: distance from screen bottom is amplified by 2.
+    const distanceToBottom = height - pointer.worldY;
+    const shipTargetY = height - distanceToBottom * 2;
+
+    this.targetX = Phaser.Math.Clamp(shipTargetX, bounds.left + 12, bounds.right - 12);
+    this.targetY = Phaser.Math.Clamp(shipTargetY, 12, height - this.bottomPadding);
   }
 
   update(deltaSeconds: number) {

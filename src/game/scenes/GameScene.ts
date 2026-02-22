@@ -152,11 +152,7 @@ export class GameScene extends Phaser.Scene {
     const bounds = getPlayfieldBounds(gameSize.width, gameSize.height);
 
     this.player.x = Phaser.Math.Clamp(this.player.x, bounds.left + 16, bounds.right - 16);
-    this.player.y = Phaser.Math.Clamp(
-      this.player.y,
-      gameSize.height * 0.45,
-      gameSize.height - ShipSelectorUI.reservedHeight
-    );
+    this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - ShipSelectorUI.reservedHeight);
 
     this.shipSelector.layout(gameSize.width, gameSize.height);
     this.levelDirector.onResize(gameSize.width, gameSize.height);
