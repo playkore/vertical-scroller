@@ -1,0 +1,34 @@
+:root {
+  --cga-black: #000000;
+  --cga-cyan: #55ffff;
+  --cga-magenta: #ff55ff;
+  --cga-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  touch-action: none;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cga-black);
+  font-family: 'Courier New', monospace;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
