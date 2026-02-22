@@ -207,6 +207,7 @@ export class GameScene extends Phaser.Scene {
       duration: 700,
       ease: 'Sine.easeOut',
       onComplete: () => {
+        this.touchController.syncTargetToPlayer();
         this.gameplayActive = true;
       }
     });

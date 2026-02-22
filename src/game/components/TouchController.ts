@@ -47,6 +47,11 @@ export class TouchController {
     this.player.moveToward(this.targetX, this.targetY, deltaSeconds);
   }
 
+  syncTargetToPlayer() {
+    this.targetX = this.player.x;
+    this.targetY = this.player.y;
+  }
+
   destroy() {
     this.scene.input.off('pointerdown', this.onPointerMove, this);
     this.scene.input.off('pointermove', this.onPointerMove, this);
