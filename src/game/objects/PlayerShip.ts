@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
 
 export class PlayerShip extends Phaser.Physics.Arcade.Sprite {
-  private readonly speed = 300;
-
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'player-ship');
+  constructor(scene: Phaser.Scene, x: number, y: number, initialTextureKey: string) {
+    super(scene, x, y, initialTextureKey);
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -26,7 +24,7 @@ export class PlayerShip extends Phaser.Physics.Arcade.Sprite {
     body.updateFromGameObject();
   }
 
-  getSpeed(): number {
-    return this.speed;
+  setShipTexture(textureKey: string) {
+    this.setTexture(textureKey);
   }
 }

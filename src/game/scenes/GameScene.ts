@@ -2,11 +2,14 @@ import Phaser from 'phaser';
 import { AutoFireSystem } from '../components/AutoFireSystem';
 import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
+import { ShipSelectorUI } from '../components/ShipSelectorUI';
 import { TouchController } from '../components/TouchController';
 import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerBullet } from '../objects/PlayerBullet';
 import { PlayerShip } from '../objects/PlayerShip';
 import { StarfieldLayer } from '../objects/StarfieldLayer';
+import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
+import { ShipDefinition } from '../ships/ShipDefinition';
 
 export class GameScene extends Phaser.Scene {
   private player!: PlayerShip;
@@ -14,6 +17,7 @@ export class GameScene extends Phaser.Scene {
   private touchController!: TouchController;
   private autoFire!: AutoFireSystem;
   private enemySpawner!: EnemySpawner;
+  private shipSelector!: ShipSelectorUI;
 
   private starLayers: StarfieldLayer[] = [];
 
@@ -45,13 +49,26 @@ export class GameScene extends Phaser.Scene {
       })
     ];
 
-    this.player = new PlayerShip(this, this.scale.width * 0.5, this.scale.height * 0.8);
+    const defaultShip = getDefaultShip();
 
-    this.touchController = new TouchController(this, this.player);
-    this.autoFire = new AutoFireSystem(this, this.player);
+    this.player = new PlayerShip(
+      this,
+      this.scale.width * 0.5,
+      this.scale.height * 0.78,
+      defaultShip.textureKey
+    );
+
+    this.touchController = new TouchController(this, this.player, ShipSelectorUI.reservedHeight);
+    this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
 
     new CollisionSystem(this, this.player, this.autoFire.getGroup(), this.enemySpawner.getGroup());
+
+    this.shipSelector = new ShipSelectorUI(this, SHIP_REGISTRY, defaultShip.id, (ship) => {
+      this.applyShip(ship);
+    });
+
+    this.applyShip(defaultShip);
 
     this.scale.on('resize', this.onResize, this);
     this.events.once('shutdown', this.shutdown, this);
@@ -71,12 +88,24 @@ export class GameScene extends Phaser.Scene {
 
   shutdown() {
     this.touchController.destroy();
+    this.shipSelector.destroy();
     this.scale.off('resize', this.onResize, this);
+  }
+
+  private applyShip(ship: ShipDefinition) {
+    this.player.setShipTexture(ship.textureKey);
+    this.autoFire.setShip(ship);
   }
 
   private onResize(gameSize: Phaser.Structs.Size) {
     this.player.x = Phaser.Math.Clamp(this.player.x, 16, gameSize.width - 16);
-    this.player.y = Phaser.Math.Clamp(this.player.y, gameSize.height * 0.45, gameSize.height - 20);
+    this.player.y = Phaser.Math.Clamp(
+      this.player.y,
+      gameSize.height * 0.45,
+      gameSize.height - ShipSelectorUI.reservedHeight
+    );
+
+    this.shipSelector.layout(gameSize.width, gameSize.height);
 
     const enemies = this.enemySpawner.getGroup();
     enemies.children.each((child) => {

@@ -1,15 +1,23 @@
 import Phaser from 'phaser';
-import { PlayerShip } from '../objects/PlayerShip';
+import { ShipDefinition } from '../ships/ShipDefinition';
 import { PlayerBullet } from '../objects/PlayerBullet';
+import { PlayerShip } from '../objects/PlayerShip';
 
 export class AutoFireSystem {
   private readonly bullets: Phaser.Physics.Arcade.Group;
   private fireCooldown = 0;
+  private activeShip: ShipDefinition;
 
-  constructor(private readonly scene: Phaser.Scene, private readonly player: PlayerShip) {
+  constructor(
+    private readonly scene: Phaser.Scene,
+    private readonly player: PlayerShip,
+    initialShip: ShipDefinition
+  ) {
+    this.activeShip = initialShip;
+
     this.bullets = this.scene.physics.add.group({
       classType: PlayerBullet,
-      maxSize: 40,
+      maxSize: 64,
       runChildUpdate: true
     });
   }
@@ -17,9 +25,14 @@ export class AutoFireSystem {
   update(deltaSeconds: number) {
     this.fireCooldown -= deltaSeconds;
     if (this.fireCooldown <= 0) {
-      this.fireCooldown = 0.15;
+      this.fireCooldown = this.activeShip.weapon.fireInterval;
       this.fire();
     }
+  }
+
+  setShip(ship: ShipDefinition) {
+    this.activeShip = ship;
+    this.fireCooldown = 0;
   }
 
   getGroup(): Phaser.Physics.Arcade.Group {
@@ -27,11 +40,21 @@ export class AutoFireSystem {
   }
 
   private fire() {
-    const bullet = this.bullets.get(this.player.x, this.player.y - 12) as PlayerBullet | null;
-    if (!bullet) {
-      return;
-    }
+    for (const projectile of this.activeShip.weapon.projectiles) {
+      const startX = this.player.x + projectile.offsetX;
+      const startY = this.player.y + projectile.offsetY;
 
-    bullet.fire(this.player.x, this.player.y - 12);
+      const bullet = this.bullets.get(startX, startY) as PlayerBullet | null;
+      if (!bullet) {
+        continue;
+      }
+
+      bullet.fire(startX, startY, {
+        velocityX: projectile.velocityX,
+        velocityY: projectile.velocityY,
+        textureKey: projectile.textureKey,
+        scale: projectile.scale
+      });
+    }
   }
 }
