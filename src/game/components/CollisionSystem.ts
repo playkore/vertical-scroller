@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
 
 export class CollisionSystem {
@@ -11,8 +12,10 @@ export class CollisionSystem {
     bullets: Phaser.Physics.Arcade.Group,
     enemies: Phaser.Physics.Arcade.Group
   ) {
+    const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
+
     this.scoreText = this.scene.add
-      .text(10, 10, 'SCORE 00000', {
+      .text(bounds.left + 10, 10, 'SCORE 00000', {
         fontFamily: 'Courier New, monospace',
         fontSize: '14px',
         color: '#ffffff'

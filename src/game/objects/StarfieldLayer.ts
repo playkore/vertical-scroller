@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getPlayfieldBounds } from '../layout/Playfield';
 
 type StarConfig = {
   texture: string;
@@ -20,10 +21,11 @@ export class StarfieldLayer {
     this.scene = scene;
 
     const { width, height } = this.scene.scale;
+    const bounds = getPlayfieldBounds(width, height);
     for (let i = 0; i < config.count; i += 1) {
       const sprite = this.scene.add
         .image(
-          Phaser.Math.Between(0, width),
+          Phaser.Math.Between(bounds.left, bounds.right),
           Phaser.Math.Between(0, height),
           config.texture
         )
@@ -39,12 +41,13 @@ export class StarfieldLayer {
   update(deltaSeconds: number) {
     const height = this.scene.scale.height;
     const width = this.scene.scale.width;
+    const bounds = getPlayfieldBounds(width, height);
 
     for (const star of this.stars) {
       star.sprite.y += star.speed * deltaSeconds;
       if (star.sprite.y > height + 4) {
         star.sprite.y = -4;
-        star.sprite.x = Phaser.Math.Between(0, width);
+        star.sprite.x = Phaser.Math.Between(bounds.left, bounds.right);
       }
     }
   }

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getPlayfieldBounds } from '../layout/Playfield';
 import { EnemyShip } from '../objects/EnemyShip';
 
 export class EnemySpawner {
@@ -26,7 +27,8 @@ export class EnemySpawner {
   }
 
   private spawnEnemy() {
-    const x = Phaser.Math.Between(16, this.scene.scale.width - 16);
+    const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
+    const x = Phaser.Math.Between(bounds.left + 16, bounds.right - 16);
     const y = -18;
     const speed = Phaser.Math.Between(70, 140);
 

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { getBulletBehavior } from '../bullets/BulletBehaviorRegistry';
+import { getPlayfieldBounds } from '../layout/Playfield';
 import { WeaponProjectileConfig } from '../ships/ShipDefinition';
 
 export class PlayerBullet extends Phaser.Physics.Arcade.Image {
@@ -55,8 +56,12 @@ export class PlayerBullet extends Phaser.Physics.Arcade.Image {
 
     const width = this.scene.scale.width;
     const height = this.scene.scale.height;
+    const bounds = getPlayfieldBounds(width, height);
 
-    if (this.active && (this.y < -40 || this.y > height + 40 || this.x < -40 || this.x > width + 40)) {
+    if (
+      this.active
+      && (this.y < -40 || this.y > height + 40 || this.x < bounds.left - 40 || this.x > bounds.right + 40)
+    ) {
       this.disableBody(true, true);
       this.behaviorId = null;
       this.behaviorState = null;

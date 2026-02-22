@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
 
 export class TouchController {
@@ -29,9 +30,10 @@ export class TouchController {
 
     const width = this.scene.scale.width;
     const height = this.scene.scale.height;
+    const bounds = getPlayfieldBounds(width, height);
     const shipTargetY = pointer.worldY - this.fingerOffsetY;
 
-    this.targetX = Phaser.Math.Clamp(pointer.worldX, 12, width - 12);
+    this.targetX = Phaser.Math.Clamp(pointer.worldX, bounds.left + 12, bounds.right - 12);
     this.targetY = Phaser.Math.Clamp(shipTargetY, height * 0.45, height - this.bottomPadding);
   }
 
