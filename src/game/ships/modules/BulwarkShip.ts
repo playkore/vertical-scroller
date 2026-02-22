@@ -15,6 +15,7 @@ export const shipModule: ShipDefinition = {
     fireInterval: 0.32,
     projectiles: [
       {
+        motion: 'linear',
         offsetX: 0,
         offsetY: -13,
         velocityX: 0,
@@ -23,6 +24,7 @@ export const shipModule: ShipDefinition = {
         scale: 1.25
       },
       {
+        motion: 'linear',
         offsetX: 0,
         offsetY: -7,
         velocityX: 0,

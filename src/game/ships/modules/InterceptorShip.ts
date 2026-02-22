@@ -14,6 +14,7 @@ export const shipModule: ShipDefinition = {
     fireInterval: 0.12,
     projectiles: [
       {
+        motion: 'linear',
         offsetX: -5,
         offsetY: -11,
         velocityX: 0,
@@ -21,6 +22,7 @@ export const shipModule: ShipDefinition = {
         textureKey: 'bullet-laser'
       },
       {
+        motion: 'linear',
         offsetX: 5,
         offsetY: -11,
         velocityX: 0,

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import { ShipDefinition } from '../ships/ShipDefinition';
 import { PlayerBullet } from '../objects/PlayerBullet';
 import { PlayerShip } from '../objects/PlayerShip';
+import { ShipDefinition } from '../ships/ShipDefinition';
 
 export class AutoFireSystem {
   private readonly bullets: Phaser.Physics.Arcade.Group;
@@ -49,12 +49,7 @@ export class AutoFireSystem {
         continue;
       }
 
-      bullet.fire(startX, startY, {
-        velocityX: projectile.velocityX,
-        velocityY: projectile.velocityY,
-        textureKey: projectile.textureKey,
-        scale: projectile.scale
-      });
+      bullet.fire(startX, startY, projectile);
     }
   }
 }
