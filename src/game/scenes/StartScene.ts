@@ -7,6 +7,7 @@ export class StartScene extends Phaser.Scene {
   private continueButton!: MenuButton;
   private newGameButton!: MenuButton;
   private levelsButton!: MenuButton;
+  private enemiesButton!: MenuButton;
 
   constructor() {
     super('StartScene');
@@ -61,12 +62,24 @@ export class StartScene extends Phaser.Scene {
     this.levelsButton = new MenuButton(this, {
       label: 'LEVELS',
       x: this.scale.width * 0.5,
-      y: this.scale.height * 0.68,
+      y: this.scale.height * 0.67,
       width: 180,
       height: 38,
       enabled: true,
       onClick: () => {
         this.scene.start('LevelSelectScene');
+      }
+    });
+
+    this.enemiesButton = new MenuButton(this, {
+      label: 'ENEMIES',
+      x: this.scale.width * 0.5,
+      y: this.scale.height * 0.75,
+      width: 180,
+      height: 38,
+      enabled: true,
+      onClick: () => {
+        this.scene.start('EnemiesScene');
       }
     });
 
@@ -79,13 +92,15 @@ export class StartScene extends Phaser.Scene {
 
     this.continueButton.setPosition(centerX, gameSize.height * 0.52);
     this.newGameButton.setPosition(centerX, gameSize.height * 0.6);
-    this.levelsButton.setPosition(centerX, gameSize.height * 0.68);
+    this.levelsButton.setPosition(centerX, gameSize.height * 0.67);
+    this.enemiesButton.setPosition(centerX, gameSize.height * 0.75);
   }
 
   private shutdown() {
     this.continueButton.destroy();
     this.newGameButton.destroy();
     this.levelsButton.destroy();
+    this.enemiesButton.destroy();
     this.scale.off('resize', this.onResize, this);
   }
 }

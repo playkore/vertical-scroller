@@ -18,7 +18,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
 
 - `scenes/`: Phaser scene lifecycle and orchestration.
   - `BootScene.ts`: Initialization/preload and early setup flow.
-  - `StartScene.ts`: Main menu scene (`Continue`, `New Game`, `Levels`).
+  - `StartScene.ts`: Main menu scene (`Continue`, `New Game`, `Levels`, `Enemies`).
+  - `EnemiesScene.ts`: Enemy codex scene that lists enemy textures and names.
   - `LevelSelectScene.ts`: Level selection scene that starts a chosen level.
   - `LevelSummaryScene.ts`: Post-level summary / game-over scene with stats and progression action.
   - `GameScene.ts`: Main gameplay scene that coordinates runtime systems.
