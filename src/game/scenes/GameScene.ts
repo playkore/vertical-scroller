@@ -3,6 +3,7 @@ import { AutoFireSystem } from '../components/AutoFireSystem';
 import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
 import { LevelDirector } from '../components/LevelDirector';
+import { LevelProgressBar } from '../components/LevelProgressBar';
 import { ShipSelectorUI } from '../components/ShipSelectorUI';
 import { TouchController } from '../components/TouchController';
 import { EnemyShip } from '../objects/EnemyShip';
@@ -22,6 +23,7 @@ export class GameScene extends Phaser.Scene {
   private autoFire!: AutoFireSystem;
   private enemySpawner!: EnemySpawner;
   private levelDirector!: LevelDirector;
+  private levelProgressBar!: LevelProgressBar;
   private shipSelector!: ShipSelectorUI;
   private arenaFrame!: Phaser.GameObjects.Graphics;
 
@@ -34,6 +36,7 @@ export class GameScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor(CGA_HEX.black);
     this.arenaFrame = this.add.graphics().setDepth(80).setScrollFactor(0);
+    this.levelProgressBar = new LevelProgressBar(this);
     this.drawArenaFrame();
 
     this.starLayers = [
@@ -80,6 +83,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.applyShip(defaultShip);
+    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
 
     this.scale.on('resize', this.onResize, this);
     this.events.once('shutdown', this.shutdown, this);
@@ -95,12 +99,14 @@ export class GameScene extends Phaser.Scene {
     this.touchController.update(deltaSeconds);
     this.autoFire.update(deltaSeconds);
     this.levelDirector.update(deltaSeconds);
+    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
   }
 
   shutdown() {
     this.touchController.destroy();
     this.shipSelector.destroy();
     this.levelDirector.destroy();
+    this.levelProgressBar.destroy();
     this.arenaFrame.destroy();
     this.scale.off('resize', this.onResize, this);
   }
@@ -138,6 +144,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.drawArenaFrame();
+    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
   }
 
   private drawArenaFrame() {

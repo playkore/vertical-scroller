@@ -24,6 +24,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `components/`: Game systems and UI controllers that run within scene update loops.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
   - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
+  - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
   - `CollisionSystem.ts`: Hit/collision resolution pipeline.
   - `ShipSelectorUI.ts`: Ship selection UI controller.

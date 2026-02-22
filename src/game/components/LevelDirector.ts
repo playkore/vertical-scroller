@@ -69,6 +69,10 @@ export class LevelDirector {
     this.spawnCooldown = Phaser.Math.FloatBetween(phase.minDelay, phase.maxDelay);
   }
 
+  getProgressRatio(): number {
+    return Phaser.Math.Clamp(this.elapsedSeconds / this.level.durationSeconds, 0, 1);
+  }
+
   onResize(width: number, _height: number) {
     const bounds = getPlayfieldBounds(width, this.scene.scale.height);
     this.levelText.setPosition(bounds.left + 10, 28);
