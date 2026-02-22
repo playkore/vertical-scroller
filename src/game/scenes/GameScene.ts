@@ -28,6 +28,8 @@ export class GameScene extends Phaser.Scene {
   private levelProgressBar!: LevelProgressBar;
   private shipSelector!: ShipSelectorUI;
   private arenaFrame!: Phaser.GameObjects.Graphics;
+  private menuButtonBg!: Phaser.GameObjects.Rectangle;
+  private menuButtonIcon!: Phaser.GameObjects.Text;
 
   private starLayers: StarfieldLayer[] = [];
 
@@ -87,6 +89,8 @@ export class GameScene extends Phaser.Scene {
       this.applyShip(ship);
     });
 
+    this.createMenuButton();
+
     this.applyShip(defaultShip);
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
 
@@ -112,6 +116,8 @@ export class GameScene extends Phaser.Scene {
     this.shipSelector.destroy();
     this.levelDirector.destroy();
     this.levelProgressBar.destroy();
+    this.menuButtonBg.destroy();
+    this.menuButtonIcon.destroy();
     this.arenaFrame.destroy();
     this.scale.off('resize', this.onResize, this);
   }
@@ -133,6 +139,7 @@ export class GameScene extends Phaser.Scene {
 
     this.shipSelector.layout(gameSize.width, gameSize.height);
     this.levelDirector.onResize(gameSize.width, gameSize.height);
+    this.layoutMenuButton(gameSize.width, gameSize.height);
 
     const enemies = this.enemySpawner.getGroup();
     enemies.children.each((child) => {
@@ -164,5 +171,41 @@ export class GameScene extends Phaser.Scene {
 
     this.arenaFrame.lineStyle(1, CGA_NUM.cyan, 1);
     this.arenaFrame.strokeRect(bounds.left, 0, bounds.width, height);
+  }
+
+  private createMenuButton() {
+    this.menuButtonBg = this.add
+      .rectangle(0, 0, 18, 18, CGA_NUM.black, 1)
+      .setStrokeStyle(1, CGA_NUM.cyan)
+      .setDepth(130)
+      .setScrollFactor(0)
+      .setInteractive({ useHandCursor: true });
+
+    // Use a hamburger icon to indicate menu while keeping footprint small.
+    this.menuButtonIcon = this.add
+      .text(0, 0, '≡', {
+        fontFamily: 'Courier New, monospace',
+        fontSize: '14px',
+        color: CGA_HEX.white
+      })
+      .setOrigin(0.5)
+      .setDepth(131)
+      .setScrollFactor(0);
+
+    this.menuButtonBg.on('pointerdown', () => {
+      this.scene.start('StartScene');
+    });
+
+    this.layoutMenuButton(this.scale.width, this.scale.height);
+  }
+
+  private layoutMenuButton(width: number, height: number) {
+    const bounds = getPlayfieldBounds(width, height);
+    const buttonX = width - Math.max(10, Math.floor(bounds.sidePanelWidth * 0.45));
+    const buttonHeight = this.menuButtonBg.height;
+    const buttonY = 10 + buttonHeight * 0.5;
+
+    this.menuButtonBg.setPosition(buttonX, buttonY);
+    this.menuButtonIcon.setPosition(buttonX, buttonY - 1);
   }
 }
