@@ -53,7 +53,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `enemies/`: Enemy domain model, behavior contracts, and module registry.
   - `EnemyDefinition.ts`: Enemy configuration/type contract.
   - `EnemyRegistry.ts`: Central registry for available enemies.
-  - `modules/`: Enemy-specific implementations (`RaiderEnemy`, `SawDriftEnemy`, `WaveEelEnemy`).
+  - `EnemyBehaviorUtils.ts`: Runtime helpers for player-targeted enemy movement logic.
+  - `modules/`: Enemy-specific implementations (`BerserkReaverEnemy`, `EscortCoreEnemy`, `FeignRetreatEnemy`, `GravityWellEnemy`, `HunterEnemy`, `LaneJammerEnemy`, `MineLayerEnemy`, `OrbitDiverEnemy`, `PulseRamEnemy`, `RaiderEnemy`, `SawDriftEnemy`, `ShieldFrontEnemy`, `SniperLockEnemy`, `SplitterEnemy`, `UndercutHunterEnemy`, `WaveEelEnemy`, `YoyoStrikerEnemy`).
 - `bosses/`: Boss domain model, behavior contracts, and module registry.
   - `BossDefinition.ts`: Boss configuration/type contract.
   - `BossRegistry.ts`: Central registry for available bosses.
