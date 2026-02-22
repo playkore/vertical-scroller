@@ -63,6 +63,12 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - Use only the 4-color CGA palette used by this project across all visual elements (gameplay objects, bullets, borders, HUD, and UI buttons): `#000000`, `#55ffff`, `#ff55ff`, `#ffffff`.
 - Do not introduce ad-hoc colors; prefer importing shared palette constants from `game/style/CgaPalette.ts`.
 
+## Documentation Directive
+
+- Add concise, meaningful comments for data structures (types/interfaces/config objects) so their purpose and fields are clear.
+- Add explanatory comments in implementation code where behavior is non-obvious (timing rules, movement logic, selection/weighting, lifecycle flow).
+- Avoid redundant comments; focus on intent and reasoning rather than restating syntax.
+
 ## Change Checklist
 
 When editing architecture, update this file in the same change if any of the following occur:
