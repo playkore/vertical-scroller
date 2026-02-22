@@ -63,7 +63,16 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id).
   - `LevelRegistry.ts`: Central registry for available levels.
   - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
-  - `modules/Level01NeonFrontier.ts`: First level timeline and enemy rollout rules.
+  - `modules/Level01NeonFrontier.ts`: First campaign level timeline and baseline enemy rollout rules.
+  - `modules/Level02HunterWake.ts`: Campaign level 2 timeline introducing hunt-style enemies.
+  - `modules/Level03OscillationRun.ts`: Campaign level 3 timeline introducing oscillation/sniper pressure.
+  - `modules/Level04DiverSplit.ts`: Campaign level 4 timeline introducing diver and splitter patterns.
+  - `modules/Level05ArmorPulse.ts`: Campaign level 5 timeline introducing armor and burst-rush patterns.
+  - `modules/Level06MinesAndFeints.ts`: Campaign level 6 timeline introducing mine and retreat patterns.
+  - `modules/Level07JammerCorridor.ts`: Campaign level 7 timeline introducing lane-jammer pressure.
+  - `modules/Level08GravityArc.ts`: Campaign level 8 timeline introducing gravity-well pressure.
+  - `modules/Level09EscortPincer.ts`: Campaign level 9 timeline introducing escort and undercut attackers.
+  - `modules/Level10FinalGauntlet.ts`: Campaign level 10 all-enemy gauntlet timeline.
   - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.

@@ -14,6 +14,7 @@ type MenuButtonOptions = {
 export class MenuButton {
   private readonly background: Phaser.GameObjects.Rectangle;
   private readonly label: Phaser.GameObjects.Text;
+  private readonly canInteract: boolean;
 
   constructor(private readonly scene: Phaser.Scene, options: MenuButtonOptions) {
     this.background = this.scene.add
@@ -32,7 +33,9 @@ export class MenuButton {
       .setDepth(121)
       .setScrollFactor(0);
 
-    if (options.enabled && options.onClick) {
+    this.canInteract = Boolean(options.enabled && options.onClick);
+
+    if (this.canInteract && options.onClick) {
       this.background.setInteractive({ useHandCursor: true });
       this.background.on('pointerdown', options.onClick);
     }
@@ -41,6 +44,20 @@ export class MenuButton {
   setPosition(x: number, y: number) {
     this.background.setPosition(x, y);
     this.label.setPosition(x, y);
+  }
+
+  setVisible(visible: boolean) {
+    this.background.setVisible(visible);
+    this.label.setVisible(visible);
+    if (!this.canInteract) {
+      return;
+    }
+
+    if (visible) {
+      this.background.setInteractive({ useHandCursor: true });
+    } else {
+      this.background.disableInteractive();
+    }
   }
 
   destroy() {
