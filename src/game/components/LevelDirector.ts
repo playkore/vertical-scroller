@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
+import { BossSpawner } from './BossSpawner';
 import { EnemySpawner } from './EnemySpawner';
+import { getBossById } from '../bosses/BossRegistry';
 import { getEnemyById } from '../enemies/EnemyRegistry';
 import { LevelDefinition, LevelPhase } from '../levels/LevelDefinition';
 import { getPlayfieldBounds } from '../layout/Playfield';
@@ -8,7 +10,7 @@ import { CGA_HEX } from '../style/CgaPalette';
 export class LevelDirector {
   private elapsedSeconds = 0;
   private spawnCooldown = 0;
-  private completed = false;
+  private bossSpawned = false;
 
   private readonly levelText: Phaser.GameObjects.Text;
   private readonly statusText: Phaser.GameObjects.Text;
@@ -16,6 +18,7 @@ export class LevelDirector {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly enemySpawner: EnemySpawner,
+    private readonly bossSpawner: BossSpawner,
     private readonly level: LevelDefinition
   ) {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
@@ -40,15 +43,16 @@ export class LevelDirector {
   }
 
   update(deltaSeconds: number) {
-    if (this.completed) {
+    if (this.bossSpawned) {
       return;
     }
 
     this.elapsedSeconds += deltaSeconds;
 
+    // End of wave timeline: lock waves and deploy boss once.
     if (this.elapsedSeconds >= this.level.durationSeconds) {
-      this.completed = true;
-      this.statusText.setText('BOSS INCOMING');
+      this.elapsedSeconds = this.level.durationSeconds;
+      this.spawnBossIfConfigured();
       return;
     }
 
@@ -84,10 +88,25 @@ export class LevelDirector {
     this.statusText.destroy();
   }
 
+  private spawnBossIfConfigured() {
+    this.bossSpawned = true;
+
+    if (!this.level.bossId) {
+      this.statusText.setText('LEVEL CLEAR');
+      return;
+    }
+
+    const boss = getBossById(this.level.bossId);
+    this.bossSpawner.spawnBoss(boss);
+    this.statusText.setText('BOSS ALERT');
+  }
+
   private getActivePhase(elapsedSeconds: number): LevelPhase | null {
-    return this.level.phases.find(
-      (phase) => elapsedSeconds >= phase.startAt && elapsedSeconds < phase.endAt
-    ) ?? null;
+    return (
+      this.level.phases.find(
+        (phase) => elapsedSeconds >= phase.startAt && elapsedSeconds < phase.endAt
+      ) ?? null
+    );
   }
 
   private rollEnemyId(phase: LevelPhase): string {

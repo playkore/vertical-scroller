@@ -26,6 +26,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `components/`: Game systems and UI controllers that run within scene update loops.
   - `MenuButton.ts`: Reusable menu button UI element for front-end scenes.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
+  - `BossSpawner.ts`: Boss spawn lifecycle and active boss group management.
   - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
@@ -35,6 +36,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `objects/`: Concrete runtime game entities.
   - `PlayerShip.ts`: Player ship object.
   - `EnemyShip.ts`: Enemy ship object.
+  - `BossShip.ts`: Boss runtime object with health and movement behavior hooks.
   - `PlayerBullet.ts`: Player projectile object.
   - `StarfieldLayer.ts`: Scrolling/parallax background layer.
 - `ships/`: Playable ship domain model and registration.
@@ -49,6 +51,10 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `EnemyDefinition.ts`: Enemy configuration/type contract.
   - `EnemyRegistry.ts`: Central registry for available enemies.
   - `modules/`: Enemy-specific implementations (`RaiderEnemy`, `SawDriftEnemy`, `WaveEelEnemy`).
+- `bosses/`: Boss domain model, behavior contracts, and module registry.
+  - `BossDefinition.ts`: Boss configuration/type contract.
+  - `BossRegistry.ts`: Central registry for available bosses.
+  - `modules/`: Boss-specific implementations (`AlphaCoreBoss`).
 - `levels/`: Level domain model and module registry.
   - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id).
   - `LevelRegistry.ts`: Central registry for available levels.
@@ -59,8 +65,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
 ## Dependency Direction (Expected)
 
 - `scenes/` orchestrate `components/`, `layout/`, and `objects/`.
-- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`, `enemies/`, `levels/`) as needed.
-- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`, `EnemyDefinition`, `LevelDefinition`).
+- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`, `enemies/`, `bosses/`, `levels/`) as needed.
+- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`, `EnemyDefinition`, `BossDefinition`, `LevelDefinition`).
 
 ## Visual Directive
 
@@ -78,7 +84,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 When editing architecture, update this file in the same change if any of the following occur:
 
 - A new folder is added under `src/game/`.
-- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, `enemies`, `levels`, or `layout`.
+- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, `enemies`, `bosses`, `levels`, or `layout`.
 - A new shared style/theme folder is added (for example `game/style/`).
 - A new registry/contract/module pattern is introduced.
 - The scene orchestration flow changes materially.

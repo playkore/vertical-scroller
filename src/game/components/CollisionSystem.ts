@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { BossShip } from '../objects/BossShip';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
 
@@ -10,7 +11,8 @@ export class CollisionSystem {
     private readonly scene: Phaser.Scene,
     private readonly player: PlayerShip,
     bullets: Phaser.Physics.Arcade.Group,
-    enemies: Phaser.Physics.Arcade.Group
+    enemies: Phaser.Physics.Arcade.Group,
+    bosses: Phaser.Physics.Arcade.Group
   ) {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
 
@@ -39,11 +41,38 @@ export class CollisionSystem {
     );
 
     this.scene.physics.add.overlap(
+      bullets,
+      bosses,
+      (bulletObj, bossObj) => {
+        const bullet = bulletObj as Phaser.Physics.Arcade.Image;
+        const boss = bossObj as BossShip;
+
+        bullet.disableBody(true, true);
+        const defeated = boss.takeHit(1);
+        if (defeated) {
+          this.addScore(500);
+        }
+      },
+      undefined,
+      this
+    );
+
+    this.scene.physics.add.overlap(
       this.player,
       enemies,
       (_playerObj, enemyObj) => {
         const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
         enemy.disableBody(true, true);
+        this.onPlayerHit();
+      },
+      undefined,
+      this
+    );
+
+    this.scene.physics.add.overlap(
+      this.player,
+      bosses,
+      () => {
         this.onPlayerHit();
       },
       undefined,

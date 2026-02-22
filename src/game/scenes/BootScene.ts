@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { BOSS_REGISTRY } from '../bosses/BossRegistry';
 import { ENEMY_REGISTRY } from '../enemies/EnemyRegistry';
 import { SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { CGA_NUM } from '../style/CgaPalette';
@@ -11,6 +12,7 @@ export class BootScene extends Phaser.Scene {
   create() {
     this.createShipAssets();
     this.createEnemyAssets();
+    this.createBossAssets();
     this.createStarTextures();
 
     this.scene.start('StartScene');
@@ -25,6 +27,12 @@ export class BootScene extends Phaser.Scene {
   private createEnemyAssets() {
     ENEMY_REGISTRY.forEach((enemy) => {
       enemy.registerAssets(this);
+    });
+  }
+
+  private createBossAssets() {
+    BOSS_REGISTRY.forEach((boss) => {
+      boss.registerAssets(this);
     });
   }
 

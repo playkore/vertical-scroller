@@ -1,11 +1,13 @@
 import Phaser from 'phaser';
 import { AutoFireSystem } from '../components/AutoFireSystem';
+import { BossSpawner } from '../components/BossSpawner';
 import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
 import { LevelDirector } from '../components/LevelDirector';
 import { LevelProgressBar } from '../components/LevelProgressBar';
 import { ShipSelectorUI } from '../components/ShipSelectorUI';
 import { TouchController } from '../components/TouchController';
+import { BossShip } from '../objects/BossShip';
 import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerBullet } from '../objects/PlayerBullet';
 import { PlayerShip } from '../objects/PlayerShip';
@@ -24,6 +26,7 @@ export class GameScene extends Phaser.Scene {
   private touchController!: TouchController;
   private autoFire!: AutoFireSystem;
   private enemySpawner!: EnemySpawner;
+  private bossSpawner!: BossSpawner;
   private levelDirector!: LevelDirector;
   private levelProgressBar!: LevelProgressBar;
   private shipSelector!: ShipSelectorUI;
@@ -80,10 +83,22 @@ export class GameScene extends Phaser.Scene {
     this.touchController = new TouchController(this, this.player, ShipSelectorUI.reservedHeight);
     this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
+    this.bossSpawner = new BossSpawner(this);
 
-    this.levelDirector = new LevelDirector(this, this.enemySpawner, this.selectedLevel);
+    this.levelDirector = new LevelDirector(
+      this,
+      this.enemySpawner,
+      this.bossSpawner,
+      this.selectedLevel
+    );
 
-    new CollisionSystem(this, this.player, this.autoFire.getGroup(), this.enemySpawner.getGroup());
+    new CollisionSystem(
+      this,
+      this.player,
+      this.autoFire.getGroup(),
+      this.enemySpawner.getGroup(),
+      this.bossSpawner.getGroup()
+    );
 
     this.shipSelector = new ShipSelectorUI(this, SHIP_REGISTRY, defaultShip.id, (ship) => {
       this.applyShip(ship);
@@ -145,6 +160,13 @@ export class GameScene extends Phaser.Scene {
     enemies.children.each((child) => {
       const enemy = child as EnemyShip;
       enemy.x = Phaser.Math.Clamp(enemy.x, bounds.left + 16, bounds.right - 16);
+      return true;
+    });
+
+    const bosses = this.bossSpawner.getGroup();
+    bosses.children.each((child) => {
+      const boss = child as BossShip;
+      boss.x = Phaser.Math.Clamp(boss.x, bounds.left + 28, bounds.right - 28);
       return true;
     });
 
