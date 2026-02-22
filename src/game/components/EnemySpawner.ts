@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { getPlayfieldBounds } from '../layout/Playfield';
+import { getWeightedRandomEnemy } from '../enemies/EnemyRegistry';
 import { EnemyShip } from '../objects/EnemyShip';
 
 export class EnemySpawner {
@@ -9,7 +10,7 @@ export class EnemySpawner {
   constructor(private readonly scene: Phaser.Scene) {
     this.enemies = this.scene.physics.add.group({
       classType: EnemyShip,
-      maxSize: 24,
+      maxSize: 32,
       runChildUpdate: true
     });
   }
@@ -17,7 +18,6 @@ export class EnemySpawner {
   update(deltaSeconds: number) {
     this.spawnCooldown -= deltaSeconds;
     if (this.spawnCooldown <= 0) {
-      this.spawnCooldown = Phaser.Math.FloatBetween(0.5, 1.2);
       this.spawnEnemy();
     }
   }
@@ -27,16 +27,22 @@ export class EnemySpawner {
   }
 
   private spawnEnemy() {
+    const definition = getWeightedRandomEnemy();
+    this.spawnCooldown = Phaser.Math.FloatBetween(definition.spawn.minDelay, definition.spawn.maxDelay);
+
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
-    const x = Phaser.Math.Between(bounds.left + 16, bounds.right - 16);
+    const x = Phaser.Math.Between(
+      bounds.left + definition.spawn.xPadding,
+      bounds.right - definition.spawn.xPadding
+    );
     const y = -18;
-    const speed = Phaser.Math.Between(70, 140);
+    const speed = Phaser.Math.Between(definition.spawn.minSpeed, definition.spawn.maxSpeed);
 
     const enemy = this.enemies.get(x, y) as EnemyShip | null;
     if (!enemy) {
       return;
     }
 
-    enemy.spawn(x, y, speed);
+    enemy.spawn(definition, x, y, speed);
   }
 }

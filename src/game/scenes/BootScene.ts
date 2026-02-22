@@ -1,11 +1,7 @@
 import Phaser from 'phaser';
+import { ENEMY_REGISTRY } from '../enemies/EnemyRegistry';
 import { SHIP_REGISTRY } from '../ships/ShipRegistry';
-
-const CGA = {
-  cyan: 0x55ffff,
-  magenta: 0xff55ff,
-  white: 0xffffff
-};
+import { CGA_NUM } from '../style/CgaPalette';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -14,7 +10,7 @@ export class BootScene extends Phaser.Scene {
 
   create() {
     this.createShipAssets();
-    this.createEnemyTexture();
+    this.createEnemyAssets();
     this.createStarTextures();
 
     this.scene.start('GameScene');
@@ -26,31 +22,25 @@ export class BootScene extends Phaser.Scene {
     });
   }
 
-  private createEnemyTexture() {
-    const g = this.add.graphics();
-    g.fillStyle(CGA.magenta, 1);
-    g.fillRect(2, 2, 12, 10);
-    g.fillStyle(CGA.white, 1);
-    g.fillRect(6, 0, 4, 2);
-    g.fillRect(4, 12, 8, 2);
-    g.generateTexture('enemy-ship', 16, 16);
-    g.clear();
-    g.destroy();
+  private createEnemyAssets() {
+    ENEMY_REGISTRY.forEach((enemy) => {
+      enemy.registerAssets(this);
+    });
   }
 
   private createStarTextures() {
     const g = this.add.graphics();
-    g.fillStyle(CGA.white, 1);
+    g.fillStyle(CGA_NUM.white, 1);
     g.fillRect(0, 0, 1, 1);
     g.generateTexture('star-small', 1, 1);
     g.clear();
 
-    g.fillStyle(CGA.cyan, 1);
+    g.fillStyle(CGA_NUM.cyan, 1);
     g.fillRect(0, 0, 2, 2);
     g.generateTexture('star-medium', 2, 2);
     g.clear();
 
-    g.fillStyle(CGA.magenta, 1);
+    g.fillStyle(CGA_NUM.magenta, 1);
     g.fillRect(0, 0, 3, 3);
     g.generateTexture('star-large', 3, 3);
     g.destroy();

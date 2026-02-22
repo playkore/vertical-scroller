@@ -40,14 +40,18 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BulletBehavior.ts`: Behavior interface/contract.
   - `BulletBehaviorRegistry.ts`: Registry for bullet behavior lookup/selection.
   - `modules/LinearBulletBehavior.ts`: Linear projectile behavior module.
+- `enemies/`: Enemy domain model, behavior contracts, and module registry.
+  - `EnemyDefinition.ts`: Enemy configuration/type contract.
+  - `EnemyRegistry.ts`: Central registry for available enemies.
+  - `modules/`: Enemy-specific implementations (`RaiderEnemy`, `SawDriftEnemy`, `WaveEelEnemy`).
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 
 ## Dependency Direction (Expected)
 
 - `scenes/` orchestrate `components/`, `layout/`, and `objects/`.
-- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`) as needed.
-- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`).
+- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`, `enemies/`) as needed.
+- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`, `EnemyDefinition`).
 
 ## Visual Directive
 
@@ -59,7 +63,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 When editing architecture, update this file in the same change if any of the following occur:
 
 - A new folder is added under `src/game/`.
-- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, or `layout`.
+- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, `enemies`, or `layout`.
 - A new shared style/theme folder is added (for example `game/style/`).
 - A new registry/contract/module pattern is introduced.
 - The scene orchestration flow changes materially.
