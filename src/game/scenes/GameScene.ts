@@ -11,6 +11,7 @@ import { StarfieldLayer } from '../objects/StarfieldLayer';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
+import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
 
 export class GameScene extends Phaser.Scene {
   private player!: PlayerShip;
@@ -28,7 +29,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#000000');
+    this.cameras.main.setBackgroundColor(CGA_HEX.black);
     this.arenaFrame = this.add.graphics().setDepth(80).setScrollFactor(0);
     this.drawArenaFrame();
 
@@ -137,18 +138,18 @@ export class GameScene extends Phaser.Scene {
 
     this.arenaFrame.clear();
 
-    this.arenaFrame.fillStyle(0x060a12, 0.8);
+    this.arenaFrame.fillStyle(CGA_NUM.black, 0.9);
     this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth, height);
     this.arenaFrame.fillRect(bounds.right, 0, bounds.sidePanelWidth, height);
 
-    this.arenaFrame.fillStyle(0x0b1221, 0.7);
+    this.arenaFrame.fillStyle(CGA_NUM.magenta, 0.2);
     this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth * 0.2, height);
     this.arenaFrame.fillRect(width - bounds.sidePanelWidth * 0.2, 0, bounds.sidePanelWidth * 0.2, height);
 
-    this.arenaFrame.lineStyle(3, 0x4ea6ff, 0.75);
+    this.arenaFrame.lineStyle(3, CGA_NUM.cyan, 0.85);
     this.arenaFrame.strokeRect(bounds.left, 0, bounds.width, height);
 
-    this.arenaFrame.lineStyle(1, 0xb7ddff, 0.45);
+    this.arenaFrame.lineStyle(1, CGA_NUM.white, 0.6);
     this.arenaFrame.lineBetween(bounds.left + 4, 0, bounds.left + 4, height);
     this.arenaFrame.lineBetween(bounds.right - 4, 0, bounds.right - 4, height);
   }

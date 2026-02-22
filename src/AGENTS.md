@@ -40,6 +40,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BulletBehavior.ts`: Behavior interface/contract.
   - `BulletBehaviorRegistry.ts`: Registry for bullet behavior lookup/selection.
   - `modules/LinearBulletBehavior.ts`: Linear projectile behavior module.
+- `style/`: Shared visual constants.
+  - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 
 ## Dependency Direction (Expected)
 
@@ -47,11 +49,17 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`) as needed.
 - `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`).
 
+## Visual Directive
+
+- Use only the 4-color CGA palette used by this project across all visual elements (gameplay objects, bullets, borders, HUD, and UI buttons): `#000000`, `#55ffff`, `#ff55ff`, `#ffffff`.
+- Do not introduce ad-hoc colors; prefer importing shared palette constants from `game/style/CgaPalette.ts`.
+
 ## Change Checklist
 
 When editing architecture, update this file in the same change if any of the following occur:
 
 - A new folder is added under `src/game/`.
 - A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, or `layout`.
+- A new shared style/theme folder is added (for example `game/style/`).
 - A new registry/contract/module pattern is introduced.
 - The scene orchestration flow changes materially.
