@@ -6,9 +6,9 @@ export type PlayfieldBounds = {
   sidePanelWidth: number;
 };
 
-const SIDE_PANEL_RATIO = 0.14;
-const MIN_SIDE_PANEL_WIDTH = 36;
-const MAX_SIDE_PANEL_WIDTH = 72;
+const SIDE_PANEL_RATIO = 0.1;
+const MIN_SIDE_PANEL_WIDTH = 24;
+const MAX_SIDE_PANEL_WIDTH = 52;
 
 export function getPlayfieldBounds(width: number, height: number): PlayfieldBounds {
   const sidePanelWidth = Math.min(

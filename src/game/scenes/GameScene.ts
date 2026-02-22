@@ -160,16 +160,7 @@ export class GameScene extends Phaser.Scene {
     this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth, height);
     this.arenaFrame.fillRect(bounds.right, 0, bounds.sidePanelWidth, height);
 
-    this.arenaFrame.fillStyle(CGA_NUM.magenta, 1);
-    this.arenaFrame.fillRect(0, 0, bounds.sidePanelWidth * 0.2, height);
-    this.arenaFrame.fillRect(
-      width - bounds.sidePanelWidth * 0.2,
-      0,
-      bounds.sidePanelWidth * 0.2,
-      height,
-    );
-
-    this.arenaFrame.lineStyle(3, CGA_NUM.cyan, 1);
+    this.arenaFrame.lineStyle(1, CGA_NUM.cyan, 1);
     this.arenaFrame.strokeRect(bounds.left, 0, bounds.width, height);
   }
 }
