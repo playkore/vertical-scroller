@@ -14,7 +14,7 @@ import { PlayerBullet } from '../objects/PlayerBullet';
 import { PlayerShip } from '../objects/PlayerShip';
 import { StarfieldLayer } from '../objects/StarfieldLayer';
 import { getPlayfieldBounds } from '../layout/Playfield';
-import { getDefaultLevel, getLevelById } from '../levels/LevelRegistry';
+import { getDefaultLevel, getLevelById, LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { LevelDefinition } from '../levels/LevelDefinition';
 import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
@@ -23,6 +23,8 @@ import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
 export class GameScene extends Phaser.Scene {
   private selectedLevel!: LevelDefinition;
   private player!: PlayerShip;
+  private gameplayActive = false;
+  private levelExitStarted = false;
 
   private touchController!: TouchController;
   private autoFire!: AutoFireSystem;
@@ -79,7 +81,7 @@ export class GameScene extends Phaser.Scene {
     this.player = new PlayerShip(
       this,
       this.scale.width * 0.5,
-      this.scale.height * 0.78,
+      this.scale.height + 28,
       defaultShip.textureKey
     );
 
@@ -112,6 +114,7 @@ export class GameScene extends Phaser.Scene {
     this.applyShip(defaultShip);
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
+    this.playLevelIntro();
 
     this.scale.on('resize', this.onResize, this);
     this.events.once('shutdown', this.shutdown, this);
@@ -124,11 +127,18 @@ export class GameScene extends Phaser.Scene {
       layer.update(deltaSeconds);
     }
 
-    this.touchController.update(deltaSeconds);
-    this.autoFire.update(deltaSeconds);
-    this.levelDirector.update(deltaSeconds);
+    if (this.gameplayActive) {
+      this.touchController.update(deltaSeconds);
+      this.autoFire.update(deltaSeconds);
+      this.levelDirector.update(deltaSeconds);
+    }
+
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
+
+    if (this.gameplayActive && this.levelDirector.isLevelComplete() && !this.levelExitStarted) {
+      this.playLevelExit();
+    }
   }
 
   shutdown() {
@@ -182,6 +192,55 @@ export class GameScene extends Phaser.Scene {
     this.drawArenaFrame();
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
+  }
+
+  private playLevelIntro() {
+    this.gameplayActive = false;
+    this.levelExitStarted = false;
+
+    // Bring ship from below the screen into center before gameplay starts.
+    this.player.setPosition(this.scale.width * 0.5, this.scale.height + 28);
+    this.tweens.add({
+      targets: this.player,
+      x: this.scale.width * 0.5,
+      y: this.scale.height * 0.5,
+      duration: 700,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        this.gameplayActive = true;
+      }
+    });
+  }
+
+  private playLevelExit() {
+    this.gameplayActive = false;
+    this.levelExitStarted = true;
+    const nextLevelId = this.getNextLevelId();
+
+    // Exit from current position upward, then route to next level or main menu.
+    this.tweens.add({
+      targets: this.player,
+      y: -40,
+      duration: 650,
+      ease: 'Sine.easeIn',
+      onComplete: () => {
+        if (nextLevelId) {
+          this.scene.start('GameScene', { levelId: nextLevelId });
+        } else {
+          this.scene.start('StartScene');
+        }
+      }
+    });
+  }
+
+  private getNextLevelId(): string | null {
+    const currentIndex = LEVEL_REGISTRY.findIndex((level) => level.id === this.selectedLevel.id);
+    if (currentIndex < 0) {
+      return null;
+    }
+
+    const nextLevel = LEVEL_REGISTRY[currentIndex + 1];
+    return nextLevel ? nextLevel.id : null;
   }
 
   private drawArenaFrame() {

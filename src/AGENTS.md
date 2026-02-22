@@ -55,10 +55,11 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `bosses/`: Boss domain model, behavior contracts, and module registry.
   - `BossDefinition.ts`: Boss configuration/type contract.
   - `BossRegistry.ts`: Central registry for available bosses.
-  - `modules/`: Boss-specific implementations (`AlphaCoreBoss`).
+  - `modules/`: Boss-specific implementations (`AlphaCoreBoss`, `TinyCoreBoss`).
 - `levels/`: Level domain model and module registry.
   - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id).
   - `LevelRegistry.ts`: Central registry for available levels.
+  - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
   - `modules/Level01NeonFrontier.ts`: First level timeline and enemy rollout rules.
   - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `style/`: Shared visual constants.

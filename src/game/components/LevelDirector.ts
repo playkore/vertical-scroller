@@ -11,6 +11,7 @@ export class LevelDirector {
   private elapsedSeconds = 0;
   private spawnCooldown = 0;
   private bossSpawned = false;
+  private levelComplete = false;
 
   private readonly levelText: Phaser.GameObjects.Text;
   private readonly statusText: Phaser.GameObjects.Text;
@@ -43,7 +44,16 @@ export class LevelDirector {
   }
 
   update(deltaSeconds: number) {
+    if (this.levelComplete) {
+      return;
+    }
+
     if (this.bossSpawned) {
+      // Once boss is deployed, all regular wave spawning is paused.
+      if (!this.bossSpawner.hasActiveBoss()) {
+        this.levelComplete = true;
+        this.statusText.setText('LEVEL CLEAR');
+      }
       return;
     }
 
@@ -77,6 +87,10 @@ export class LevelDirector {
     return Phaser.Math.Clamp(this.elapsedSeconds / this.level.durationSeconds, 0, 1);
   }
 
+  isLevelComplete(): boolean {
+    return this.levelComplete;
+  }
+
   onResize(width: number, _height: number) {
     const bounds = getPlayfieldBounds(width, this.scene.scale.height);
     this.levelText.setPosition(bounds.left + 10, 28);
@@ -92,6 +106,7 @@ export class LevelDirector {
     this.bossSpawned = true;
 
     if (!this.level.bossId) {
+      this.levelComplete = true;
       this.statusText.setText('LEVEL CLEAR');
       return;
     }
