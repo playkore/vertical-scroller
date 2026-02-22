@@ -16,6 +16,7 @@ import { StarfieldLayer } from '../objects/StarfieldLayer';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { getDefaultLevel, getLevelById, LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { LevelDefinition } from '../levels/LevelDefinition';
+import { LevelStats } from '../stats/LevelStats';
 import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
 import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
@@ -31,6 +32,7 @@ export class GameScene extends Phaser.Scene {
   private enemySpawner!: EnemySpawner;
   private bossSpawner!: BossSpawner;
   private levelDirector!: LevelDirector;
+  private collisionSystem!: CollisionSystem;
   private levelProgressBar!: LevelProgressBar;
   private bossHealthBar!: BossHealthBar;
   private shipSelector!: ShipSelectorUI;
@@ -97,7 +99,7 @@ export class GameScene extends Phaser.Scene {
       this.selectedLevel
     );
 
-    new CollisionSystem(
+    this.collisionSystem = new CollisionSystem(
       this,
       this.player,
       this.autoFire.getGroup(),
@@ -217,19 +219,20 @@ export class GameScene extends Phaser.Scene {
     this.gameplayActive = false;
     this.levelExitStarted = true;
     const nextLevelId = this.getNextLevelId();
+    const stats: LevelStats = this.collisionSystem.getStatsSnapshot();
 
-    // Exit from current position upward, then route to next level or main menu.
+    // Exit from current position upward, then open summary screen.
     this.tweens.add({
       targets: this.player,
       y: -40,
       duration: 650,
       ease: 'Sine.easeIn',
       onComplete: () => {
-        if (nextLevelId) {
-          this.scene.start('GameScene', { levelId: nextLevelId });
-        } else {
-          this.scene.start('StartScene');
-        }
+        this.scene.start('LevelSummaryScene', {
+          levelName: this.selectedLevel.name,
+          nextLevelId,
+          stats
+        });
       }
     });
   }

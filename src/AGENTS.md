@@ -20,6 +20,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BootScene.ts`: Initialization/preload and early setup flow.
   - `StartScene.ts`: Main menu scene (`Continue`, `New Game`, `Levels`).
   - `LevelSelectScene.ts`: Level selection scene that starts a chosen level.
+  - `LevelSummaryScene.ts`: Post-level summary / game-over scene with stats and progression action.
   - `GameScene.ts`: Main gameplay scene that coordinates runtime systems.
 - `layout/`: Play area layout and sizing concerns.
   - `Playfield.ts`: Defines gameplay viewport/playfield geometry.
@@ -64,6 +65,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
+- `stats/`: Shared stats payload contracts.
+  - `LevelStats.ts`: Per-level results data shown on summary screens.
 
 ## Dependency Direction (Expected)
 

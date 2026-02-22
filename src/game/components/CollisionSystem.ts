@@ -2,9 +2,16 @@ import Phaser from 'phaser';
 import { BossShip } from '../objects/BossShip';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
+import { LevelStats } from '../stats/LevelStats';
 
 export class CollisionSystem {
-  private score = 0;
+  private stats: LevelStats = {
+    score: 0,
+    enemiesDestroyed: 0,
+    bossesDefeated: 0,
+    hitsTaken: 0
+  };
+
   private readonly scoreText: Phaser.GameObjects.Text;
 
   constructor(
@@ -34,6 +41,7 @@ export class CollisionSystem {
 
         bullet.disableBody(true, true);
         enemy.disableBody(true, true);
+        this.stats.enemiesDestroyed += 1;
         this.addScore(10);
       },
       undefined,
@@ -50,6 +58,7 @@ export class CollisionSystem {
         bullet.disableBody(true, true);
         const defeated = boss.takeHit(1);
         if (defeated) {
+          this.stats.bossesDefeated += 1;
           this.addScore(500);
         }
       },
@@ -80,12 +89,17 @@ export class CollisionSystem {
     );
   }
 
+  getStatsSnapshot(): LevelStats {
+    return { ...this.stats };
+  }
+
   private addScore(points: number) {
-    this.score += points;
-    this.scoreText.setText(`SCORE ${this.score.toString().padStart(5, '0')}`);
+    this.stats.score += points;
+    this.scoreText.setText(`SCORE ${this.stats.score.toString().padStart(5, '0')}`);
   }
 
   private onPlayerHit() {
+    this.stats.hitsTaken += 1;
     this.scene.cameras.main.shake(200, 0.01);
     this.player.setTint(0xff55ff);
     this.scene.time.delayedCall(120, () => {
