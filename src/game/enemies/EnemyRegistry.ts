@@ -12,20 +12,13 @@ export const ENEMY_REGISTRY: EnemyDefinition[] = Object.values(discoveredModules
   .map((mod) => mod.enemyModule)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-export function getWeightedRandomEnemy(): EnemyDefinition {
-  if (ENEMY_REGISTRY.length === 0) {
-    throw new Error('No enemy modules found in src/game/enemies/modules');
+const enemyById = new Map<string, EnemyDefinition>(ENEMY_REGISTRY.map((enemy) => [enemy.id, enemy]));
+
+export function getEnemyById(enemyId: string): EnemyDefinition {
+  const enemy = enemyById.get(enemyId);
+  if (!enemy) {
+    throw new Error(`Unknown enemy id in level config: ${enemyId}`);
   }
 
-  const totalWeight = ENEMY_REGISTRY.reduce((sum, enemy) => sum + enemy.spawnWeight, 0);
-  let roll = Math.random() * totalWeight;
-
-  for (const enemy of ENEMY_REGISTRY) {
-    roll -= enemy.spawnWeight;
-    if (roll <= 0) {
-      return enemy;
-    }
-  }
-
-  return ENEMY_REGISTRY[ENEMY_REGISTRY.length - 1];
+  return enemy;
 }

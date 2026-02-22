@@ -1,11 +1,10 @@
 import Phaser from 'phaser';
 import { getPlayfieldBounds } from '../layout/Playfield';
-import { getWeightedRandomEnemy } from '../enemies/EnemyRegistry';
+import { EnemyDefinition } from '../enemies/EnemyDefinition';
 import { EnemyShip } from '../objects/EnemyShip';
 
 export class EnemySpawner {
   private readonly enemies: Phaser.Physics.Arcade.Group;
-  private spawnCooldown = 0;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.enemies = this.scene.physics.add.group({
@@ -15,21 +14,11 @@ export class EnemySpawner {
     });
   }
 
-  update(deltaSeconds: number) {
-    this.spawnCooldown -= deltaSeconds;
-    if (this.spawnCooldown <= 0) {
-      this.spawnEnemy();
-    }
-  }
-
   getGroup(): Phaser.Physics.Arcade.Group {
     return this.enemies;
   }
 
-  private spawnEnemy() {
-    const definition = getWeightedRandomEnemy();
-    this.spawnCooldown = Phaser.Math.FloatBetween(definition.spawn.minDelay, definition.spawn.maxDelay);
-
+  spawnEnemy(definition: EnemyDefinition) {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
     const x = Phaser.Math.Between(
       bounds.left + definition.spawn.xPadding,
