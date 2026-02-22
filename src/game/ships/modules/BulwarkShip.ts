@@ -15,22 +15,26 @@ export const shipModule: ShipDefinition = {
     fireInterval: 0.32,
     projectiles: [
       {
-        motion: 'linear',
         offsetX: 0,
         offsetY: -13,
-        velocityX: 0,
-        velocityY: -320,
         textureKey: 'bullet-orb',
-        scale: 1.25
+        scale: 1.25,
+        behaviorId: 'linear',
+        behaviorParams: {
+          velocityX: 0,
+          velocityY: -320
+        }
       },
       {
-        motion: 'linear',
         offsetX: 0,
         offsetY: -7,
-        velocityX: 0,
-        velocityY: -270,
         textureKey: 'bullet-orb',
-        scale: 1
+        scale: 1,
+        behaviorId: 'linear',
+        behaviorParams: {
+          velocityX: 0,
+          velocityY: -270
+        }
       }
     ]
   },

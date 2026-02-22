@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { BulletBehaviorDefinition } from '../../bullets/BulletBehavior';
 import { ShipDefinition } from '../ShipDefinition';
 
 const COLORS = {
@@ -7,38 +8,93 @@ const COLORS = {
   amber: 0xffaa00
 };
 
+type SpiralState = {
+  centerX: number;
+  centerY: number;
+  centerVelocityX: number;
+  centerVelocityY: number;
+  angularSpeed: number;
+  phase: number;
+  radius: number;
+  radiusGrowth: number;
+};
+
+const solarSpiralBehavior: BulletBehaviorDefinition = {
+  id: 'solar-expanding-spiral',
+  onFire: ({ bullet, spawnX, spawnY, params }) => {
+    const centerVelocityX = params.centerVelocityX ?? 0;
+    const centerVelocityY = params.centerVelocityY ?? -230;
+    const angularSpeed = params.angularSpeed ?? 11;
+    const phase = params.phase ?? 0;
+    const radius = params.initialRadius ?? 2;
+    const radiusGrowth = params.radiusGrowth ?? 24;
+
+    bullet.setVelocity(0, 0);
+    bullet.setPosition(spawnX + Math.cos(phase) * radius, spawnY + Math.sin(phase) * radius);
+
+    return {
+      centerX: spawnX,
+      centerY: spawnY,
+      centerVelocityX,
+      centerVelocityY,
+      angularSpeed,
+      phase,
+      radius,
+      radiusGrowth
+    } satisfies SpiralState;
+  },
+  onUpdate: ({ bullet, deltaSeconds, state }) => {
+    const spiral = state as SpiralState;
+
+    spiral.centerX += spiral.centerVelocityX * deltaSeconds;
+    spiral.centerY += spiral.centerVelocityY * deltaSeconds;
+    spiral.phase += spiral.angularSpeed * deltaSeconds;
+    spiral.radius += spiral.radiusGrowth * deltaSeconds;
+
+    bullet.setPosition(
+      spiral.centerX + Math.cos(spiral.phase) * spiral.radius,
+      spiral.centerY + Math.sin(spiral.phase) * spiral.radius
+    );
+  }
+};
+
 export const shipModule: ShipDefinition = {
   id: 'solar-spiral',
   name: 'SUN',
   textureKey: 'ship-solar-spiral',
+  bulletBehaviors: [solarSpiralBehavior],
   weapon: {
     fireInterval: 0.24,
     projectiles: [
       {
-        motion: 'spiral',
         offsetX: 0,
         offsetY: -11,
-        centerVelocityX: 0,
-        centerVelocityY: -230,
-        angularSpeed: 11,
-        initialRadius: 2,
-        radiusGrowth: 24,
-        phase: 0,
         textureKey: 'bullet-solar-spiral',
-        scale: 0.95
+        scale: 0.95,
+        behaviorId: 'solar-expanding-spiral',
+        behaviorParams: {
+          centerVelocityX: 0,
+          centerVelocityY: -230,
+          angularSpeed: 11,
+          initialRadius: 2,
+          radiusGrowth: 24,
+          phase: 0
+        }
       },
       {
-        motion: 'spiral',
         offsetX: 0,
         offsetY: -11,
-        centerVelocityX: 0,
-        centerVelocityY: -230,
-        angularSpeed: -11,
-        initialRadius: 2,
-        radiusGrowth: 24,
-        phase: 3.14159,
         textureKey: 'bullet-solar-spiral',
-        scale: 0.95
+        scale: 0.95,
+        behaviorId: 'solar-expanding-spiral',
+        behaviorParams: {
+          centerVelocityX: 0,
+          centerVelocityY: -230,
+          angularSpeed: -11,
+          initialRadius: 2,
+          radiusGrowth: 24,
+          phase: 3.14159
+        }
       }
     ]
   },

@@ -14,29 +14,35 @@ export const shipModule: ShipDefinition = {
     fireInterval: 0.2,
     projectiles: [
       {
-        motion: 'linear',
         offsetX: -9,
         offsetY: -10,
-        velocityX: -90,
-        velocityY: -430,
-        textureKey: 'bullet-plasma'
+        textureKey: 'bullet-plasma',
+        behaviorId: 'linear',
+        behaviorParams: {
+          velocityX: -90,
+          velocityY: -430
+        }
       },
       {
-        motion: 'linear',
         offsetX: 0,
         offsetY: -12,
-        velocityX: 0,
-        velocityY: -470,
         textureKey: 'bullet-plasma',
-        scale: 1.1
+        scale: 1.1,
+        behaviorId: 'linear',
+        behaviorParams: {
+          velocityX: 0,
+          velocityY: -470
+        }
       },
       {
-        motion: 'linear',
         offsetX: 9,
         offsetY: -10,
-        velocityX: 90,
-        velocityY: -430,
-        textureKey: 'bullet-plasma'
+        textureKey: 'bullet-plasma',
+        behaviorId: 'linear',
+        behaviorParams: {
+          velocityX: 90,
+          velocityY: -430
+        }
       }
     ]
   },

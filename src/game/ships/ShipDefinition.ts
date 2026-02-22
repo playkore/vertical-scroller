@@ -1,29 +1,14 @@
 import Phaser from 'phaser';
+import { BulletBehaviorDefinition, BulletBehaviorParams } from '../bullets/BulletBehavior';
 
-interface BaseProjectileConfig {
+export interface WeaponProjectileConfig {
   offsetX: number;
   offsetY: number;
   textureKey: string;
   scale?: number;
+  behaviorId: string;
+  behaviorParams?: BulletBehaviorParams;
 }
-
-export interface LinearProjectileConfig extends BaseProjectileConfig {
-  motion: 'linear';
-  velocityX: number;
-  velocityY: number;
-}
-
-export interface SpiralProjectileConfig extends BaseProjectileConfig {
-  motion: 'spiral';
-  centerVelocityX: number;
-  centerVelocityY: number;
-  angularSpeed: number;
-  initialRadius: number;
-  radiusGrowth: number;
-  phase: number;
-}
-
-export type WeaponProjectileConfig = LinearProjectileConfig | SpiralProjectileConfig;
 
 export interface ShipWeaponConfig {
   fireInterval: number;
@@ -36,4 +21,5 @@ export interface ShipDefinition {
   textureKey: string;
   weapon: ShipWeaponConfig;
   registerAssets: (scene: Phaser.Scene) => void;
+  bulletBehaviors?: BulletBehaviorDefinition[];
 }
