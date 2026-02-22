@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import './styles/app.css';
 import { BootScene } from './game/scenes/BootScene';
 import { GameScene } from './game/scenes/GameScene';
+import { LevelSelectScene } from './game/scenes/LevelSelectScene';
+import { StartScene } from './game/scenes/StartScene';
 
 const GAME_WIDTH = 360;
 const GAME_HEIGHT = 640;
@@ -22,7 +24,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [BootScene, GameScene]
+  scene: [BootScene, StartScene, LevelSelectScene, GameScene]
 };
 
 new Phaser.Game(config);

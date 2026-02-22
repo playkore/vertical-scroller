@@ -11,12 +11,14 @@ import { PlayerBullet } from '../objects/PlayerBullet';
 import { PlayerShip } from '../objects/PlayerShip';
 import { StarfieldLayer } from '../objects/StarfieldLayer';
 import { getPlayfieldBounds } from '../layout/Playfield';
-import { getDefaultLevel } from '../levels/LevelRegistry';
+import { getDefaultLevel, getLevelById } from '../levels/LevelRegistry';
+import { LevelDefinition } from '../levels/LevelDefinition';
 import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
 import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
 
 export class GameScene extends Phaser.Scene {
+  private selectedLevel!: LevelDefinition;
   private player!: PlayerShip;
 
   private touchController!: TouchController;
@@ -31,6 +33,10 @@ export class GameScene extends Phaser.Scene {
 
   constructor() {
     super('GameScene');
+  }
+
+  init(data: { levelId?: string }) {
+    this.selectedLevel = data.levelId ? getLevelById(data.levelId) : getDefaultLevel();
   }
 
   create() {
@@ -73,8 +79,7 @@ export class GameScene extends Phaser.Scene {
     this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
 
-    const defaultLevel = getDefaultLevel();
-    this.levelDirector = new LevelDirector(this, this.enemySpawner, defaultLevel);
+    this.levelDirector = new LevelDirector(this, this.enemySpawner, this.selectedLevel);
 
     new CollisionSystem(this, this.player, this.autoFire.getGroup(), this.enemySpawner.getGroup());
 

@@ -13,7 +13,7 @@ export class BootScene extends Phaser.Scene {
     this.createEnemyAssets();
     this.createStarTextures();
 
-    this.scene.start('GameScene');
+    this.scene.start('StartScene');
   }
 
   private createShipAssets() {

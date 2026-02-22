@@ -18,10 +18,13 @@ This file documents the architecture of the `src/` codebase and should be kept i
 
 - `scenes/`: Phaser scene lifecycle and orchestration.
   - `BootScene.ts`: Initialization/preload and early setup flow.
+  - `StartScene.ts`: Main menu scene (`Continue`, `New Game`, `Levels`).
+  - `LevelSelectScene.ts`: Level selection scene that starts a chosen level.
   - `GameScene.ts`: Main gameplay scene that coordinates runtime systems.
 - `layout/`: Play area layout and sizing concerns.
   - `Playfield.ts`: Defines gameplay viewport/playfield geometry.
 - `components/`: Game systems and UI controllers that run within scene update loops.
+  - `MenuButton.ts`: Reusable menu button UI element for front-end scenes.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
   - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
