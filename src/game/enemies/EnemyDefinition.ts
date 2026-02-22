@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 
+// Arcade-body collider tuning for an enemy sprite.
 export type EnemyColliderConfig = {
   width: number;
   height: number;
@@ -7,6 +8,7 @@ export type EnemyColliderConfig = {
   offsetY: number;
 };
 
+// Spawn-time randomness and placement bounds for an enemy type.
 export type EnemySpawnConfig = {
   minDelay: number;
   maxDelay: number;
@@ -15,6 +17,7 @@ export type EnemySpawnConfig = {
   xPadding: number;
 };
 
+// Context passed once when an enemy instance is created.
 export type EnemySpawnContext = {
   enemy: Phaser.Physics.Arcade.Sprite;
   scene: Phaser.Scene;
@@ -25,6 +28,7 @@ export type EnemySpawnContext = {
   playfieldRight: number;
 };
 
+// Per-frame data passed to movement logic for custom behavior.
 export type EnemyUpdateContext = {
   enemy: Phaser.Physics.Arcade.Sprite;
   scene: Phaser.Scene;
@@ -35,11 +39,13 @@ export type EnemyUpdateContext = {
   playfieldRight: number;
 };
 
+// Optional movement lifecycle hooks implemented by each enemy module.
 export type EnemyMovementBehavior = {
   onSpawn?: (context: EnemySpawnContext) => unknown;
   onUpdate?: (context: EnemyUpdateContext) => void;
 };
 
+// Full enemy module contract consumed by the enemy registry/spawner.
 export interface EnemyDefinition {
   id: string;
   name: string;
