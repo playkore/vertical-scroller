@@ -8,8 +8,11 @@ import { getPlayfieldBounds } from '../layout/Playfield';
 import { CGA_HEX } from '../style/CgaPalette';
 
 export class LevelDirector {
+  // Runtime clock that advances through the configured level timeline.
   private elapsedSeconds = 0;
+  // Countdown until the next enemy roll is allowed in the active phase.
   private spawnCooldown = 0;
+  // Prevents repeated boss deployment after timeline completion.
   private bossSpawned = false;
 
   private readonly levelText: Phaser.GameObjects.Text;
@@ -42,6 +45,7 @@ export class LevelDirector {
       .setScrollFactor(0);
   }
 
+  // Advances level pacing, handles phased spawns, and triggers boss handoff.
   update(deltaSeconds: number) {
     if (this.bossSpawned) {
       return;
@@ -70,6 +74,7 @@ export class LevelDirector {
     const enemy = getEnemyById(enemyId);
     this.enemySpawner.spawnEnemy(enemy);
 
+    // Re-roll per spawn so each phase breathes between min/max cadence bounds.
     this.spawnCooldown = Phaser.Math.FloatBetween(phase.minDelay, phase.maxDelay);
   }
 
@@ -109,6 +114,7 @@ export class LevelDirector {
     );
   }
 
+  // Weighted random pick so higher-weight enemies appear more often without hard ordering.
   private rollEnemyId(phase: LevelPhase): string {
     const totalWeight = phase.enemies.reduce((sum, item) => sum + item.weight, 0);
     let roll = Math.random() * totalWeight;
