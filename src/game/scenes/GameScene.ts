@@ -6,6 +6,8 @@ import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
 import { LevelDirector } from '../components/LevelDirector';
 import { LevelProgressBar } from '../components/LevelProgressBar';
+import { PowerupDropDirector } from '../components/PowerupDropDirector';
+import { PowerupSpawner } from '../components/PowerupSpawner';
 import { ShipSelectorUI } from '../components/ShipSelectorUI';
 import { TouchController } from '../components/TouchController';
 import { BossShip } from '../objects/BossShip';
@@ -30,6 +32,7 @@ export class GameScene extends Phaser.Scene {
   private touchController!: TouchController;
   private autoFire!: AutoFireSystem;
   private enemySpawner!: EnemySpawner;
+  private powerupSpawner!: PowerupSpawner;
   private bossSpawner!: BossSpawner;
   private levelDirector!: LevelDirector;
   private collisionSystem!: CollisionSystem;
@@ -90,7 +93,9 @@ export class GameScene extends Phaser.Scene {
     this.touchController = new TouchController(this, this.player, ShipSelectorUI.reservedHeight);
     this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
+    this.powerupSpawner = new PowerupSpawner(this);
     this.bossSpawner = new BossSpawner(this);
+    const powerupDropDirector = new PowerupDropDirector(this.selectedLevel, this.powerupSpawner);
 
     this.levelDirector = new LevelDirector(
       this,
@@ -104,7 +109,9 @@ export class GameScene extends Phaser.Scene {
       this.player,
       this.autoFire.getGroup(),
       this.enemySpawner.getGroup(),
-      this.bossSpawner.getGroup()
+      this.bossSpawner.getGroup(),
+      this.powerupSpawner.getGroup(),
+      powerupDropDirector
     );
 
     this.shipSelector = new ShipSelectorUI(this, SHIP_REGISTRY, defaultShip.id, (ship) => {

@@ -20,6 +20,14 @@ export type LevelPhase = {
   enemies: LevelEnemyPoolEntry[];
 };
 
+// Per-level quota describing how many pickups of a given type should drop.
+export type LevelPowerupDropEntry = {
+  // Registry id of the powerup module to drop.
+  powerupId: string;
+  // Target number of drops to attempt across the level.
+  count: number;
+};
+
 // Complete level contract consumed by the level registry and level director.
 export interface LevelDefinition {
   // Stable registry id.
@@ -30,6 +38,8 @@ export interface LevelDefinition {
   durationSeconds: number;
   // Optional boss id spawned when timeline reaches duration.
   bossId: string | null;
+  // Drop quotas used by the powerup drop director for this level.
+  powerups: LevelPowerupDropEntry[];
   // Ordered phase list defining spawn pacing and composition over time.
   phases: LevelPhase[];
 }

@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'FINAL GAUNTLET',
   durationSeconds: 180,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 6 },
+      { powerupId: 'flux-battery', count: 6 }
+    ],
   phases: [
     {
       startAt: 0,

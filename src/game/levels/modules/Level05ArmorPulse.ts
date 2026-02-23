@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'ARMOR PULSE',
   durationSeconds: 135,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 4 },
+      { powerupId: 'flux-battery', count: 3 }
+    ],
   phases: [
     {
       startAt: 0,

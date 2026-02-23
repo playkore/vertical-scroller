@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'GRAVITY ARC',
   durationSeconds: 165,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 5 },
+      { powerupId: 'flux-battery', count: 5 }
+    ],
   phases: [
     {
       startAt: 0,

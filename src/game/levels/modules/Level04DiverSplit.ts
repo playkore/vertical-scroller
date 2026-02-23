@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'DIVER SPLIT',
   durationSeconds: 135,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 3 },
+      { powerupId: 'flux-battery', count: 3 }
+    ],
   phases: [
     {
       startAt: 0,

@@ -6,6 +6,10 @@ export const levelModule: LevelDefinition = {
   name: 'BOSS TEST',
   durationSeconds: 4,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 1 },
+      { powerupId: 'flux-battery', count: 0 }
+    ],
   phases: [
     {
       startAt: 0,
