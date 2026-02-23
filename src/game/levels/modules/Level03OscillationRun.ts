@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'OSCILLATION RUN',
   durationSeconds: 120,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 3 },
+      { powerupId: 'flux-battery', count: 2 }
+    ],
   phases: [
     {
       startAt: 0,

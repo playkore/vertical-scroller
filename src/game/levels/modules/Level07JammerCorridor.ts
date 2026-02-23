@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'JAMMER CORRIDOR',
   durationSeconds: 150,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 5 },
+      { powerupId: 'flux-battery', count: 4 }
+    ],
   phases: [
     {
       startAt: 0,

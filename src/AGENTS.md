@@ -34,6 +34,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
   - `CollisionSystem.ts`: Hit/collision resolution pipeline.
+  - `PowerupSpawner.ts`: Runtime pool/spawn manager for falling powerup pickups.
+  - `PowerupDropDirector.ts`: Quota-aware algorithm that decides which enemies drop powerups.
   - `ShipSelectorUI.ts`: Ship selection UI controller.
   - `TouchController.ts`: Touch input adapter/controller.
 - `objects/`: Concrete runtime game entities.
@@ -41,6 +43,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `EnemyShip.ts`: Enemy ship object.
   - `BossShip.ts`: Boss runtime object with health and movement behavior hooks.
   - `PlayerBullet.ts`: Player projectile object.
+  - `PowerupPickup.ts`: Falling collectible pickup spawned from defeated enemies.
   - `StarfieldLayer.ts`: Scrolling/parallax background layer.
 - `ships/`: Playable ship domain model and registration.
   - `ShipDefinition.ts`: Ship configuration/type contract.
@@ -60,7 +63,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BossRegistry.ts`: Central registry for available bosses.
   - `modules/`: Boss-specific implementations (`AlphaCoreBoss`, `TinyCoreBoss`).
 - `levels/`: Level domain model and module registry.
-  - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id).
+  - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id, powerup drop quotas).
   - `LevelRegistry.ts`: Central registry for available levels.
   - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
   - `modules/Level01NeonFrontier.ts`: First campaign level timeline and baseline enemy rollout rules.
@@ -74,6 +77,10 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `modules/Level09EscortPincer.ts`: Campaign level 9 timeline introducing escort and undercut attackers.
   - `modules/Level10FinalGauntlet.ts`: Campaign level 10 all-enemy gauntlet timeline.
   - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
+- `powerups/`: Powerup domain model, behavior contracts, and module registry.
+  - `PowerupDefinition.ts`: Powerup configuration/type contract.
+  - `PowerupRegistry.ts`: Central registry for available powerups.
+  - `modules/`: Powerup implementations (`FluxBatteryPowerup`, `SignalScrapPowerup`).
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 - `stats/`: Shared stats payload contracts.

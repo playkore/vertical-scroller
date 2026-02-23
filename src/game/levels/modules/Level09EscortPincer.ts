@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'ESCORT PINCER',
   durationSeconds: 165,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 6 },
+      { powerupId: 'flux-battery', count: 5 }
+    ],
   phases: [
     {
       startAt: 0,

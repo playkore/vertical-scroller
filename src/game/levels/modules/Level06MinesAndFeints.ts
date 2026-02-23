@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'MINES AND FEINTS',
   durationSeconds: 150,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 4 },
+      { powerupId: 'flux-battery', count: 4 }
+    ],
   phases: [
     {
       startAt: 0,

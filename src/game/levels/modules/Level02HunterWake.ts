@@ -5,6 +5,10 @@ export const levelModule: LevelDefinition = {
   name: 'HUNTER WAKE',
   durationSeconds: 120,
   bossId: 'boss-alpha-core',
+  powerups: [
+      { powerupId: 'signal-scrap', count: 2 },
+      { powerupId: 'flux-battery', count: 2 }
+    ],
   phases: [
     {
       startAt: 0,

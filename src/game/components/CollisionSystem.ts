@@ -2,7 +2,9 @@ import Phaser from 'phaser';
 import { BossShip } from '../objects/BossShip';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
+import { PowerupPickup } from '../objects/PowerupPickup';
 import { LevelStats } from '../stats/LevelStats';
+import { PowerupDropDirector } from './PowerupDropDirector';
 
 export class CollisionSystem {
   private stats: LevelStats = {
@@ -19,7 +21,9 @@ export class CollisionSystem {
     private readonly player: PlayerShip,
     bullets: Phaser.Physics.Arcade.Group,
     enemies: Phaser.Physics.Arcade.Group,
-    bosses: Phaser.Physics.Arcade.Group
+    bosses: Phaser.Physics.Arcade.Group,
+    powerups: Phaser.Physics.Arcade.Group,
+    powerupDropDirector: PowerupDropDirector
   ) {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
 
@@ -38,9 +42,12 @@ export class CollisionSystem {
       (bulletObj, enemyObj) => {
         const bullet = bulletObj as Phaser.Physics.Arcade.Image;
         const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
+        const dropX = enemy.x;
+        const dropY = enemy.y;
 
         bullet.disableBody(true, true);
         enemy.disableBody(true, true);
+        powerupDropDirector.onEnemyDestroyed(dropX, dropY);
         this.stats.enemiesDestroyed += 1;
         this.addScore(10);
       },
@@ -83,6 +90,18 @@ export class CollisionSystem {
       bosses,
       () => {
         this.onPlayerHit();
+      },
+      undefined,
+      this
+    );
+
+    this.scene.physics.add.overlap(
+      this.player,
+      powerups,
+      (playerObj, powerupObj) => {
+        const player = playerObj as PlayerShip;
+        const powerup = powerupObj as PowerupPickup;
+        powerup.collect(player);
       },
       undefined,
       this
