@@ -4,6 +4,7 @@ import { PowerupDefinition } from '../powerups/PowerupDefinition';
 
 export class PowerupPickup extends Phaser.Physics.Arcade.Sprite {
   private definition: PowerupDefinition | null = null;
+  private blinkTween: Phaser.Tweens.Tween | null = null;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'powerup-signal-scrap');
@@ -16,10 +17,20 @@ export class PowerupPickup extends Phaser.Physics.Arcade.Sprite {
   }
 
   spawn(definition: PowerupDefinition, x: number, y: number) {
+    this.stopBlink();
     this.definition = definition;
     this.enableBody(true, x, y, true, true);
     this.setTexture(definition.textureKey);
+    this.setAlpha(1);
     this.setVelocity(0, definition.fallSpeed);
+    this.blinkTween = this.scene.tweens.add({
+      targets: this,
+      alpha: 0.35,
+      duration: 180,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(12, 12);
@@ -33,6 +44,7 @@ export class PowerupPickup extends Phaser.Physics.Arcade.Sprite {
     }
 
     this.definition.behavior.onCollect({ scene: this.scene, player });
+    this.stopBlink();
     this.disableBody(true, true);
     this.definition = null;
   }
@@ -43,8 +55,15 @@ export class PowerupPickup extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (this.y > this.scene.scale.height + 20) {
+      this.stopBlink();
       this.disableBody(true, true);
       this.definition = null;
     }
+  }
+
+  private stopBlink() {
+    this.blinkTween?.remove();
+    this.blinkTween = null;
+    this.setAlpha(1);
   }
 }

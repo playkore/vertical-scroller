@@ -7,7 +7,11 @@ export const levelModule: LevelDefinition = {
   bossId: 'boss-alpha-core',
   powerups: [
       { powerupId: 'signal-scrap', count: 2 },
-      { powerupId: 'flux-battery', count: 1 }
+      { powerupId: 'flux-battery', count: 1 },
+      { powerupId: 'switch-bulwark', count: 8 },
+      { powerupId: 'switch-interceptor', count: 8 },
+      { powerupId: 'switch-lancer', count: 8 },
+      { powerupId: 'switch-solar-spiral', count: 8 }
     ],
   phases: [
     {

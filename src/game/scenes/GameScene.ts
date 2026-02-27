@@ -8,7 +8,6 @@ import { LevelDirector } from '../components/LevelDirector';
 import { LevelProgressBar } from '../components/LevelProgressBar';
 import { PowerupDropDirector } from '../components/PowerupDropDirector';
 import { PowerupSpawner } from '../components/PowerupSpawner';
-import { ShipSelectorUI } from '../components/ShipSelectorUI';
 import { TouchController } from '../components/TouchController';
 import { BossShip } from '../objects/BossShip';
 import { EnemyShip } from '../objects/EnemyShip';
@@ -19,9 +18,11 @@ import { getPlayfieldBounds } from '../layout/Playfield';
 import { getDefaultLevel, getLevelById, LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { LevelDefinition } from '../levels/LevelDefinition';
 import { LevelStats } from '../stats/LevelStats';
-import { getDefaultShip, SHIP_REGISTRY } from '../ships/ShipRegistry';
+import { getDefaultShip, getShipById } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
 import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
+
+const BOTTOM_SAFE_PADDING = 20;
 
 export class GameScene extends Phaser.Scene {
   private selectedLevel!: LevelDefinition;
@@ -38,7 +39,6 @@ export class GameScene extends Phaser.Scene {
   private collisionSystem!: CollisionSystem;
   private levelProgressBar!: LevelProgressBar;
   private bossHealthBar!: BossHealthBar;
-  private shipSelector!: ShipSelectorUI;
   private arenaFrame!: Phaser.GameObjects.Graphics;
   private menuButtonBg!: Phaser.GameObjects.Rectangle;
   private menuButtonIcon!: Phaser.GameObjects.Text;
@@ -90,7 +90,7 @@ export class GameScene extends Phaser.Scene {
       defaultShip.textureKey
     );
 
-    this.touchController = new TouchController(this, this.player, ShipSelectorUI.reservedHeight);
+    this.touchController = new TouchController(this, this.player, BOTTOM_SAFE_PADDING);
     this.autoFire = new AutoFireSystem(this, this.player, defaultShip);
     this.enemySpawner = new EnemySpawner(this);
     this.powerupSpawner = new PowerupSpawner(this);
@@ -113,10 +113,6 @@ export class GameScene extends Phaser.Scene {
       this.powerupSpawner.getGroup(),
       powerupDropDirector
     );
-
-    this.shipSelector = new ShipSelectorUI(this, SHIP_REGISTRY, defaultShip.id, (ship) => {
-      this.applyShip(ship);
-    });
 
     this.createMenuButton();
 
@@ -152,7 +148,6 @@ export class GameScene extends Phaser.Scene {
 
   shutdown() {
     this.touchController.destroy();
-    this.shipSelector.destroy();
     this.levelDirector.destroy();
     this.levelProgressBar.destroy();
     this.bossHealthBar.destroy();
@@ -167,13 +162,15 @@ export class GameScene extends Phaser.Scene {
     this.autoFire.setShip(ship);
   }
 
+  applyShipById(shipId: string) {
+    this.applyShip(getShipById(shipId));
+  }
+
   private onResize(gameSize: Phaser.Structs.Size) {
     const bounds = getPlayfieldBounds(gameSize.width, gameSize.height);
 
     this.player.x = Phaser.Math.Clamp(this.player.x, bounds.left + 16, bounds.right - 16);
-    this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - ShipSelectorUI.reservedHeight);
-
-    this.shipSelector.layout(gameSize.width, gameSize.height);
+    this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - BOTTOM_SAFE_PADDING);
     this.levelDirector.onResize(gameSize.width, gameSize.height);
     this.layoutMenuButton(gameSize.width, gameSize.height);
 

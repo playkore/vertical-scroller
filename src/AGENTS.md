@@ -22,7 +22,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `EnemiesScene.ts`: Enemy codex scene that lists enemy textures and names.
   - `LevelSelectScene.ts`: Level selection scene that starts a chosen level.
   - `LevelSummaryScene.ts`: Post-level summary / game-over scene with stats and progression action.
-  - `GameScene.ts`: Main gameplay scene that coordinates runtime systems.
+  - `GameScene.ts`: Main gameplay scene that coordinates runtime systems and pickup-driven ship switching.
 - `layout/`: Play area layout and sizing concerns.
   - `Playfield.ts`: Defines gameplay viewport/playfield geometry.
 - `components/`: Game systems and UI controllers that run within scene update loops.
@@ -36,7 +36,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `CollisionSystem.ts`: Hit/collision resolution pipeline.
   - `PowerupSpawner.ts`: Runtime pool/spawn manager for falling powerup pickups.
   - `PowerupDropDirector.ts`: Quota-aware algorithm that decides which enemies drop powerups.
-  - `ShipSelectorUI.ts`: Ship selection UI controller.
+  - `ShipSelectorUI.ts`: Legacy ship selection UI controller (currently unused in gameplay).
   - `TouchController.ts`: Touch input adapter/controller.
 - `objects/`: Concrete runtime game entities.
   - `PlayerShip.ts`: Player ship object.
@@ -80,7 +80,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `powerups/`: Powerup domain model, behavior contracts, and module registry.
   - `PowerupDefinition.ts`: Powerup configuration/type contract.
   - `PowerupRegistry.ts`: Central registry for available powerups.
-  - `modules/`: Powerup implementations (`FluxBatteryPowerup`, `SignalScrapPowerup`).
+  - `modules/`: Powerup implementations (`BulwarkSwitchPowerup`, `FluxBatteryPowerup`, `InterceptorSwitchPowerup`, `LancerSwitchPowerup`, `SignalScrapPowerup`, `SolarSpiralSwitchPowerup`).
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 - `stats/`: Shared stats payload contracts.

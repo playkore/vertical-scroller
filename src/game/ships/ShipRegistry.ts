@@ -12,10 +12,21 @@ export const SHIP_REGISTRY: ShipDefinition[] = Object.values(discoveredModules)
   .map((mod) => mod.shipModule)
   .sort((a, b) => a.name.localeCompare(b.name));
 
+const shipById = new Map<string, ShipDefinition>(SHIP_REGISTRY.map((ship) => [ship.id, ship]));
+
 export function getDefaultShip(): ShipDefinition {
   if (SHIP_REGISTRY.length === 0) {
     throw new Error('No ship modules found in src/game/ships/modules');
   }
 
   return SHIP_REGISTRY[0];
+}
+
+export function getShipById(shipId: string): ShipDefinition {
+  const ship = shipById.get(shipId);
+  if (!ship) {
+    throw new Error(`Unknown ship id: ${shipId}`);
+  }
+
+  return ship;
 }
