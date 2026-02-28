@@ -2,6 +2,10 @@ import Phaser from 'phaser';
 import { MenuButton } from '../components/MenuButton';
 import { getDefaultLevel } from '../levels/LevelRegistry';
 import { CGA_HEX } from '../style/CgaPalette';
+import {
+  getContinueBehavior,
+  getContinueTargetLevelId
+} from '../stats/Progression';
 
 export class StartScene extends Phaser.Scene {
   private continueButton!: MenuButton;
@@ -35,6 +39,8 @@ export class StartScene extends Phaser.Scene {
       .setDepth(120);
 
     const defaultLevel = getDefaultLevel();
+    const continueLevelId = getContinueTargetLevelId();
+    const continueBehavior = getContinueBehavior();
 
     this.continueButton = new MenuButton(this, {
       label: 'CONTINUE',
@@ -42,7 +48,19 @@ export class StartScene extends Phaser.Scene {
       y: this.scale.height * 0.52,
       width: 180,
       height: 38,
-      enabled: false
+      enabled: Boolean(continueLevelId),
+      onClick: () => {
+        if (!continueLevelId) {
+          return;
+        }
+
+        if (continueBehavior === 'open-level-select') {
+          this.scene.start('LevelSelectScene', { focusedLevelId: continueLevelId });
+          return;
+        }
+
+        this.scene.start('GameScene', { levelId: continueLevelId });
+      }
     });
 
     this.newGameButton = new MenuButton(this, {

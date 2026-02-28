@@ -84,8 +84,9 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `modules/`: Powerup implementations (`BulwarkSwitchPowerup`, `FlamethrowerSwitchPowerup`, `FluxBatteryPowerup`, `InterceptorSwitchPowerup`, `LancerSwitchPowerup`, `SignalScrapPowerup`, `SolarSpiralSwitchPowerup`).
 - `style/`: Shared visual constants.
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
-- `stats/`: Shared stats payload contracts.
-  - `LevelStats.ts`: Per-level results data shown on summary screens.
+- `stats/`: Shared stats payload contracts and progression persistence helpers.
+  - `LevelStats.ts`: Runtime collision counters and summary payload types passed between scenes.
+  - `Progression.ts`: Rank calculation, localStorage persistence, PB selection rules, and continue-flow targeting.
 
 ## Dependency Direction (Expected)
 
