@@ -3,61 +3,51 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-01',
   name: 'NEON FRONTIER',
-  durationSeconds: 105,
   bossId: 'boss-alpha-core',
   perfectKillThreshold: 1,
-  powerups: [
-      { powerupId: 'switch-bulwark', count: 8 },
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 1.8,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 24,
-      minDelay: 0.6,
-      maxDelay: 0.76,
-      enemies: [{ enemyId: 'raider', weight: 1 }]
+      id: 'w1',
+      enemies: [{ enemyId: 'raider', count: 18 }],
+      loot: [{ powerupId: 'switch-bulwark', count: 2 }]
     },
     {
-      startAt: 24,
-      endAt: 48,
-      minDelay: 0.52,
-      maxDelay: 0.68,
+      id: 'w2',
       enemies: [
-        { enemyId: 'raider', weight: 0.9 },
-        { enemyId: 'wave-eel', weight: 0.55 }
-      ]
+        { enemyId: 'raider', count: 12 },
+        { enemyId: 'wave-eel', count: 7 }
+      ],
+      loot: [{ powerupId: 'switch-bulwark', count: 2 }]
     },
     {
-      startAt: 48,
-      endAt: 72,
-      minDelay: 0.48,
-      maxDelay: 0.64,
+      id: 'w3',
       enemies: [
-        { enemyId: 'raider', weight: 0.75 },
-        { enemyId: 'wave-eel', weight: 0.7 },
-        { enemyId: 'saw-drift', weight: 0.45 }
-      ]
+        { enemyId: 'raider', count: 8 },
+        { enemyId: 'wave-eel', count: 8 },
+        { enemyId: 'saw-drift', count: 5 }
+      ],
+      loot: [{ powerupId: 'switch-bulwark', count: 2 }]
     },
     {
-      startAt: 72,
-      endAt: 93,
-      minDelay: 0.44,
-      maxDelay: 0.58,
+      id: 'w4',
       enemies: [
-        { enemyId: 'wave-eel', weight: 0.9 },
-        { enemyId: 'saw-drift', weight: 0.85 },
-        { enemyId: 'raider', weight: 0.45 }
-      ]
+        { enemyId: 'wave-eel', count: 11 },
+        { enemyId: 'saw-drift', count: 9 },
+        { enemyId: 'raider', count: 4 }
+      ],
+      loot: [{ powerupId: 'switch-bulwark', count: 1 }]
     },
     {
-      startAt: 93,
-      endAt: 105,
-      minDelay: 0.4,
-      maxDelay: 0.52,
+      id: 'w5',
       enemies: [
-        { enemyId: 'wave-eel', weight: 1 },
-        { enemyId: 'saw-drift', weight: 1 }
-      ]
+        { enemyId: 'wave-eel', count: 13 },
+        { enemyId: 'saw-drift', count: 13 }
+      ],
+      loot: [{ powerupId: 'switch-bulwark', count: 1 }]
     }
   ]
 };

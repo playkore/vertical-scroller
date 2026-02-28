@@ -49,6 +49,7 @@ export class LevelDirector {
 
   // Advances level pacing, handles phased spawns, and triggers boss handoff.
   update(deltaSeconds: number) {
+    const durationSeconds = this.level.durationSeconds ?? 0;
     if (this.levelComplete) {
       return;
     }
@@ -65,8 +66,8 @@ export class LevelDirector {
     this.elapsedSeconds += deltaSeconds;
 
     // End of wave timeline: lock waves and deploy boss once.
-    if (this.elapsedSeconds >= this.level.durationSeconds) {
-      this.elapsedSeconds = this.level.durationSeconds;
+    if (this.elapsedSeconds >= durationSeconds) {
+      this.elapsedSeconds = durationSeconds;
       this.spawnBossIfConfigured();
       return;
     }
@@ -92,7 +93,8 @@ export class LevelDirector {
   }
 
   getProgressRatio(): number {
-    return Phaser.Math.Clamp(this.elapsedSeconds / this.level.durationSeconds, 0, 1);
+    const durationSeconds = this.level.durationSeconds ?? 1;
+    return Phaser.Math.Clamp(this.elapsedSeconds / durationSeconds, 0, 1);
   }
 
   isLevelComplete(): boolean {
@@ -130,7 +132,7 @@ export class LevelDirector {
 
   private getActivePhase(elapsedSeconds: number): LevelPhase | null {
     return (
-      this.level.phases.find(
+      (this.level.phases ?? []).find(
         (phase) => elapsedSeconds >= phase.startAt && elapsedSeconds < phase.endAt
       ) ?? null
     );

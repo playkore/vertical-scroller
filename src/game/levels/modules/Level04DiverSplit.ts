@@ -3,76 +3,72 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-04',
   name: 'DIVER SPLIT',
-  durationSeconds: 135,
   bossId: 'boss-alpha-core',
-  powerups: [
-      { powerupId: 'signal-scrap', count: 3 },
-      { powerupId: 'flux-battery', count: 3 },
-      { powerupId: 'switch-bulwark', count: 1 },
-      { powerupId: 'switch-interceptor', count: 1 },
-      { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 },
-      { powerupId: 'switch-flamethrower', count: 1 }
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 2.6,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 27,
-      minDelay: 0.38,
-      maxDelay: 0.5,
+      id: 'w1',
       enemies: [
-        { enemyId: 'wave-eel', weight: 0.8 },
-        { enemyId: 'hunter', weight: 0.75 },
-        { enemyId: 'yoyo-striker', weight: 0.6 }
+        { enemyId: 'wave-eel', count: 23 },
+        { enemyId: 'hunter', count: 21 },
+        { enemyId: 'yoyo-striker', count: 17 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-bulwark', count: 1 }
       ]
     },
     {
-      startAt: 27,
-      endAt: 54,
-      minDelay: 0.34,
-      maxDelay: 0.46,
+      id: 'w2',
       enemies: [
-        { enemyId: 'saw-drift', weight: 0.75 },
-        { enemyId: 'hunter', weight: 0.7 },
-        { enemyId: 'yoyo-striker', weight: 0.7 },
-        { enemyId: 'orbit-diver', weight: 0.4 }
+        { enemyId: 'saw-drift', count: 20 },
+        { enemyId: 'hunter', count: 19 },
+        { enemyId: 'yoyo-striker', count: 18 },
+        { enemyId: 'orbit-diver', count: 11 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-interceptor', count: 1 }
       ]
     },
     {
-      startAt: 54,
-      endAt: 81,
-      minDelay: 0.32,
-      maxDelay: 0.44,
+      id: 'w3',
       enemies: [
-        { enemyId: 'hunter', weight: 0.65 },
-        { enemyId: 'yoyo-striker', weight: 0.75 },
-        { enemyId: 'sniper-lock', weight: 0.55 },
-        { enemyId: 'orbit-diver', weight: 0.55 },
-        { enemyId: 'splitter', weight: 0.4 }
+        { enemyId: 'hunter', count: 16 },
+        { enemyId: 'yoyo-striker', count: 18 },
+        { enemyId: 'sniper-lock', count: 14 },
+        { enemyId: 'orbit-diver', count: 13 },
+        { enemyId: 'splitter', count: 10 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-lancer', count: 1 }
       ]
     },
     {
-      startAt: 81,
-      endAt: 108,
-      minDelay: 0.3,
-      maxDelay: 0.42,
+      id: 'w4',
       enemies: [
-        { enemyId: 'sniper-lock', weight: 0.65 },
-        { enemyId: 'orbit-diver', weight: 0.75 },
-        { enemyId: 'splitter', weight: 0.65 },
-        { enemyId: 'berserk-reaver', weight: 0.45 }
-      ]
+        { enemyId: 'sniper-lock', count: 20 },
+        { enemyId: 'orbit-diver', count: 22 },
+        { enemyId: 'splitter', count: 19 },
+        { enemyId: 'berserk-reaver', count: 14 }
+      ],
+      loot: [{ powerupId: 'switch-solar-spiral', count: 1 }]
     },
     {
-      startAt: 108,
-      endAt: 135,
-      minDelay: 0.26,
-      maxDelay: 0.4,
+      id: 'w5',
       enemies: [
-        { enemyId: 'orbit-diver', weight: 0.9 },
-        { enemyId: 'splitter', weight: 0.85 },
-        { enemyId: 'sniper-lock', weight: 0.65 }
-      ]
+        { enemyId: 'orbit-diver', count: 31 },
+        { enemyId: 'splitter', count: 29 },
+        { enemyId: 'sniper-lock', count: 22 }
+      ],
+      loot: [{ powerupId: 'switch-flamethrower', count: 1 }]
     }
   ]
 };

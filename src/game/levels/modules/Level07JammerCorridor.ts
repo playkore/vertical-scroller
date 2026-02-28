@@ -3,75 +3,78 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-07',
   name: 'JAMMER CORRIDOR',
-  durationSeconds: 150,
   bossId: 'boss-alpha-core',
-  powerups: [
-      { powerupId: 'signal-scrap', count: 5 },
-      { powerupId: 'flux-battery', count: 4 },
-      { powerupId: 'switch-bulwark', count: 1 },
-      { powerupId: 'switch-interceptor', count: 1 },
-      { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 },
-      { powerupId: 'switch-flamethrower', count: 1 }
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 3.2,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 30,
-      minDelay: 0.28,
-      maxDelay: 0.4,
+      id: 'w1',
       enemies: [
-        { enemyId: 'mine-layer', weight: 0.75 },
-        { enemyId: 'feign-retreat', weight: 0.7 },
-        { enemyId: 'pulse-ram', weight: 0.65 }
+        { enemyId: 'mine-layer', count: 32 },
+        { enemyId: 'feign-retreat', count: 29 },
+        { enemyId: 'pulse-ram', count: 27 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-bulwark', count: 1 }
       ]
     },
     {
-      startAt: 30,
-      endAt: 60,
-      minDelay: 0.26,
-      maxDelay: 0.38,
+      id: 'w2',
       enemies: [
-        { enemyId: 'mine-layer', weight: 0.7 },
-        { enemyId: 'feign-retreat', weight: 0.7 },
-        { enemyId: 'lane-jammer', weight: 0.45 },
-        { enemyId: 'hunter', weight: 0.6 }
+        { enemyId: 'mine-layer', count: 27 },
+        { enemyId: 'feign-retreat', count: 27 },
+        { enemyId: 'lane-jammer', count: 17 },
+        { enemyId: 'hunter', count: 23 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-interceptor', count: 1 }
       ]
     },
     {
-      startAt: 60,
-      endAt: 90,
-      minDelay: 0.24,
-      maxDelay: 0.36,
+      id: 'w3',
       enemies: [
-        { enemyId: 'lane-jammer', weight: 0.65 },
-        { enemyId: 'mine-layer', weight: 0.65 },
-        { enemyId: 'feign-retreat', weight: 0.65 },
-        { enemyId: 'shield-front', weight: 0.55 },
-        { enemyId: 'sniper-lock', weight: 0.5 }
+        { enemyId: 'lane-jammer', count: 22 },
+        { enemyId: 'mine-layer', count: 21 },
+        { enemyId: 'feign-retreat', count: 21 },
+        { enemyId: 'shield-front', count: 19 },
+        { enemyId: 'sniper-lock', count: 17 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-lancer', count: 1 }
       ]
     },
     {
-      startAt: 90,
-      endAt: 120,
-      minDelay: 0.21,
-      maxDelay: 0.33,
+      id: 'w4',
       enemies: [
-        { enemyId: 'lane-jammer', weight: 0.8 },
-        { enemyId: 'feign-retreat', weight: 0.7 },
-        { enemyId: 'pulse-ram', weight: 0.65 },
-        { enemyId: 'yoyo-striker', weight: 0.5 }
+        { enemyId: 'lane-jammer', count: 34 },
+        { enemyId: 'feign-retreat', count: 29 },
+        { enemyId: 'pulse-ram', count: 27 },
+        { enemyId: 'yoyo-striker', count: 21 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-solar-spiral', count: 1 }
       ]
     },
     {
-      startAt: 120,
-      endAt: 150,
-      minDelay: 0.19,
-      maxDelay: 0.31,
+      id: 'w5',
       enemies: [
-        { enemyId: 'lane-jammer', weight: 1 },
-        { enemyId: 'mine-layer', weight: 0.75 },
-        { enemyId: 'feign-retreat', weight: 0.75 }
+        { enemyId: 'lane-jammer', count: 48 },
+        { enemyId: 'mine-layer', count: 36 },
+        { enemyId: 'feign-retreat', count: 36 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'switch-flamethrower', count: 1 }
       ]
     }
   ]

@@ -3,75 +3,67 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-02',
   name: 'HUNTER WAKE',
-  durationSeconds: 120,
   bossId: 'boss-alpha-core',
-  powerups: [
-      { powerupId: 'signal-scrap', count: 2 },
-      { powerupId: 'flux-battery', count: 2 },
-      { powerupId: 'switch-bulwark', count: 1 },
-      { powerupId: 'switch-interceptor', count: 1 },
-      { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 },
-      { powerupId: 'switch-flamethrower', count: 1 }
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 2.1,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 24,
-      minDelay: 0.48,
-      maxDelay: 0.64,
+      id: 'w1',
       enemies: [
-        { enemyId: 'raider', weight: 1 },
-        { enemyId: 'wave-eel', weight: 0.5 }
+        { enemyId: 'raider', count: 29 },
+        { enemyId: 'wave-eel', count: 14 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-bulwark', count: 1 }
       ]
     },
     {
-      startAt: 24,
-      endAt: 48,
-      minDelay: 0.44,
-      maxDelay: 0.6,
+      id: 'w2',
       enemies: [
-        { enemyId: 'raider', weight: 0.8 },
-        { enemyId: 'wave-eel', weight: 0.7 },
-        { enemyId: 'saw-drift', weight: 0.55 },
-        { enemyId: 'hunter', weight: 0.4 }
+        { enemyId: 'raider', count: 15 },
+        { enemyId: 'wave-eel', count: 13 },
+        { enemyId: 'saw-drift', count: 10 },
+        { enemyId: 'hunter', count: 8 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-interceptor', count: 1 }
       ]
     },
     {
-      startAt: 48,
-      endAt: 72,
-      minDelay: 0.4,
-      maxDelay: 0.56,
+      id: 'w3',
       enemies: [
-        { enemyId: 'raider', weight: 0.65 },
-        { enemyId: 'wave-eel', weight: 0.7 },
-        { enemyId: 'saw-drift', weight: 0.7 },
-        { enemyId: 'hunter', weight: 0.65 },
-        { enemyId: 'berserk-reaver', weight: 0.35 }
-      ]
+        { enemyId: 'raider', count: 11 },
+        { enemyId: 'wave-eel', count: 11 },
+        { enemyId: 'saw-drift', count: 11 },
+        { enemyId: 'hunter', count: 11 },
+        { enemyId: 'berserk-reaver', count: 6 }
+      ],
+      loot: [{ powerupId: 'switch-lancer', count: 1 }]
     },
     {
-      startAt: 72,
-      endAt: 96,
-      minDelay: 0.36,
-      maxDelay: 0.52,
+      id: 'w4',
       enemies: [
-        { enemyId: 'wave-eel', weight: 0.75 },
-        { enemyId: 'saw-drift', weight: 0.75 },
-        { enemyId: 'hunter', weight: 0.8 },
-        { enemyId: 'berserk-reaver', weight: 0.55 }
-      ]
+        { enemyId: 'wave-eel', count: 15 },
+        { enemyId: 'saw-drift', count: 14 },
+        { enemyId: 'hunter', count: 15 },
+        { enemyId: 'berserk-reaver', count: 11 }
+      ],
+      loot: [{ powerupId: 'switch-solar-spiral', count: 1 }]
     },
     {
-      startAt: 96,
-      endAt: 120,
-      minDelay: 0.32,
-      maxDelay: 0.48,
+      id: 'w5',
       enemies: [
-        { enemyId: 'hunter', weight: 0.95 },
-        { enemyId: 'berserk-reaver', weight: 0.8 },
-        { enemyId: 'saw-drift', weight: 0.65 }
-      ]
+        { enemyId: 'hunter', count: 24 },
+        { enemyId: 'berserk-reaver', count: 20 },
+        { enemyId: 'saw-drift', count: 16 }
+      ],
+      loot: [{ powerupId: 'switch-flamethrower', count: 1 }]
     }
   ]
 };

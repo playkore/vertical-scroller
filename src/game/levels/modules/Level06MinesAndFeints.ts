@@ -3,76 +3,76 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-06',
   name: 'MINES AND FEINTS',
-  durationSeconds: 150,
   bossId: 'boss-alpha-core',
-  powerups: [
-      { powerupId: 'signal-scrap', count: 4 },
-      { powerupId: 'flux-battery', count: 4 },
-      { powerupId: 'switch-bulwark', count: 1 },
-      { powerupId: 'switch-interceptor', count: 1 },
-      { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 },
-      { powerupId: 'switch-flamethrower', count: 1 }
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 3,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 30,
-      minDelay: 0.32,
-      maxDelay: 0.44,
+      id: 'w1',
       enemies: [
-        { enemyId: 'shield-front', weight: 0.7 },
-        { enemyId: 'pulse-ram', weight: 0.65 },
-        { enemyId: 'splitter', weight: 0.6 }
+        { enemyId: 'shield-front', count: 29 },
+        { enemyId: 'pulse-ram', count: 26 },
+        { enemyId: 'splitter', count: 24 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-bulwark', count: 1 }
       ]
     },
     {
-      startAt: 30,
-      endAt: 60,
-      minDelay: 0.28,
-      maxDelay: 0.4,
+      id: 'w2',
       enemies: [
-        { enemyId: 'shield-front', weight: 0.65 },
-        { enemyId: 'pulse-ram', weight: 0.7 },
-        { enemyId: 'mine-layer', weight: 0.45 },
-        { enemyId: 'orbit-diver', weight: 0.55 }
+        { enemyId: 'shield-front', count: 25 },
+        { enemyId: 'pulse-ram', count: 26 },
+        { enemyId: 'mine-layer', count: 17 },
+        { enemyId: 'orbit-diver', count: 20 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-interceptor', count: 1 }
       ]
     },
     {
-      startAt: 60,
-      endAt: 90,
-      minDelay: 0.27,
-      maxDelay: 0.39,
+      id: 'w3',
       enemies: [
-        { enemyId: 'mine-layer', weight: 0.65 },
-        { enemyId: 'feign-retreat', weight: 0.5 },
-        { enemyId: 'pulse-ram', weight: 0.7 },
-        { enemyId: 'sniper-lock', weight: 0.6 },
-        { enemyId: 'shield-front', weight: 0.6 }
+        { enemyId: 'mine-layer', count: 19 },
+        { enemyId: 'feign-retreat', count: 15 },
+        { enemyId: 'pulse-ram', count: 21 },
+        { enemyId: 'sniper-lock', count: 18 },
+        { enemyId: 'shield-front', count: 18 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-lancer', count: 1 }
       ]
     },
     {
-      startAt: 90,
-      endAt: 120,
-      minDelay: 0.25,
-      maxDelay: 0.37,
+      id: 'w4',
       enemies: [
-        { enemyId: 'mine-layer', weight: 0.7 },
-        { enemyId: 'feign-retreat', weight: 0.7 },
-        { enemyId: 'pulse-ram', weight: 0.7 },
-        { enemyId: 'hunter', weight: 0.55 }
+        { enemyId: 'mine-layer', count: 26 },
+        { enemyId: 'feign-retreat', count: 26 },
+        { enemyId: 'pulse-ram', count: 25 },
+        { enemyId: 'hunter', count: 20 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-solar-spiral', count: 1 }
       ]
     },
     {
-      startAt: 120,
-      endAt: 150,
-      minDelay: 0.22,
-      maxDelay: 0.36,
+      id: 'w5',
       enemies: [
-        { enemyId: 'feign-retreat', weight: 0.9 },
-        { enemyId: 'mine-layer', weight: 0.9 },
-        { enemyId: 'pulse-ram', weight: 0.75 }
-      ]
+        { enemyId: 'feign-retreat', count: 37 },
+        { enemyId: 'mine-layer', count: 36 },
+        { enemyId: 'pulse-ram', count: 30 }
+      ],
+      loot: [{ powerupId: 'switch-flamethrower', count: 1 }]
     }
   ]
 };

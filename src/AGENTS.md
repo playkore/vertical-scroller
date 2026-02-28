@@ -30,7 +30,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BossHealthBar.ts`: Right-side vertical boss health indicator shown during boss fights.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
   - `BossSpawner.ts`: Boss spawn lifecycle and active boss group management.
-  - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
+  - `WaveDirector.ts`: Wave-based level flow controller that spawns queued enemies, awards per-wave loot, and hands off to bosses.
+  - `LevelDirector.ts`: Legacy timeline controller retained only for backwards-compatible data conversion support.
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
   - `ScoreDirector.ts`: Score/multiplier runtime controller with combo HUD state.
@@ -64,7 +65,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BossRegistry.ts`: Central registry for available bosses.
   - `modules/`: Boss-specific implementations (`AlphaCoreBoss`, `TinyCoreBoss`).
 - `levels/`: Level domain model and module registry.
-  - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id, perfect-clear threshold, powerup drop quotas).
+  - `LevelDefinition.ts`: Level configuration/type contract (wave-mode pacing, waves, boss id, perfect-clear threshold, plus legacy phase compatibility helpers).
   - `LevelRegistry.ts`: Central registry for available levels.
   - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
   - `modules/Level01NeonFrontier.ts`: First campaign level timeline and baseline enemy rollout rules.

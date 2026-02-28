@@ -3,75 +3,79 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-08',
   name: 'GRAVITY ARC',
-  durationSeconds: 165,
   bossId: 'boss-alpha-core',
-  powerups: [
-      { powerupId: 'signal-scrap', count: 5 },
-      { powerupId: 'flux-battery', count: 5 },
-      { powerupId: 'switch-bulwark', count: 1 },
-      { powerupId: 'switch-interceptor', count: 1 },
-      { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 },
-      { powerupId: 'switch-flamethrower', count: 1 }
-    ],
-  phases: [
+  waveMode: {
+    spawnRatePerSecond: 3.3,
+    interWaveDelaySeconds: 3
+  },
+  waves: [
     {
-      startAt: 0,
-      endAt: 33,
-      minDelay: 0.28,
-      maxDelay: 0.4,
+      id: 'w1',
       enemies: [
-        { enemyId: 'lane-jammer', weight: 0.75 },
-        { enemyId: 'feign-retreat', weight: 0.75 },
-        { enemyId: 'mine-layer', weight: 0.65 }
+        { enemyId: 'lane-jammer', count: 34 },
+        { enemyId: 'feign-retreat', count: 34 },
+        { enemyId: 'mine-layer', count: 29 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-bulwark', count: 1 }
       ]
     },
     {
-      startAt: 33,
-      endAt: 66,
-      minDelay: 0.26,
-      maxDelay: 0.38,
+      id: 'w2',
       enemies: [
-        { enemyId: 'lane-jammer', weight: 0.7 },
-        { enemyId: 'mine-layer', weight: 0.7 },
-        { enemyId: 'gravity-well', weight: 0.45 },
-        { enemyId: 'sniper-lock', weight: 0.55 }
+        { enemyId: 'lane-jammer', count: 30 },
+        { enemyId: 'mine-layer', count: 30 },
+        { enemyId: 'gravity-well', count: 19 },
+        { enemyId: 'sniper-lock', count: 24 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-interceptor', count: 1 }
       ]
     },
     {
-      startAt: 66,
-      endAt: 99,
-      minDelay: 0.24,
-      maxDelay: 0.36,
+      id: 'w3',
       enemies: [
-        { enemyId: 'gravity-well', weight: 0.6 },
-        { enemyId: 'lane-jammer', weight: 0.65 },
-        { enemyId: 'feign-retreat', weight: 0.65 },
-        { enemyId: 'shield-front', weight: 0.55 },
-        { enemyId: 'pulse-ram', weight: 0.5 }
+        { enemyId: 'gravity-well', count: 22 },
+        { enemyId: 'lane-jammer', count: 24 },
+        { enemyId: 'feign-retreat', count: 24 },
+        { enemyId: 'shield-front', count: 21 },
+        { enemyId: 'pulse-ram', count: 19 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-lancer', count: 1 }
       ]
     },
     {
-      startAt: 99,
-      endAt: 132,
-      minDelay: 0.21,
-      maxDelay: 0.33,
+      id: 'w4',
       enemies: [
-        { enemyId: 'gravity-well', weight: 0.75 },
-        { enemyId: 'lane-jammer', weight: 0.75 },
-        { enemyId: 'orbit-diver', weight: 0.6 },
-        { enemyId: 'feign-retreat', weight: 0.55 }
+        { enemyId: 'gravity-well', count: 35 },
+        { enemyId: 'lane-jammer', count: 34 },
+        { enemyId: 'orbit-diver', count: 28 },
+        { enemyId: 'feign-retreat', count: 25 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-solar-spiral', count: 1 }
       ]
     },
     {
-      startAt: 132,
-      endAt: 165,
-      minDelay: 0.19,
-      maxDelay: 0.31,
+      id: 'w5',
       enemies: [
-        { enemyId: 'gravity-well', weight: 0.95 },
-        { enemyId: 'lane-jammer', weight: 0.8 },
-        { enemyId: 'mine-layer', weight: 0.7 }
+        { enemyId: 'gravity-well', count: 51 },
+        { enemyId: 'lane-jammer', count: 43 },
+        { enemyId: 'mine-layer', count: 38 }
+      ],
+      loot: [
+        { powerupId: 'signal-scrap', count: 1 },
+        { powerupId: 'flux-battery', count: 1 },
+        { powerupId: 'switch-flamethrower', count: 1 }
       ]
     }
   ]

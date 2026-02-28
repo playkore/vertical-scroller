@@ -12,7 +12,7 @@ export class PowerupDropDirector {
     private readonly powerupSpawner: PowerupSpawner
   ) {
     // Normalize and validate all configured quotas up-front.
-    this.level.powerups.forEach((entry) => {
+    (this.level.powerups ?? []).forEach((entry) => {
       getPowerupById(entry.powerupId);
       this.remainingById.set(entry.powerupId, Math.max(0, Math.floor(entry.count)));
     });
@@ -55,7 +55,7 @@ export class PowerupDropDirector {
     return Math.max(
       1,
       Math.round(
-        this.level.phases.reduce((sum, phase) => {
+        (this.level.phases ?? []).reduce((sum, phase) => {
           const phaseDuration = Math.max(0, phase.endAt - phase.startAt);
           const averageDelay = Math.max(0.05, (phase.minDelay + phase.maxDelay) * 0.5);
           return sum + phaseDuration / averageDelay;
@@ -65,7 +65,7 @@ export class PowerupDropDirector {
   }
 
   private rollDropType(): LevelPowerupDropEntry | null {
-    const entries = this.level.powerups
+    const entries = (this.level.powerups ?? [])
       .map((entry) => ({ powerupId: entry.powerupId, count: this.remainingById.get(entry.powerupId) ?? 0 }))
       .filter((entry) => entry.count > 0);
 

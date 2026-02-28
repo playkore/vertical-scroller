@@ -4,12 +4,11 @@ import { BossHealthBar } from '../components/BossHealthBar';
 import { BossSpawner } from '../components/BossSpawner';
 import { CollisionSystem } from '../components/CollisionSystem';
 import { EnemySpawner } from '../components/EnemySpawner';
-import { LevelDirector } from '../components/LevelDirector';
 import { LevelProgressBar } from '../components/LevelProgressBar';
-import { PowerupDropDirector } from '../components/PowerupDropDirector';
 import { PowerupSpawner } from '../components/PowerupSpawner';
 import { ScoreDirector } from '../components/ScoreDirector';
 import { TouchController } from '../components/TouchController';
+import { WaveDirector } from '../components/WaveDirector';
 import { BossShip } from '../objects/BossShip';
 import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerBullet } from '../objects/PlayerBullet';
@@ -37,7 +36,7 @@ export class GameScene extends Phaser.Scene {
   private enemySpawner!: EnemySpawner;
   private powerupSpawner!: PowerupSpawner;
   private bossSpawner!: BossSpawner;
-  private levelDirector!: LevelDirector;
+  private waveDirector!: WaveDirector;
   private collisionSystem!: CollisionSystem;
   private scoreDirector!: ScoreDirector;
   private levelProgressBar!: LevelProgressBar;
@@ -103,13 +102,13 @@ export class GameScene extends Phaser.Scene {
     this.enemySpawner = new EnemySpawner(this);
     this.powerupSpawner = new PowerupSpawner(this);
     this.bossSpawner = new BossSpawner(this);
-    const powerupDropDirector = new PowerupDropDirector(this.selectedLevel, this.powerupSpawner);
     this.scoreDirector = new ScoreDirector(this, this.selectedLevel.scoreConfig);
 
-    this.levelDirector = new LevelDirector(
+    this.waveDirector = new WaveDirector(
       this,
       this.enemySpawner,
       this.bossSpawner,
+      this.powerupSpawner,
       this.selectedLevel
     );
 
@@ -121,7 +120,12 @@ export class GameScene extends Phaser.Scene {
       this.enemySpawner.getGroup(),
       this.bossSpawner.getGroup(),
       this.powerupSpawner.getGroup(),
-      powerupDropDirector
+      (x, y) => {
+        this.waveDirector.onEnemyKilled(x, y);
+      },
+      () => {
+        this.waveDirector.onEnemyRemoved();
+      }
     );
 
     this.createMenuButton();
@@ -129,7 +133,7 @@ export class GameScene extends Phaser.Scene {
     this.initializeWeaponLevels();
 
     this.applyShip(defaultShip);
-    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.levelProgressBar.update(this.waveDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
     this.playLevelIntro();
 
@@ -146,23 +150,23 @@ export class GameScene extends Phaser.Scene {
 
     if (this.gameplayActive) {
       this.touchController.update(deltaSeconds);
-      this.levelDirector.update(deltaSeconds);
+      this.waveDirector.update(deltaSeconds);
       this.scoreDirector.update(delta);
       this.autoFire.setWeaponLevelMultiplier(this.scoreDirector.getMultiplier());
       this.autoFire.update(deltaSeconds);
     }
 
-    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.levelProgressBar.update(this.waveDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
 
-    if (this.gameplayActive && this.levelDirector.isLevelComplete() && !this.levelExitStarted) {
+    if (this.gameplayActive && this.waveDirector.isLevelComplete() && !this.levelExitStarted) {
       this.playLevelExit();
     }
   }
 
   shutdown() {
     this.touchController.destroy();
-    this.levelDirector.destroy();
+    this.waveDirector.destroy();
     this.levelProgressBar.destroy();
     this.bossHealthBar.destroy();
     this.scoreDirector.destroy();
@@ -193,7 +197,7 @@ export class GameScene extends Phaser.Scene {
 
     this.player.x = Phaser.Math.Clamp(this.player.x, bounds.left + 16, bounds.right - 16);
     this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - BOTTOM_SAFE_PADDING);
-    this.levelDirector.onResize(gameSize.width, gameSize.height);
+    this.waveDirector.onResize(gameSize.width, gameSize.height);
     this.scoreDirector.onResize(gameSize.width, gameSize.height);
     this.layoutMenuButton(gameSize.width, gameSize.height);
     this.layoutWeaponLevelText(gameSize.width);
@@ -220,7 +224,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.drawArenaFrame();
-    this.levelProgressBar.update(this.levelDirector.getProgressRatio());
+    this.levelProgressBar.update(this.waveDirector.getProgressRatio());
     this.bossHealthBar.update(this.bossSpawner.getVisibleBossHealthRatio());
   }
 
@@ -259,7 +263,7 @@ export class GameScene extends Phaser.Scene {
       maxChainCount: stats.maxChainCount,
       durationMs: Math.max(0, Math.round(this.time.now - this.levelStartTimeMs)),
       bossConfigured: this.selectedLevel.bossId !== null,
-      enemiesSpawned: this.levelDirector.getEnemiesSpawned(),
+      enemiesSpawned: this.waveDirector.getTotalEnemies(),
       perfectKillThreshold: this.selectedLevel.perfectKillThreshold ?? 1
     };
 

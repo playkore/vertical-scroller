@@ -4,7 +4,6 @@ import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerShip } from '../objects/PlayerShip';
 import { PowerupPickup } from '../objects/PowerupPickup';
 import { LevelStats } from '../stats/LevelStats';
-import { PowerupDropDirector } from './PowerupDropDirector';
 import { ScoreDirector } from './ScoreDirector';
 
 export class CollisionSystem {
@@ -22,7 +21,8 @@ export class CollisionSystem {
     enemies: Phaser.Physics.Arcade.Group,
     bosses: Phaser.Physics.Arcade.Group,
     powerups: Phaser.Physics.Arcade.Group,
-    powerupDropDirector: PowerupDropDirector
+    private readonly onEnemyKilled?: (x: number, y: number) => void,
+    private readonly onEnemyRemoved?: () => void
   ) {
     this.scene.physics.add.overlap(
       bullets,
@@ -36,9 +36,9 @@ export class CollisionSystem {
         bullet.disableBody(true, true);
         const defeated = enemy.takeHit(1);
         if (defeated) {
-          powerupDropDirector.onEnemyDestroyed(dropX, dropY);
           this.stats.enemiesDestroyed += 1;
           this.scoreDirector.onEnemyKilled('wave', false);
+          this.onEnemyKilled?.(dropX, dropY);
         }
       },
       undefined,
@@ -69,6 +69,7 @@ export class CollisionSystem {
       (_playerObj, enemyObj) => {
         const enemy = enemyObj as EnemyShip;
         enemy.despawn();
+        this.onEnemyRemoved?.();
         this.onPlayerHit();
       },
       undefined,
