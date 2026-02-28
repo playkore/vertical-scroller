@@ -7,7 +7,8 @@ export class AutoFireSystem {
   private readonly bullets: Phaser.Physics.Arcade.Group;
   private fireCooldown = 0;
   private activeShip: ShipDefinition;
-  private activeWeaponLevel = 1;
+  private baseWeaponLevel = 1;
+  private weaponLevelMultiplier = 1;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -26,15 +27,19 @@ export class AutoFireSystem {
   update(deltaSeconds: number) {
     this.fireCooldown -= deltaSeconds;
     if (this.fireCooldown <= 0) {
-      this.fireCooldown = this.activeShip.weapon.fireInterval(this.activeWeaponLevel);
+      this.fireCooldown = this.activeShip.weapon.fireInterval(this.getEffectiveWeaponLevel());
       this.fire();
     }
   }
 
   setShip(ship: ShipDefinition, weaponLevel: number) {
     this.activeShip = ship;
-    this.activeWeaponLevel = Phaser.Math.Clamp(weaponLevel, 1, this.activeShip.weapon.maxLevel);
+    this.baseWeaponLevel = Phaser.Math.Clamp(weaponLevel, 1, this.activeShip.weapon.maxLevel);
     this.fireCooldown = 0;
+  }
+
+  setWeaponLevelMultiplier(multiplier: number) {
+    this.weaponLevelMultiplier = Math.max(1, multiplier);
   }
 
   getGroup(): Phaser.Physics.Arcade.Group {
@@ -42,7 +47,7 @@ export class AutoFireSystem {
   }
 
   private fire() {
-    const weaponLevel = Math.max(1, this.activeWeaponLevel);
+    const weaponLevel = this.getEffectiveWeaponLevel();
 
     for (const projectile of this.activeShip.weapon.projectiles) {
       const startX = this.player.x + projectile.offsetX;
@@ -55,5 +60,9 @@ export class AutoFireSystem {
 
       bullet.fire(startX, startY, projectile, weaponLevel);
     }
+  }
+
+  private getEffectiveWeaponLevel() {
+    return Math.max(1, this.baseWeaponLevel * this.weaponLevelMultiplier);
   }
 }

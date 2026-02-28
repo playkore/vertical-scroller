@@ -79,7 +79,7 @@ export class ScoreDirector {
     );
 
     const baseScore = isBoss ? this.config.bossKillScore : this.config.baseKillScore;
-    this.score += Math.floor(baseScore * this.multiplier);
+    this.score += Math.floor(baseScore);
     this.maxMultiplier = Math.max(this.maxMultiplier, this.multiplier);
     this.maxChainCount = Math.max(this.maxChainCount, this.chainCount);
 

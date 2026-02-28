@@ -146,9 +146,10 @@ export class GameScene extends Phaser.Scene {
 
     if (this.gameplayActive) {
       this.touchController.update(deltaSeconds);
-      this.autoFire.update(deltaSeconds);
       this.levelDirector.update(deltaSeconds);
       this.scoreDirector.update(delta);
+      this.autoFire.setWeaponLevelMultiplier(this.scoreDirector.getMultiplier());
+      this.autoFire.update(deltaSeconds);
     }
 
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
@@ -176,6 +177,7 @@ export class GameScene extends Phaser.Scene {
     const currentWeaponLevel = this.getWeaponLevel(ship.id);
     this.player.setShipTexture(ship.textureKey);
     this.autoFire.setShip(ship, currentWeaponLevel);
+    this.autoFire.setWeaponLevelMultiplier(this.scoreDirector.getMultiplier());
     this.weaponLevelText.setText(`WEAPON LV ${currentWeaponLevel}`);
   }
 
