@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { BossShip } from '../objects/BossShip';
+import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerShip } from '../objects/PlayerShip';
 import { PowerupPickup } from '../objects/PowerupPickup';
 import { LevelStats } from '../stats/LevelStats';
@@ -28,15 +29,17 @@ export class CollisionSystem {
       enemies,
       (bulletObj, enemyObj) => {
         const bullet = bulletObj as Phaser.Physics.Arcade.Image;
-        const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
+        const enemy = enemyObj as EnemyShip;
         const dropX = enemy.x;
         const dropY = enemy.y;
 
         bullet.disableBody(true, true);
-        enemy.disableBody(true, true);
-        powerupDropDirector.onEnemyDestroyed(dropX, dropY);
-        this.stats.enemiesDestroyed += 1;
-        this.scoreDirector.onEnemyKilled('wave', false);
+        const defeated = enemy.takeHit(1);
+        if (defeated) {
+          powerupDropDirector.onEnemyDestroyed(dropX, dropY);
+          this.stats.enemiesDestroyed += 1;
+          this.scoreDirector.onEnemyKilled('wave', false);
+        }
       },
       undefined,
       this
@@ -64,8 +67,8 @@ export class CollisionSystem {
       this.player,
       enemies,
       (_playerObj, enemyObj) => {
-        const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
-        enemy.disableBody(true, true);
+        const enemy = enemyObj as EnemyShip;
+        enemy.despawn();
         this.onPlayerHit();
       },
       undefined,

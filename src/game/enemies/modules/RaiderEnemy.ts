@@ -6,6 +6,7 @@ export const enemyModule: EnemyDefinition = {
   id: 'raider',
   name: 'RDR',
   textureKey: 'enemy-raider',
+  maxHitPoints: 1,
   spawnWeight: 1.2,
   spawn: {
     minDelay: 0.45,

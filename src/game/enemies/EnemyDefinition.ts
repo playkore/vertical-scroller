@@ -50,6 +50,8 @@ export interface EnemyDefinition {
   id: string;
   name: string;
   textureKey: string;
+  // Total hit points for this enemy. Defaults to 2 when omitted.
+  maxHitPoints?: number;
   spawnWeight: number;
   spawn: EnemySpawnConfig;
   collider: EnemyColliderConfig;
