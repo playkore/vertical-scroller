@@ -27,11 +27,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `Playfield.ts`: Defines gameplay viewport/playfield geometry.
 - `components/`: Game systems and UI controllers that run within scene update loops.
   - `MenuButton.ts`: Reusable menu button UI element for front-end scenes.
-  - `BossHealthBar.ts`: Right-side vertical boss health indicator shown during boss fights.
   - `EnemySpawner.ts`: Enemy spawn scheduling/creation logic.
-  - `BossSpawner.ts`: Boss spawn lifecycle and active boss group management.
-  - `WaveDirector.ts`: Wave-based level flow controller that spawns queued enemies, awards per-wave loot, and hands off to bosses.
-  - `LevelDirector.ts`: Legacy timeline controller retained only for backwards-compatible data conversion support.
+  - `WaveDirector.ts`: Wave-based level flow controller that spawns queued enemies, awards per-wave loot, and completes levels after all waves.
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
   - `ScoreDirector.ts`: Score/multiplier runtime controller with combo HUD state.
@@ -43,7 +40,6 @@ This file documents the architecture of the `src/` codebase and should be kept i
 - `objects/`: Concrete runtime game entities.
   - `PlayerShip.ts`: Player ship object.
   - `EnemyShip.ts`: Enemy ship object.
-  - `BossShip.ts`: Boss runtime object with health and movement behavior hooks.
   - `PlayerBullet.ts`: Player projectile object.
   - `PowerupPickup.ts`: Falling collectible pickup spawned from defeated enemies.
   - `StarfieldLayer.ts`: Scrolling/parallax background layer.
@@ -60,14 +56,9 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `EnemyRegistry.ts`: Central registry for available enemies.
   - `EnemyBehaviorUtils.ts`: Runtime helpers for player-targeted enemy movement logic.
   - `modules/`: Enemy-specific implementations (`BerserkReaverEnemy`, `BoidFlockEnemy`, `EscortCoreEnemy`, `FeignRetreatEnemy`, `GravityWellEnemy`, `HunterEnemy`, `LaneJammerEnemy`, `MineLayerEnemy`, `OrbitDiverEnemy`, `PulseRamEnemy`, `RaiderEnemy`, `SawDriftEnemy`, `ShieldFrontEnemy`, `SniperLockEnemy`, `SplitterEnemy`, `UndercutHunterEnemy`, `WaveEelEnemy`, `YoyoStrikerEnemy`).
-- `bosses/`: Boss domain model, behavior contracts, and module registry.
-  - `BossDefinition.ts`: Boss configuration/type contract.
-  - `BossRegistry.ts`: Central registry for available bosses.
-  - `modules/`: Boss-specific implementations (`AlphaCoreBoss`, `TinyCoreBoss`).
 - `levels/`: Level domain model and module registry.
-  - `LevelDefinition.ts`: Level configuration/type contract (wave-mode pacing, waves, boss id, perfect-clear threshold, plus legacy phase compatibility helpers).
+  - `LevelDefinition.ts`: Level configuration/type contract (wave-mode pacing, waves, perfect-clear threshold, plus legacy phase compatibility helpers).
   - `LevelRegistry.ts`: Central registry for available levels.
-  - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
   - `modules/Level01NeonFrontier.ts`: First campaign level timeline and baseline enemy rollout rules.
   - `modules/Level02HunterWake.ts`: Campaign level 2 timeline introducing hunt-style enemies.
   - `modules/Level03OscillationRun.ts`: Campaign level 3 timeline introducing oscillation/sniper pressure.
@@ -79,7 +70,6 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `modules/Level09EscortPincer.ts`: Campaign level 9 timeline introducing escort and undercut attackers.
   - `modules/Level10FinalGauntlet.ts`: Campaign level 10 all-enemy gauntlet timeline.
   - `modules/Level11BoidStorm.ts`: Bonus flock challenge spawning only boid enemies in dense waves.
-  - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `powerups/`: Powerup domain model, behavior contracts, and module registry.
   - `PowerupDefinition.ts`: Powerup configuration/type contract.
   - `PowerupRegistry.ts`: Central registry for available powerups.
@@ -94,8 +84,8 @@ This file documents the architecture of the `src/` codebase and should be kept i
 ## Dependency Direction (Expected)
 
 - `scenes/` orchestrate `components/`, `layout/`, and `objects/`.
-- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`, `enemies/`, `bosses/`, `levels/`) as needed.
-- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`, `EnemyDefinition`, `BossDefinition`, `LevelDefinition`).
+- `components/` operate on `objects/` and consult registries (`ships/`, `bullets/`, `enemies/`, `levels/`) as needed.
+- `modules/` folders provide pluggable concrete implementations behind stable contracts (`ShipDefinition`, `BulletBehavior`, `EnemyDefinition`, `LevelDefinition`).
 
 ## Visual Directive
 
@@ -113,7 +103,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
 When editing architecture, update this file in the same change if any of the following occur:
 
 - A new folder is added under `src/game/`.
-- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, `enemies`, `bosses`, `levels`, or `layout`.
+- A file is moved between `scenes`, `components`, `objects`, `ships`, `bullets`, `enemies`, `levels`, or `layout`.
 - A new shared style/theme folder is added (for example `game/style/`).
 - A new registry/contract/module pattern is introduced.
 - The scene orchestration flow changes materially.
