@@ -25,7 +25,8 @@ export class AutoFireSystem {
   update(deltaSeconds: number) {
     this.fireCooldown -= deltaSeconds;
     if (this.fireCooldown <= 0) {
-      this.fireCooldown = this.activeShip.weapon.fireInterval;
+      const weaponLevel = Math.max(1, this.activeShip.weapon.level);
+      this.fireCooldown = this.activeShip.weapon.fireInterval / weaponLevel;
       this.fire();
     }
   }
@@ -40,6 +41,8 @@ export class AutoFireSystem {
   }
 
   private fire() {
+    const weaponLevel = Math.max(1, this.activeShip.weapon.level);
+
     for (const projectile of this.activeShip.weapon.projectiles) {
       const startX = this.player.x + projectile.offsetX;
       const startY = this.player.y + projectile.offsetY;
@@ -49,7 +52,7 @@ export class AutoFireSystem {
         continue;
       }
 
-      bullet.fire(startX, startY, projectile);
+      bullet.fire(startX, startY, projectile, weaponLevel);
     }
   }
 }

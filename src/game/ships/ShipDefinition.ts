@@ -8,9 +8,11 @@ export interface WeaponProjectileConfig {
   scale?: number;
   behaviorId: string;
   behaviorParams?: BulletBehaviorParams;
+  behaviorParamsPerLevel?: BulletBehaviorParams;
 }
 
 export interface ShipWeaponConfig {
+  level: number;
   fireInterval: number;
   projectiles: WeaponProjectileConfig[];
 }

@@ -11,6 +11,7 @@ export const shipModule: ShipDefinition = {
   name: 'INT',
   textureKey: 'ship-interceptor',
   weapon: {
+    level: 1,
     fireInterval: 0.12,
     projectiles: [
       {

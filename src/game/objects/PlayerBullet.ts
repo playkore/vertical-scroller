@@ -17,7 +17,7 @@ export class PlayerBullet extends Phaser.Physics.Arcade.Image {
     this.setVisible(false);
   }
 
-  fire(x: number, y: number, projectile: WeaponProjectileConfig) {
+  fire(x: number, y: number, projectile: WeaponProjectileConfig, weaponLevel = 1) {
     this.enableBody(true, x, y, true, true);
     this.setTexture(projectile.textureKey);
 
@@ -26,13 +26,21 @@ export class PlayerBullet extends Phaser.Physics.Arcade.Image {
 
     this.behaviorId = projectile.behaviorId;
     const behavior = getBulletBehavior(projectile.behaviorId);
+    const behaviorParams = { ...(projectile.behaviorParams ?? {}) };
+    const levelBonus = Math.max(0, weaponLevel - 1);
+
+    if (projectile.behaviorParamsPerLevel && levelBonus > 0) {
+      for (const [key, value] of Object.entries(projectile.behaviorParamsPerLevel)) {
+        behaviorParams[key] = (behaviorParams[key] ?? 0) + (value * levelBonus);
+      }
+    }
 
     this.behaviorState = behavior.onFire({
       bullet: this,
       scene: this.scene,
       spawnX: x,
       spawnY: y,
-      params: projectile.behaviorParams ?? {}
+      params: behaviorParams
     });
 
     const body = this.body as Phaser.Physics.Arcade.Body;

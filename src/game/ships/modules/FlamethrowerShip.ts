@@ -66,6 +66,7 @@ export const shipModule: ShipDefinition = {
   textureKey: 'ship-flamethrower',
   bulletBehaviors: [flameBehavior],
   weapon: {
+    level: 1,
     fireInterval: 0.1,
     projectiles: [
       {
@@ -81,6 +82,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.5,
           endScale: 1.4,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       },
       {
@@ -96,6 +100,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.58,
           endScale: 1.48,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       },
       {
@@ -111,6 +118,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.62,
           endScale: 1.52,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       },
       {
@@ -126,6 +136,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.62,
           endScale: 1.52,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       },
       {
@@ -141,6 +154,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.76,
           endScale: 1.68,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       },
       {
@@ -156,6 +172,9 @@ export const shipModule: ShipDefinition = {
           startScale: 0.76,
           endScale: 1.68,
           maxDistance: 98
+        },
+        behaviorParamsPerLevel: {
+          maxDistance: 18
         }
       }
     ]

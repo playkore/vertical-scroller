@@ -64,6 +64,7 @@ export const shipModule: ShipDefinition = {
   textureKey: 'ship-solar-spiral',
   bulletBehaviors: [solarSpiralBehavior],
   weapon: {
+    level: 1,
     fireInterval: 0.24,
     projectiles: [
       {
