@@ -12,7 +12,7 @@ export const shipModule: ShipDefinition = {
   name: 'BLW',
   textureKey: 'ship-bulwark',
   weapon: {
-    maxLevel: 5,
+    maxLevel: 12,
     fireInterval: 0.32,
     projectiles: [
       {
@@ -24,17 +24,6 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: 0,
           velocityY: -320
-        }
-      },
-      {
-        offsetX: 0,
-        offsetY: -7,
-        textureKey: 'bullet-orb',
-        scale: 1,
-        behaviorId: 'linear',
-        behaviorParams: {
-          velocityX: 0,
-          velocityY: -270
         }
       }
     ]
