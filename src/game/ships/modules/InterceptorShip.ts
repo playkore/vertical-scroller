@@ -8,7 +8,11 @@ export const shipModule: ShipDefinition = {
   textureKey: 'ship-interceptor',
   weapon: {
     maxLevel: 5,
-    fireInterval: 0.12,
+    fireInterval: (level) => {
+      const maxLevel = 5;
+      const clampedLevel = Phaser.Math.Clamp(level, 1, maxLevel);
+      return Phaser.Math.Linear(1, 0.12, (clampedLevel - 1) / (maxLevel - 1));
+    },
     projectiles: [
       {
         offsetX: -5,

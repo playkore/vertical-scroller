@@ -4,8 +4,6 @@ import { PlayerShip } from '../objects/PlayerShip';
 import { ShipDefinition } from '../ships/ShipDefinition';
 
 export class AutoFireSystem {
-  private static readonly MIN_FIRE_INTERVAL_SECONDS = 1;
-
   private readonly bullets: Phaser.Physics.Arcade.Group;
   private fireCooldown = 0;
   private activeShip: ShipDefinition;
@@ -28,7 +26,7 @@ export class AutoFireSystem {
   update(deltaSeconds: number) {
     this.fireCooldown -= deltaSeconds;
     if (this.fireCooldown <= 0) {
-      this.fireCooldown = this.getFireIntervalForCurrentLevel();
+      this.fireCooldown = this.activeShip.weapon.fireInterval(this.activeWeaponLevel);
       this.fire();
     }
   }
@@ -57,20 +55,5 @@ export class AutoFireSystem {
 
       bullet.fire(startX, startY, projectile, weaponLevel);
     }
-  }
-
-  private getFireIntervalForCurrentLevel() {
-    const maxLevel = Math.max(1, this.activeShip.weapon.maxLevel);
-    if (maxLevel === 1) {
-      return this.activeShip.weapon.fireInterval;
-    }
-
-    const level = Phaser.Math.Clamp(this.activeWeaponLevel, 1, maxLevel);
-    const progress = (level - 1) / (maxLevel - 1);
-    return Phaser.Math.Linear(
-      AutoFireSystem.MIN_FIRE_INTERVAL_SECONDS,
-      this.activeShip.weapon.fireInterval,
-      progress
-    );
   }
 }
