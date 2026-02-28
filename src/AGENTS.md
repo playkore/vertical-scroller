@@ -57,7 +57,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `EnemyDefinition.ts`: Enemy configuration/type contract.
   - `EnemyRegistry.ts`: Central registry for available enemies.
   - `EnemyBehaviorUtils.ts`: Runtime helpers for player-targeted enemy movement logic.
-  - `modules/`: Enemy-specific implementations (`BerserkReaverEnemy`, `EscortCoreEnemy`, `FeignRetreatEnemy`, `GravityWellEnemy`, `HunterEnemy`, `LaneJammerEnemy`, `MineLayerEnemy`, `OrbitDiverEnemy`, `PulseRamEnemy`, `RaiderEnemy`, `SawDriftEnemy`, `ShieldFrontEnemy`, `SniperLockEnemy`, `SplitterEnemy`, `UndercutHunterEnemy`, `WaveEelEnemy`, `YoyoStrikerEnemy`).
+  - `modules/`: Enemy-specific implementations (`BerserkReaverEnemy`, `BoidFlockEnemy`, `EscortCoreEnemy`, `FeignRetreatEnemy`, `GravityWellEnemy`, `HunterEnemy`, `LaneJammerEnemy`, `MineLayerEnemy`, `OrbitDiverEnemy`, `PulseRamEnemy`, `RaiderEnemy`, `SawDriftEnemy`, `ShieldFrontEnemy`, `SniperLockEnemy`, `SplitterEnemy`, `UndercutHunterEnemy`, `WaveEelEnemy`, `YoyoStrikerEnemy`).
 - `bosses/`: Boss domain model, behavior contracts, and module registry.
   - `BossDefinition.ts`: Boss configuration/type contract.
   - `BossRegistry.ts`: Central registry for available bosses.
@@ -76,6 +76,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `modules/Level08GravityArc.ts`: Campaign level 8 timeline introducing gravity-well pressure.
   - `modules/Level09EscortPincer.ts`: Campaign level 9 timeline introducing escort and undercut attackers.
   - `modules/Level10FinalGauntlet.ts`: Campaign level 10 all-enemy gauntlet timeline.
+  - `modules/Level11BoidStorm.ts`: Bonus flock challenge spawning only boid enemies in dense waves.
   - `modules/Level99BossTest.ts`: Short boss-test timeline for rapid boss iteration.
 - `powerups/`: Powerup domain model, behavior contracts, and module registry.
   - `PowerupDefinition.ts`: Powerup configuration/type contract.
