@@ -119,28 +119,34 @@ export function saveLevelResult(result: LevelResult): PersistedRunResult {
   const previousBest = progress.levels[result.levelId] ?? null;
 
   const rank = calculateRank(result);
-  const candidateBest: LevelProgressRecord = {
-    completed: true,
-    bestScore: result.score,
-    bestRank: rank,
-    bestRun: {
-      score: result.score,
-      rank,
-      hitsTaken: result.hitsTaken,
-      enemiesDestroyed: result.enemiesDestroyed,
-      bossesDefeated: result.bossesDefeated,
-      durationMs: result.durationMs,
-      endedAtIso: new Date().toISOString()
-    }
+  const currentRun: StoredBestRun = {
+    score: result.score,
+    rank,
+    hitsTaken: result.hitsTaken,
+    enemiesDestroyed: result.enemiesDestroyed,
+    bossesDefeated: result.bossesDefeated,
+    durationMs: result.durationMs,
+    endedAtIso: new Date().toISOString()
   };
 
-  const isNewRecord = !previousBest || isCandidateBetter(candidateBest, previousBest);
-  const updatedBest = isNewRecord
-    ? candidateBest
+  const didImproveScore = !previousBest || result.score > previousBest.bestScore;
+  const didImproveRank = !previousBest || compareRanks(rank, previousBest.bestRank) > 0;
+
+  const updatedBest: LevelProgressRecord = previousBest
+    ? {
+        completed: true,
+        bestScore: didImproveScore ? result.score : previousBest.bestScore,
+        bestRank: didImproveRank ? rank : previousBest.bestRank,
+        bestRun: didImproveScore || didImproveRank ? currentRun : previousBest.bestRun
+      }
     : {
-        ...previousBest,
-        completed: true
+        completed: true,
+        bestScore: result.score,
+        bestRank: rank,
+        bestRun: currentRun
       };
+
+  const isNewRecord = didImproveScore || didImproveRank;
 
   const nextProgress: PlayerProgress = {
     ...progress,
@@ -175,19 +181,6 @@ export function getContinueTargetLevelId(): string | null {
 
 export function getContinueBehavior(): ContinueBehavior {
   return CONTINUE_BEHAVIOR;
-}
-
-function isCandidateBetter(candidate: LevelProgressRecord, current: LevelProgressRecord): boolean {
-  const rankDelta = compareRanks(candidate.bestRank, current.bestRank);
-  if (rankDelta > 0) {
-    return true;
-  }
-
-  if (rankDelta < 0) {
-    return false;
-  }
-
-  return candidate.bestScore > current.bestScore;
 }
 
 function rankToScore(rank: Rank): number {
