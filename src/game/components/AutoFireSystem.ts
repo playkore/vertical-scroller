@@ -4,9 +4,12 @@ import { PlayerShip } from '../objects/PlayerShip';
 import { ShipDefinition } from '../ships/ShipDefinition';
 
 export class AutoFireSystem {
+  private static readonly MIN_FIRE_INTERVAL_SECONDS = 1;
+
   private readonly bullets: Phaser.Physics.Arcade.Group;
   private fireCooldown = 0;
   private activeShip: ShipDefinition;
+  private activeWeaponLevel = 1;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -25,14 +28,14 @@ export class AutoFireSystem {
   update(deltaSeconds: number) {
     this.fireCooldown -= deltaSeconds;
     if (this.fireCooldown <= 0) {
-      const weaponLevel = Math.max(1, this.activeShip.weapon.level);
-      this.fireCooldown = this.activeShip.weapon.fireInterval / weaponLevel;
+      this.fireCooldown = this.getFireIntervalForCurrentLevel();
       this.fire();
     }
   }
 
-  setShip(ship: ShipDefinition) {
+  setShip(ship: ShipDefinition, weaponLevel: number) {
     this.activeShip = ship;
+    this.activeWeaponLevel = Phaser.Math.Clamp(weaponLevel, 1, this.activeShip.weapon.maxLevel);
     this.fireCooldown = 0;
   }
 
@@ -41,7 +44,7 @@ export class AutoFireSystem {
   }
 
   private fire() {
-    const weaponLevel = Math.max(1, this.activeShip.weapon.level);
+    const weaponLevel = Math.max(1, this.activeWeaponLevel);
 
     for (const projectile of this.activeShip.weapon.projectiles) {
       const startX = this.player.x + projectile.offsetX;
@@ -54,5 +57,20 @@ export class AutoFireSystem {
 
       bullet.fire(startX, startY, projectile, weaponLevel);
     }
+  }
+
+  private getFireIntervalForCurrentLevel() {
+    const maxLevel = Math.max(1, this.activeShip.weapon.maxLevel);
+    if (maxLevel === 1) {
+      return this.activeShip.weapon.fireInterval;
+    }
+
+    const level = Phaser.Math.Clamp(this.activeWeaponLevel, 1, maxLevel);
+    const progress = (level - 1) / (maxLevel - 1);
+    return Phaser.Math.Linear(
+      AutoFireSystem.MIN_FIRE_INTERVAL_SECONDS,
+      this.activeShip.weapon.fireInterval,
+      progress
+    );
   }
 }

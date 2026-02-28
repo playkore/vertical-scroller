@@ -12,7 +12,7 @@ export const shipModule: ShipDefinition = {
   name: 'BLW',
   textureKey: 'ship-bulwark',
   weapon: {
-    level: 1,
+    maxLevel: 5,
     fireInterval: 0.32,
     projectiles: [
       {

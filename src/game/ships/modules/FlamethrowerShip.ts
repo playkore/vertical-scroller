@@ -66,7 +66,7 @@ export const shipModule: ShipDefinition = {
   textureKey: 'ship-flamethrower',
   bulletBehaviors: [flameBehavior],
   weapon: {
-    level: 1,
+    maxLevel: 5,
     fireInterval: 0.1,
     projectiles: [
       {

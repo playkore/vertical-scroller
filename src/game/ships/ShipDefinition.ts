@@ -12,7 +12,7 @@ export interface WeaponProjectileConfig {
 }
 
 export interface ShipWeaponConfig {
-  level: number;
+  maxLevel: number;
   fireInterval: number;
   projectiles: WeaponProjectileConfig[];
 }

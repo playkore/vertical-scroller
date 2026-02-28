@@ -18,7 +18,7 @@ import { getPlayfieldBounds } from '../layout/Playfield';
 import { getDefaultLevel, getLevelById, LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { LevelDefinition } from '../levels/LevelDefinition';
 import { LevelStats } from '../stats/LevelStats';
-import { getDefaultShip, getShipById } from '../ships/ShipRegistry';
+import { getDefaultShip, getShipById, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
 import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
 
@@ -42,6 +42,8 @@ export class GameScene extends Phaser.Scene {
   private arenaFrame!: Phaser.GameObjects.Graphics;
   private menuButtonBg!: Phaser.GameObjects.Rectangle;
   private menuButtonIcon!: Phaser.GameObjects.Text;
+  private weaponLevelText!: Phaser.GameObjects.Text;
+  private weaponLevelsByShipId = new Map<string, number>();
 
   private starLayers: StarfieldLayer[] = [];
 
@@ -115,6 +117,8 @@ export class GameScene extends Phaser.Scene {
     );
 
     this.createMenuButton();
+    this.createWeaponLevelText();
+    this.initializeWeaponLevels();
 
     this.applyShip(defaultShip);
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
@@ -153,17 +157,23 @@ export class GameScene extends Phaser.Scene {
     this.bossHealthBar.destroy();
     this.menuButtonBg.destroy();
     this.menuButtonIcon.destroy();
+    this.weaponLevelText.destroy();
     this.arenaFrame.destroy();
     this.scale.off('resize', this.onResize, this);
   }
 
   private applyShip(ship: ShipDefinition) {
+    const currentWeaponLevel = this.getWeaponLevel(ship.id);
     this.player.setShipTexture(ship.textureKey);
-    this.autoFire.setShip(ship);
+    this.autoFire.setShip(ship, currentWeaponLevel);
+    this.weaponLevelText.setText(`WEAPON LV ${currentWeaponLevel}`);
   }
 
   applyShipById(shipId: string) {
-    this.applyShip(getShipById(shipId));
+    const ship = getShipById(shipId);
+    const leveledWeapon = Phaser.Math.Clamp(this.getWeaponLevel(shipId) + 1, 1, ship.weapon.maxLevel);
+    this.weaponLevelsByShipId.set(shipId, leveledWeapon);
+    this.applyShip(ship);
   }
 
   private onResize(gameSize: Phaser.Structs.Size) {
@@ -173,6 +183,7 @@ export class GameScene extends Phaser.Scene {
     this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - BOTTOM_SAFE_PADDING);
     this.levelDirector.onResize(gameSize.width, gameSize.height);
     this.layoutMenuButton(gameSize.width, gameSize.height);
+    this.layoutWeaponLevelText(gameSize.width);
 
     const enemies = this.enemySpawner.getGroup();
     enemies.children.each((child) => {
@@ -291,6 +302,20 @@ export class GameScene extends Phaser.Scene {
     this.layoutMenuButton(this.scale.width, this.scale.height);
   }
 
+  private createWeaponLevelText() {
+    this.weaponLevelText = this.add
+      .text(0, 8, '', {
+        fontFamily: 'Courier New, monospace',
+        fontSize: '12px',
+        color: CGA_HEX.white
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(130)
+      .setScrollFactor(0);
+
+    this.layoutWeaponLevelText(this.scale.width);
+  }
+
   private layoutMenuButton(width: number, height: number) {
     const bounds = getPlayfieldBounds(width, height);
     const buttonX = width - Math.max(10, Math.floor(bounds.sidePanelWidth * 0.45));
@@ -299,5 +324,19 @@ export class GameScene extends Phaser.Scene {
 
     this.menuButtonBg.setPosition(buttonX, buttonY);
     this.menuButtonIcon.setPosition(buttonX, buttonY - 1);
+  }
+
+  private layoutWeaponLevelText(width: number) {
+    this.weaponLevelText.setX(width * 0.5);
+  }
+
+  private initializeWeaponLevels() {
+    SHIP_REGISTRY.forEach((ship) => {
+      this.weaponLevelsByShipId.set(ship.id, 1);
+    });
+  }
+
+  private getWeaponLevel(shipId: string) {
+    return this.weaponLevelsByShipId.get(shipId) ?? 1;
   }
 }

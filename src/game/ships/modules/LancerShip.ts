@@ -11,7 +11,7 @@ export const shipModule: ShipDefinition = {
   name: 'LNC',
   textureKey: 'ship-lancer',
   weapon: {
-    level: 1,
+    maxLevel: 5,
     fireInterval: 0.2,
     projectiles: [
       {
