@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type SplitterState = {
@@ -36,7 +37,7 @@ export const enemyModule: EnemyDefinition = {
         swapEvery: Phaser.Math.FloatBetween(0.65, 1.05)
       } satisfies SplitterState;
     },
-    onUpdate: ({ enemy, state, deltaSeconds, playfieldLeft, playfieldRight }) => {
+    onUpdate: ({ enemy, state, deltaSeconds, playfieldLeft, playfieldRight, scene }) => {
       const splitter = state as SplitterState;
       splitter.swapTimer += deltaSeconds;
 
@@ -47,7 +48,7 @@ export const enemyModule: EnemyDefinition = {
       }
 
       enemy.x += splitter.horizontalSpeed * deltaSeconds;
-      enemy.y += splitter.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, splitter.verticalSpeed * deltaSeconds, scene.scale.height);
 
       if (enemy.x <= playfieldLeft + 8) {
         enemy.x = playfieldLeft + 8;

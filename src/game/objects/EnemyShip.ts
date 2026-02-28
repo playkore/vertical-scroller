@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { getPlayfieldBounds } from '../layout/Playfield';
+import { resetVerticalLoopState } from '../enemies/EnemyBehaviorUtils';
 import { EnemyDefinition } from '../enemies/EnemyDefinition';
 import { CGA_NUM } from '../style/CgaPalette';
 
@@ -46,6 +47,7 @@ export class EnemyShip extends Phaser.Physics.Arcade.Sprite {
     this.enableBody(true, x, y, true, true);
     this.setTexture(definition.textureKey);
     this.setVelocity(0, 0);
+    resetVerticalLoopState(this);
     this.clearTint();
     this.hideHealthBar();
 
@@ -101,7 +103,6 @@ export class EnemyShip extends Phaser.Physics.Arcade.Sprite {
     this.ageSeconds += dt;
 
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
-
     this.definition.movement.onUpdate?.({
       enemy: this,
       scene: this.scene,
@@ -115,10 +116,6 @@ export class EnemyShip extends Phaser.Physics.Arcade.Sprite {
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.updateFromGameObject();
     this.refreshHealthBar();
-
-    if (this.y > this.scene.scale.height + 20 || this.x < bounds.left - 24 || this.x > bounds.right + 24) {
-      this.despawn();
-    }
   }
 
   destroy(fromScene?: boolean): void {

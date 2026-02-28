@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type UndercutState = {
@@ -43,7 +43,7 @@ export const enemyModule: EnemyDefinition = {
       const undercut = state as UndercutState;
 
       if (undercut.phase === 'drop') {
-        enemy.y += undercut.verticalSpeed * deltaSeconds;
+        moveEnemyVertically(enemy, undercut.verticalSpeed * deltaSeconds, scene.scale.height);
         if (enemy.y >= undercut.turnY) {
           undercut.phase = 'rise';
         }
@@ -51,7 +51,7 @@ export const enemyModule: EnemyDefinition = {
       }
 
       enemy.x = approach(enemy.x, getTargetX(scene, enemy.x), undercut.lateralSpeed * deltaSeconds);
-      enemy.y -= undercut.riseSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, -undercut.riseSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

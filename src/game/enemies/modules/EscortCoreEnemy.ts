@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type EscortState = {
@@ -36,10 +37,10 @@ export const enemyModule: EnemyDefinition = {
         swayFrequency: Phaser.Math.FloatBetween(1.8, 2.6)
       } satisfies EscortState;
     },
-    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds }) => {
+    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds, scene }) => {
       const escort = state as EscortState;
       enemy.x = escort.baseX + Math.sin(ageSeconds * escort.swayFrequency) * escort.swayAmplitude;
-      enemy.y += escort.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, escort.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

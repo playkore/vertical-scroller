@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type HunterState = {
@@ -38,7 +38,7 @@ export const enemyModule: EnemyDefinition = {
       const targetX = getTargetX(scene, enemy.x);
 
       enemy.x = approach(enemy.x, targetX, hunter.lateralSpeed * deltaSeconds);
-      enemy.y += hunter.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, hunter.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

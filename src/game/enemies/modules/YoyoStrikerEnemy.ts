@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type YoyoState = {
@@ -36,9 +37,9 @@ export const enemyModule: EnemyDefinition = {
         maxY: scene.scale.height * 0.82
       } satisfies YoyoState;
     },
-    onUpdate: ({ enemy, state, deltaSeconds }) => {
+    onUpdate: ({ enemy, state, deltaSeconds, scene }) => {
       const yoyo = state as YoyoState;
-      enemy.y += yoyo.verticalSpeed * yoyo.direction * deltaSeconds;
+      moveEnemyVertically(enemy, yoyo.verticalSpeed * yoyo.direction * deltaSeconds, scene.scale.height);
 
       if (enemy.y >= yoyo.maxY) {
         enemy.y = yoyo.maxY;

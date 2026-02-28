@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type FeignState = {
@@ -59,16 +59,16 @@ export const enemyModule: EnemyDefinition = {
       enemy.x = approach(enemy.x, getTargetX(scene, enemy.x), feign.lateralSpeed * deltaSeconds);
 
       if (feign.phase === 'press') {
-        enemy.y += feign.pressSpeed * deltaSeconds;
+        moveEnemyVertically(enemy, feign.pressSpeed * deltaSeconds, scene.scale.height);
         return;
       }
 
       if (feign.phase === 'retreat') {
-        enemy.y = Math.max(-16, enemy.y - feign.retreatSpeed * deltaSeconds);
+        moveEnemyVertically(enemy, -feign.retreatSpeed * deltaSeconds, scene.scale.height);
         return;
       }
 
-      enemy.y += feign.returnSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, feign.returnSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

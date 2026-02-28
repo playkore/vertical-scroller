@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type PulseRamState = {
@@ -44,7 +44,7 @@ export const enemyModule: EnemyDefinition = {
       const currentSpeed = pulse.baseSpeed * pulseFactor;
 
       enemy.x = approach(enemy.x, getTargetX(scene, enemy.x), pulse.lateralSpeed * deltaSeconds);
-      enemy.y += currentSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, currentSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

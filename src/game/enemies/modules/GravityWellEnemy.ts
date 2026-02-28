@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type GravityWellState = {
@@ -36,10 +37,10 @@ export const enemyModule: EnemyDefinition = {
         driftFrequency: Phaser.Math.FloatBetween(1.4, 2)
       } satisfies GravityWellState;
     },
-    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds }) => {
+    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds, scene }) => {
       const well = state as GravityWellState;
       enemy.x = well.baseX + Math.sin(ageSeconds * well.driftFrequency) * well.driftAmplitude;
-      enemy.y += well.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, well.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

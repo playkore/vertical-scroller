@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type DriftState = {
@@ -34,11 +35,11 @@ export const enemyModule: EnemyDefinition = {
         verticalSpeed: initialSpeed
       } satisfies DriftState;
     },
-    onUpdate: ({ enemy, state, deltaSeconds, playfieldLeft, playfieldRight }) => {
+    onUpdate: ({ enemy, state, deltaSeconds, playfieldLeft, playfieldRight, scene }) => {
       const drift = state as DriftState;
 
       enemy.x += drift.horizontalSpeed * deltaSeconds;
-      enemy.y += drift.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, drift.verticalSpeed * deltaSeconds, scene.scale.height);
 
       if (enemy.x <= playfieldLeft + 8) {
         enemy.x = playfieldLeft + 8;

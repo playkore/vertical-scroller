@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 export const enemyModule: EnemyDefinition = {
@@ -23,8 +24,14 @@ export const enemyModule: EnemyDefinition = {
   },
   movement: {
     onSpawn: ({ enemy, initialSpeed }) => {
-      enemy.setVelocity(0, initialSpeed);
-      return null;
+      enemy.setVelocity(0, 0);
+      return {
+        verticalSpeed: initialSpeed
+      };
+    },
+    onUpdate: ({ enemy, state, deltaSeconds, scene }) => {
+      const raider = state as { verticalSpeed: number };
+      moveEnemyVertically(enemy, raider.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

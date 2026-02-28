@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type ReaverState = {
@@ -58,9 +58,9 @@ export const enemyModule: EnemyDefinition = {
       enemy.x = approach(enemy.x, targetX, xSpeed * deltaSeconds);
 
       if (reaver.phase === 'chase') {
-        enemy.y += reaver.verticalSpeed * deltaSeconds;
+        moveEnemyVertically(enemy, reaver.verticalSpeed * deltaSeconds, scene.scale.height);
       } else {
-        enemy.y = Math.max(-16, enemy.y - reaver.retreatSpeed * deltaSeconds);
+        moveEnemyVertically(enemy, -reaver.retreatSpeed * deltaSeconds, scene.scale.height);
       }
     }
   },

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getPlayerPosition } from '../EnemyBehaviorUtils';
+import { getPlayerPosition, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type SniperState = {
@@ -55,12 +55,12 @@ export const enemyModule: EnemyDefinition = {
         dashSpeed: Phaser.Math.Between(220, 270)
       } satisfies SniperState;
     },
-    onUpdate: ({ enemy, state, deltaSeconds }) => {
+    onUpdate: ({ enemy, state, deltaSeconds, scene }) => {
       const sniper = state as SniperState;
       sniper.phaseSeconds += deltaSeconds;
 
       if (sniper.phase === 'lock') {
-        enemy.y += sniper.driftSpeed * 0.4 * deltaSeconds;
+        moveEnemyVertically(enemy, sniper.driftSpeed * 0.4 * deltaSeconds, scene.scale.height);
         if (sniper.phaseSeconds >= sniper.lockSeconds) {
           sniper.phase = 'dash';
           sniper.phaseSeconds = 0;
@@ -70,7 +70,7 @@ export const enemyModule: EnemyDefinition = {
 
       if (sniper.phase === 'dash') {
         enemy.x += sniper.dashVector.x * sniper.dashSpeed * deltaSeconds;
-        enemy.y += sniper.dashVector.y * sniper.dashSpeed * deltaSeconds;
+        moveEnemyVertically(enemy, sniper.dashVector.y * sniper.dashSpeed * deltaSeconds, scene.scale.height);
         if (sniper.phaseSeconds >= sniper.dashSeconds) {
           sniper.phase = 'cooldown';
           sniper.phaseSeconds = 0;
@@ -78,7 +78,7 @@ export const enemyModule: EnemyDefinition = {
         return;
       }
 
-      enemy.y += sniper.driftSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, sniper.driftSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

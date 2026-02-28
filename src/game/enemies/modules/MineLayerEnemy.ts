@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type MineLayerState = {
@@ -36,11 +37,11 @@ export const enemyModule: EnemyDefinition = {
         waveFrequency: Phaser.Math.FloatBetween(2.6, 3.5)
       } satisfies MineLayerState;
     },
-    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds }) => {
+    onUpdate: ({ enemy, state, ageSeconds, deltaSeconds, scene }) => {
       const layer = state as MineLayerState;
       layer.baseX += Math.sin(ageSeconds * 0.9) * 3.5 * deltaSeconds;
       enemy.x = layer.baseX + Math.sin(ageSeconds * layer.waveFrequency) * layer.waveAmplitude;
-      enemy.y += layer.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, layer.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

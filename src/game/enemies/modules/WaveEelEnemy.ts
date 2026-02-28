@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
+import { moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type WaveState = {
@@ -29,7 +30,7 @@ export const enemyModule: EnemyDefinition = {
   },
   movement: {
     onSpawn: ({ enemy, spawnX, initialSpeed }) => {
-      enemy.setVelocity(0, initialSpeed);
+      enemy.setVelocity(0, 0);
       return {
         baseX: spawnX,
         amplitude: Phaser.Math.Between(18, 34),
@@ -37,11 +38,11 @@ export const enemyModule: EnemyDefinition = {
         verticalSpeed: initialSpeed
       } satisfies WaveState;
     },
-    onUpdate: ({ enemy, ageSeconds, state, deltaSeconds }) => {
+    onUpdate: ({ enemy, ageSeconds, state, deltaSeconds, scene }) => {
       const wave = state as WaveState;
       wave.baseX += Math.sin(ageSeconds * 0.8) * 6 * deltaSeconds;
       enemy.x = wave.baseX + Math.sin(ageSeconds * wave.frequency) * wave.amplitude;
-      enemy.y += wave.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, wave.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

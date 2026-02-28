@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getPlayerPosition, getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getPlayerPosition, getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type OrbitState = {
@@ -54,7 +54,7 @@ export const enemyModule: EnemyDefinition = {
 
       if (orbit.phase === 'approach') {
         enemy.x = approach(enemy.x, orbit.anchorX, 70 * deltaSeconds);
-        enemy.y += orbit.approachSpeed * deltaSeconds;
+        moveEnemyVertically(enemy, orbit.approachSpeed * deltaSeconds, scene.scale.height);
         if (enemy.y >= orbit.anchorY) {
           orbit.phase = 'orbit';
           orbit.phaseSeconds = 0;
@@ -76,7 +76,7 @@ export const enemyModule: EnemyDefinition = {
       }
 
       enemy.x = approach(enemy.x, getTargetX(scene, enemy.x), 110 * deltaSeconds);
-      enemy.y += orbit.diveSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, orbit.diveSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

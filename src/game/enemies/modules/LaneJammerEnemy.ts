@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX } from '../EnemyBehaviorUtils';
+import { getTargetX, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type LaneJammerState = {
@@ -61,7 +61,7 @@ export const enemyModule: EnemyDefinition = {
       }
 
       enemy.x = Phaser.Math.Linear(enemy.x, jammer.laneCenterX, Math.min(1, deltaSeconds * 13));
-      enemy.y += jammer.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, jammer.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {

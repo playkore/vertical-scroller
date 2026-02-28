@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { EnemyDefinition } from '../EnemyDefinition';
-import { getTargetX, approach } from '../EnemyBehaviorUtils';
+import { getTargetX, approach, moveEnemyVertically } from '../EnemyBehaviorUtils';
 import { CGA_NUM } from '../../style/CgaPalette';
 
 type ShieldFrontState = {
@@ -37,7 +37,7 @@ export const enemyModule: EnemyDefinition = {
       const shield = state as ShieldFrontState;
       const targetX = getTargetX(scene, enemy.x);
       enemy.x = approach(enemy.x, targetX, shield.lateralSpeed * deltaSeconds);
-      enemy.y += shield.verticalSpeed * deltaSeconds;
+      moveEnemyVertically(enemy, shield.verticalSpeed * deltaSeconds, scene.scale.height);
     }
   },
   registerAssets: (scene: Phaser.Scene) => {
