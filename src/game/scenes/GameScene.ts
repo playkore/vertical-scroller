@@ -17,7 +17,8 @@ import { StarfieldLayer } from '../objects/StarfieldLayer';
 import { getPlayfieldBounds } from '../layout/Playfield';
 import { getDefaultLevel, getLevelById, LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { LevelDefinition } from '../levels/LevelDefinition';
-import { LevelStats } from '../stats/LevelStats';
+import { LevelRunSummaryData, LevelStats } from '../stats/LevelStats';
+import { setLastPlayedLevel } from '../stats/Progression';
 import { getDefaultShip, getShipById, SHIP_REGISTRY } from '../ships/ShipRegistry';
 import { ShipDefinition } from '../ships/ShipDefinition';
 import { CGA_HEX, CGA_NUM } from '../style/CgaPalette';
@@ -44,6 +45,7 @@ export class GameScene extends Phaser.Scene {
   private menuButtonIcon!: Phaser.GameObjects.Text;
   private weaponLevelText!: Phaser.GameObjects.Text;
   private weaponLevelsByShipId = new Map<string, number>();
+  private levelStartTimeMs = 0;
 
   private starLayers: StarfieldLayer[] = [];
 
@@ -56,6 +58,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    setLastPlayedLevel(this.selectedLevel.id);
+
     this.cameras.main.setBackgroundColor(CGA_HEX.black);
     this.arenaFrame = this.add.graphics().setDepth(80).setScrollFactor(0);
     this.levelProgressBar = new LevelProgressBar(this);
@@ -225,6 +229,7 @@ export class GameScene extends Phaser.Scene {
       ease: 'Sine.easeOut',
       onComplete: () => {
         this.touchController.syncTargetToPlayer();
+        this.levelStartTimeMs = this.time.now;
         this.gameplayActive = true;
       }
     });
@@ -235,6 +240,15 @@ export class GameScene extends Phaser.Scene {
     this.levelExitStarted = true;
     const nextLevelId = this.getNextLevelId();
     const stats: LevelStats = this.collisionSystem.getStatsSnapshot();
+    const runData: LevelRunSummaryData = {
+      levelId: this.selectedLevel.id,
+      score: stats.score,
+      hitsTaken: stats.hitsTaken,
+      enemiesDestroyed: stats.enemiesDestroyed,
+      bossesDefeated: stats.bossesDefeated,
+      durationMs: Math.max(0, Math.round(this.time.now - this.levelStartTimeMs)),
+      bossConfigured: this.selectedLevel.bossId !== null
+    };
 
     // Exit from current position upward, then open summary screen.
     this.tweens.add({
@@ -246,7 +260,7 @@ export class GameScene extends Phaser.Scene {
         this.scene.start('LevelSummaryScene', {
           levelName: this.selectedLevel.name,
           nextLevelId,
-          stats
+          stats: runData
         });
       }
     });
