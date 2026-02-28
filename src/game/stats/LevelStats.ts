@@ -11,4 +11,6 @@ export interface LevelRunSummaryData extends LevelStats {
   levelId: string;
   durationMs: number;
   bossConfigured: boolean;
+  enemiesSpawned: number;
+  perfectKillThreshold: number | null;
 }

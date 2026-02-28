@@ -18,7 +18,7 @@ export class EnemySpawner {
     return this.enemies;
   }
 
-  spawnEnemy(definition: EnemyDefinition) {
+  spawnEnemy(definition: EnemyDefinition): EnemyShip | null {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
     const x = Phaser.Math.Between(
       bounds.left + definition.spawn.xPadding,
@@ -29,9 +29,10 @@ export class EnemySpawner {
 
     const enemy = this.enemies.get(x, y) as EnemyShip | null;
     if (!enemy) {
-      return;
+      return null;
     }
 
     enemy.spawn(definition, x, y, speed);
+    return enemy;
   }
 }

@@ -247,7 +247,9 @@ export class GameScene extends Phaser.Scene {
       enemiesDestroyed: stats.enemiesDestroyed,
       bossesDefeated: stats.bossesDefeated,
       durationMs: Math.max(0, Math.round(this.time.now - this.levelStartTimeMs)),
-      bossConfigured: this.selectedLevel.bossId !== null
+      bossConfigured: this.selectedLevel.bossId !== null,
+      enemiesSpawned: this.levelDirector.getEnemiesSpawned(),
+      perfectKillThreshold: this.selectedLevel.perfectKillThreshold ?? 1
     };
 
     // Exit from current position upward, then open summary screen.

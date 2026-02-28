@@ -15,6 +15,7 @@ export class LevelDirector {
   // Prevents repeated boss deployment after timeline completion.
   private bossSpawned = false;
   private levelComplete = false;
+  private enemiesSpawned = 0;
 
   private readonly levelText: Phaser.GameObjects.Text;
   private readonly statusText: Phaser.GameObjects.Text;
@@ -82,7 +83,9 @@ export class LevelDirector {
 
     const enemyId = this.rollEnemyId(phase);
     const enemy = getEnemyById(enemyId);
-    this.enemySpawner.spawnEnemy(enemy);
+    if (this.enemySpawner.spawnEnemy(enemy)) {
+      this.enemiesSpawned += 1;
+    }
 
     // Re-roll per spawn so each phase breathes between min/max cadence bounds.
     this.spawnCooldown = Phaser.Math.FloatBetween(phase.minDelay, phase.maxDelay);
@@ -94,6 +97,10 @@ export class LevelDirector {
 
   isLevelComplete(): boolean {
     return this.levelComplete;
+  }
+
+  getEnemiesSpawned(): number {
+    return this.enemiesSpawned;
   }
 
   onResize(width: number, _height: number) {

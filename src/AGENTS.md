@@ -63,7 +63,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `BossRegistry.ts`: Central registry for available bosses.
   - `modules/`: Boss-specific implementations (`AlphaCoreBoss`, `TinyCoreBoss`).
 - `levels/`: Level domain model and module registry.
-  - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id, powerup drop quotas).
+  - `LevelDefinition.ts`: Level configuration/type contract (phases, duration, boss id, perfect-clear threshold, powerup drop quotas).
   - `LevelRegistry.ts`: Central registry for available levels.
   - `modules/Level00ShortLevelTest.ts`: Very short level for transition + weak-boss testing.
   - `modules/Level01NeonFrontier.ts`: First campaign level timeline and baseline enemy rollout rules.
@@ -86,7 +86,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 - `stats/`: Shared stats payload contracts and progression persistence helpers.
   - `LevelStats.ts`: Runtime collision counters and summary payload types passed between scenes.
-  - `Progression.ts`: Rank calculation, localStorage persistence, PB selection rules, and continue-flow targeting.
+  - `Progression.ts`: Rank calculation, localStorage persistence, PB selection rules, level achievements, and continue-flow targeting.
 
 ## Dependency Direction (Expected)
 

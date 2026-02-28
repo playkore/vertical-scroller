@@ -16,6 +16,13 @@ type SummaryLine = {
   yRatio: number;
 };
 
+type AchievementBadge = {
+  label: Phaser.GameObjects.Text;
+  unlockedText: Phaser.GameObjects.Text | null;
+  xRatio: number;
+  yRatio: number;
+};
+
 export class LevelSummaryScene extends Phaser.Scene {
   private nextLevelId: string | null = null;
   private levelName = '';
@@ -26,10 +33,13 @@ export class LevelSummaryScene extends Phaser.Scene {
     bossesDefeated: 0,
     hitsTaken: 0,
     durationMs: 0,
-    bossConfigured: false
+    bossConfigured: false,
+    enemiesSpawned: 0,
+    perfectKillThreshold: 1
   };
 
   private summaryLines: SummaryLine[] = [];
+  private achievementBadges: AchievementBadge[] = [];
   private buttons: MenuButton[] = [];
 
   constructor() {
@@ -89,11 +99,26 @@ export class LevelSummaryScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setDepth(120);
 
+    this.addAchievementBadge(
+      'NO-HIT',
+      persisted.updatedAchievements.noHit,
+      persisted.unlockedAchievements.includes('noHit'),
+      0.33,
+      0.75
+    );
+    this.addAchievementBadge(
+      'PERFECT',
+      persisted.updatedAchievements.perfect,
+      persisted.unlockedAchievements.includes('perfect'),
+      0.67,
+      0.75
+    );
+
     this.buttons = [
       new MenuButton(this, {
         label: 'NEXT LEVEL',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.77,
+        y: this.scale.height * 0.83,
         width: 145,
         height: 32,
         enabled: Boolean(this.nextLevelId),
@@ -108,7 +133,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'RETRY LEVEL',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.77,
+        y: this.scale.height * 0.83,
         width: 145,
         height: 32,
         enabled: true,
@@ -119,7 +144,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'LEVEL SELECT',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.84,
+        y: this.scale.height * 0.9,
         width: 145,
         height: 32,
         enabled: true,
@@ -130,7 +155,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'MAIN MENU',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.84,
+        y: this.scale.height * 0.9,
         width: 145,
         height: 32,
         enabled: true,
@@ -166,16 +191,60 @@ export class LevelSummaryScene extends Phaser.Scene {
     });
   }
 
+  private addAchievementBadge(
+    label: string,
+    unlocked: boolean,
+    isFirstUnlock: boolean,
+    xRatio: number,
+    yRatio: number
+  ) {
+    const labelText = this.add
+      .text(this.scale.width * xRatio, this.scale.height * yRatio, label, {
+        fontFamily: 'Courier New, monospace',
+        fontSize: '16px',
+        color: unlocked ? CGA_HEX.cyan : CGA_HEX.magenta
+      })
+      .setOrigin(0.5)
+      .setAlpha(unlocked ? 1 : 0.45)
+      .setDepth(120);
+
+    const unlockedText = isFirstUnlock
+      ? this.add
+          .text(this.scale.width * xRatio, this.scale.height * (yRatio + 0.04), 'UNLOCKED', {
+            fontFamily: 'Courier New, monospace',
+            fontSize: '10px',
+            color: CGA_HEX.white
+          })
+          .setOrigin(0.5)
+          .setDepth(120)
+      : null;
+
+    this.achievementBadges.push({
+      label: labelText,
+      unlockedText,
+      xRatio,
+      yRatio
+    });
+  }
+
   private onResize(gameSize: Phaser.Structs.Size) {
     for (const line of this.summaryLines) {
       line.label.setPosition(gameSize.width * 0.2, gameSize.height * line.yRatio);
       line.value.setPosition(gameSize.width * 0.8, gameSize.height * line.yRatio);
     }
 
-    this.buttons[0].setPosition(gameSize.width * 0.28, gameSize.height * 0.77);
-    this.buttons[1].setPosition(gameSize.width * 0.72, gameSize.height * 0.77);
-    this.buttons[2].setPosition(gameSize.width * 0.28, gameSize.height * 0.84);
-    this.buttons[3].setPosition(gameSize.width * 0.72, gameSize.height * 0.84);
+    for (const badge of this.achievementBadges) {
+      badge.label.setPosition(gameSize.width * badge.xRatio, gameSize.height * badge.yRatio);
+      badge.unlockedText?.setPosition(
+        gameSize.width * badge.xRatio,
+        gameSize.height * (badge.yRatio + 0.04)
+      );
+    }
+
+    this.buttons[0].setPosition(gameSize.width * 0.28, gameSize.height * 0.83);
+    this.buttons[1].setPosition(gameSize.width * 0.72, gameSize.height * 0.83);
+    this.buttons[2].setPosition(gameSize.width * 0.28, gameSize.height * 0.9);
+    this.buttons[3].setPosition(gameSize.width * 0.72, gameSize.height * 0.9);
   }
 
   private shutdown() {
@@ -186,6 +255,11 @@ export class LevelSummaryScene extends Phaser.Scene {
     for (const line of this.summaryLines) {
       line.label.destroy();
       line.value.destroy();
+    }
+
+    for (const badge of this.achievementBadges) {
+      badge.label.destroy();
+      badge.unlockedText?.destroy();
     }
 
     this.scale.off('resize', this.onResize, this);

@@ -5,6 +5,7 @@ export const levelModule: LevelDefinition = {
   name: 'NEON FRONTIER',
   durationSeconds: 105,
   bossId: 'boss-alpha-core',
+  perfectKillThreshold: 1,
   powerups: [
       { powerupId: 'signal-scrap', count: 2 },
       { powerupId: 'flux-battery', count: 1 },

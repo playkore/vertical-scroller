@@ -4,7 +4,7 @@ import { LEVEL_REGISTRY } from '../levels/LevelRegistry';
 import { CGA_HEX } from '../style/CgaPalette';
 import { Rank, getProgress } from '../stats/Progression';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 4;
 
 type LevelSelectData = {
   focusedLevelId?: string;
@@ -14,6 +14,8 @@ type LevelRow = {
   background: Phaser.GameObjects.Rectangle;
   statusMarker: Phaser.GameObjects.Arc;
   labelText: Phaser.GameObjects.Text;
+  noHitBadgeText: Phaser.GameObjects.Text;
+  perfectBadgeText: Phaser.GameObjects.Text;
   rankText: Phaser.GameObjects.Text;
   scoreText: Phaser.GameObjects.Text;
   focused: boolean;
@@ -56,6 +58,8 @@ export class LevelSelectScene extends Phaser.Scene {
     this.levelRows = LEVEL_REGISTRY.map((level, index) => {
       const levelProgress = progress.levels[level.id];
       const completed = Boolean(levelProgress?.completed);
+      const noHitUnlocked = Boolean(levelProgress?.achievements.noHit);
+      const perfectUnlocked = Boolean(levelProgress?.achievements.perfect);
       const bestRank: Rank | '-' = levelProgress?.bestRank ?? '-';
       const bestScore = levelProgress ? levelProgress.bestScore.toString().padStart(5, '0') : '-----';
       const focused = level.id === this.focusedLevelId;
@@ -97,6 +101,24 @@ export class LevelSelectScene extends Phaser.Scene {
           .setOrigin(0, 0.5)
           .setDepth(122)
           .setScrollFactor(0),
+        noHitBadgeText: this.add
+          .text(initialMetrics.rowX, initialMetrics.baseY, noHitUnlocked ? 'NH' : '', {
+            fontFamily: 'Courier New, monospace',
+            fontSize: '10px',
+            color: CGA_HEX.magenta
+          })
+          .setOrigin(0, 0.5)
+          .setDepth(122)
+          .setScrollFactor(0),
+        perfectBadgeText: this.add
+          .text(initialMetrics.rowX, initialMetrics.baseY, perfectUnlocked ? 'PF' : '', {
+            fontFamily: 'Courier New, monospace',
+            fontSize: '10px',
+            color: CGA_HEX.cyan
+          })
+          .setOrigin(0, 0.5)
+          .setDepth(122)
+          .setScrollFactor(0),
         rankText: this.add
           .text(initialMetrics.rowX, initialMetrics.baseY, bestRank, {
             fontFamily: 'Courier New, monospace',
@@ -129,7 +151,7 @@ export class LevelSelectScene extends Phaser.Scene {
     }
 
     this.pageText = this.add
-      .text(this.scale.width * 0.5, this.scale.height * 0.77, '', {
+      .text(this.scale.width * 0.5, this.scale.height * 0.75, '', {
         fontFamily: 'Courier New, monospace',
         fontSize: '14px',
         color: CGA_HEX.magenta
@@ -140,7 +162,7 @@ export class LevelSelectScene extends Phaser.Scene {
     this.prevButton = new MenuButton(this, {
       label: 'PREV',
       x: this.scale.width * 0.31,
-      y: this.scale.height * 0.82,
+      y: this.scale.height * 0.8,
       width: 120,
       height: 34,
       enabled: true,
@@ -152,7 +174,7 @@ export class LevelSelectScene extends Phaser.Scene {
     this.nextButton = new MenuButton(this, {
       label: 'NEXT',
       x: this.scale.width * 0.69,
-      y: this.scale.height * 0.82,
+      y: this.scale.height * 0.8,
       width: 120,
       height: 34,
       enabled: true,
@@ -164,7 +186,7 @@ export class LevelSelectScene extends Phaser.Scene {
     this.backButton = new MenuButton(this, {
       label: 'BACK',
       x: this.scale.width * 0.5,
-      y: this.scale.height * 0.9,
+      y: this.scale.height * 0.88,
       width: 180,
       height: 38,
       enabled: true,
@@ -200,8 +222,12 @@ export class LevelSelectScene extends Phaser.Scene {
       const y = metrics.baseY + metrics.rowGap * localIndex;
       const rowLeft = metrics.rowX - metrics.rowWidth * 0.5;
       const rowRight = metrics.rowX + metrics.rowWidth * 0.5;
+      const topLineY = y - metrics.rowHeight * 0.18;
+      const badgeLineY = y + metrics.rowHeight * 0.2;
       const statusX = rowLeft + 18;
       const labelX = rowLeft + 34;
+      const noHitBadgeX = rowLeft + 34;
+      const perfectBadgeX = rowLeft + 66;
       const scoreRight = rowRight - 10;
       const rankRight = scoreRight - row.scoreText.width - 18;
 
@@ -209,16 +235,18 @@ export class LevelSelectScene extends Phaser.Scene {
       row.background.setSize(metrics.rowWidth, metrics.rowHeight);
       row.background.setDisplaySize(metrics.rowWidth, metrics.rowHeight);
       row.background.setStrokeStyle(1, row.focused ? 0xff55ff : 0x55ffff);
-      row.statusMarker.setPosition(statusX, y);
-      row.scoreText.setPosition(scoreRight, y);
-      row.rankText.setPosition(rankRight, y);
-      row.labelText.setPosition(labelX, y);
+      row.statusMarker.setPosition(statusX, topLineY);
+      row.scoreText.setPosition(scoreRight, topLineY);
+      row.rankText.setPosition(rankRight, topLineY);
+      row.noHitBadgeText.setPosition(noHitBadgeX, badgeLineY);
+      row.perfectBadgeText.setPosition(perfectBadgeX, badgeLineY);
+      row.labelText.setPosition(labelX, topLineY);
     });
 
-    this.pageText.setPosition(width * 0.5, height * 0.77);
-    this.prevButton.setPosition(width * 0.31, height * 0.82);
-    this.nextButton.setPosition(width * 0.69, height * 0.82);
-    this.backButton.setPosition(width * 0.5, height * 0.9);
+    this.pageText.setPosition(width * 0.5, height * 0.75);
+    this.prevButton.setPosition(width * 0.31, height * 0.8);
+    this.nextButton.setPosition(width * 0.69, height * 0.8);
+    this.backButton.setPosition(width * 0.5, height * 0.88);
   }
 
   private renderPage() {
@@ -230,6 +258,8 @@ export class LevelSelectScene extends Phaser.Scene {
       row.background.setVisible(visible);
       row.labelText.setVisible(visible);
       row.statusMarker.setVisible(visible);
+      row.noHitBadgeText.setVisible(visible);
+      row.perfectBadgeText.setVisible(visible);
       row.rankText.setVisible(visible);
       row.scoreText.setVisible(visible);
 
@@ -253,6 +283,8 @@ export class LevelSelectScene extends Phaser.Scene {
       row.background.destroy();
       row.statusMarker.destroy();
       row.labelText.destroy();
+      row.noHitBadgeText.destroy();
+      row.perfectBadgeText.destroy();
       row.rankText.destroy();
       row.scoreText.destroy();
     });
@@ -267,9 +299,9 @@ export class LevelSelectScene extends Phaser.Scene {
     return {
       rowX: width * 0.5,
       rowWidth: Math.min(420, width * 0.74),
-      rowHeight: Math.max(34, Math.min(42, height * 0.055)),
+      rowHeight: Math.max(46, Math.min(58, height * 0.08)),
       baseY: height * 0.28,
-      rowGap: Math.min(58, height * 0.09)
+      rowGap: Math.min(82, height * 0.12)
     };
   }
 }

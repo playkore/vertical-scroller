@@ -38,6 +38,9 @@ export interface LevelDefinition {
   durationSeconds: number;
   // Optional boss id spawned when timeline reaches duration.
   bossId: string | null;
+  // Minimum share of spawned wave enemies that must be destroyed for a perfect clear.
+  // Use null to ignore kill coverage and require only no-hit + boss clear.
+  perfectKillThreshold?: number | null;
   // Drop quotas used by the powerup drop director for this level.
   powerups: LevelPowerupDropEntry[];
   // Ordered phase list defining spawn pacing and composition over time.
