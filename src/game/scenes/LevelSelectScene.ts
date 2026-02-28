@@ -10,17 +10,19 @@ type LevelSelectData = {
   focusedLevelId?: string;
 };
 
-type TileMetaText = {
+type LevelRow = {
+  background: Phaser.GameObjects.Rectangle;
+  statusMarker: Phaser.GameObjects.Arc;
+  labelText: Phaser.GameObjects.Text;
   rankText: Phaser.GameObjects.Text;
   scoreText: Phaser.GameObjects.Text;
-  completedText: Phaser.GameObjects.Text;
+  focused: boolean;
 };
 
 export class LevelSelectScene extends Phaser.Scene {
   private title!: Phaser.GameObjects.Text;
   private pageText!: Phaser.GameObjects.Text;
-  private levelButtons: MenuButton[] = [];
-  private tileMetaTexts: TileMetaText[] = [];
+  private levelRows: LevelRow[] = [];
   private currentPage = 0;
   private totalPages = 1;
   private prevButton!: MenuButton;
@@ -49,57 +51,75 @@ export class LevelSelectScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setDepth(120);
 
-    this.levelButtons = LEVEL_REGISTRY.map((level, index) => {
+    const initialMetrics = this.getLevelRowMetrics(this.scale.width, this.scale.height);
+
+    this.levelRows = LEVEL_REGISTRY.map((level, index) => {
       const levelProgress = progress.levels[level.id];
+      const completed = Boolean(levelProgress?.completed);
       const bestRank: Rank | '-' = levelProgress?.bestRank ?? '-';
       const bestScore = levelProgress ? levelProgress.bestScore.toString().padStart(5, '0') : '-----';
-      const completed = levelProgress?.completed ? 'COMPLETED' : 'INCOMPLETE';
+      const focused = level.id === this.focusedLevelId;
+      const background = this.add
+        .rectangle(
+          initialMetrics.rowX,
+          initialMetrics.baseY,
+          initialMetrics.rowWidth,
+          initialMetrics.rowHeight,
+          0x000000,
+          1
+        )
+        .setStrokeStyle(1, focused ? 0xff55ff : 0x55ffff)
+        .setDepth(120)
+        .setScrollFactor(0)
+        .setInteractive({ useHandCursor: true });
 
-      const button = new MenuButton(this, {
-        label: `L${index + 1}: ${level.name}`,
-        x: this.scale.width * 0.42,
-        y: this.scale.height * 0.3,
-        width: 190,
-        height: 34,
-        enabled: true,
-        onClick: () => {
-          this.scene.start('GameScene', {
-            levelId: level.id
-          });
-        }
+      background.on('pointerdown', () => {
+        this.scene.start('GameScene', {
+          levelId: level.id
+        });
       });
 
-      this.tileMetaTexts.push({
-        rankText: this.add
-          .text(this.scale.width * 0.73, this.scale.height * 0.3, `R ${bestRank}`, {
+      const statusMarker = this.add
+        .circle(initialMetrics.rowX, initialMetrics.baseY, 5, completed ? 0xff55ff : 0x000000, completed ? 1 : 0)
+        .setStrokeStyle(1, completed ? 0xff55ff : 0x55ffff)
+        .setDepth(122)
+        .setScrollFactor(0);
+
+      return {
+        background,
+        statusMarker,
+        labelText: this.add
+          .text(initialMetrics.rowX, initialMetrics.baseY, `${index + 1}. ${level.name}`, {
             fontFamily: 'Courier New, monospace',
             fontSize: '12px',
             color: CGA_HEX.white
           })
-          .setOrigin(0.5)
-          .setDepth(122),
-        scoreText: this.add
-          .text(this.scale.width * 0.87, this.scale.height * 0.3, `S ${bestScore}`, {
+          .setOrigin(0, 0.5)
+          .setDepth(122)
+          .setScrollFactor(0),
+        rankText: this.add
+          .text(initialMetrics.rowX, initialMetrics.baseY, bestRank, {
             fontFamily: 'Courier New, monospace',
-            fontSize: '12px',
+            fontSize: '11px',
+            color: CGA_HEX.white
+          })
+          .setOrigin(1, 0.5)
+          .setDepth(122)
+          .setScrollFactor(0),
+        scoreText: this.add
+          .text(initialMetrics.rowX, initialMetrics.baseY, bestScore, {
+            fontFamily: 'Courier New, monospace',
+            fontSize: '11px',
             color: CGA_HEX.cyan
           })
-          .setOrigin(0.5)
-          .setDepth(122),
-        completedText: this.add
-          .text(this.scale.width * 0.18, this.scale.height * 0.3, completed, {
-            fontFamily: 'Courier New, monospace',
-            fontSize: '10px',
-            color: levelProgress?.completed ? CGA_HEX.magenta : CGA_HEX.white
-          })
-          .setOrigin(0.5)
+          .setOrigin(1, 0.5)
           .setDepth(122)
-      });
-
-      return button;
+          .setScrollFactor(0),
+        focused
+      };
     });
 
-    this.totalPages = Math.max(1, Math.ceil(this.levelButtons.length / ITEMS_PER_PAGE));
+    this.totalPages = Math.max(1, Math.ceil(this.levelRows.length / ITEMS_PER_PAGE));
 
     if (this.focusedLevelId) {
       const focusedIndex = LEVEL_REGISTRY.findIndex((level) => level.id === this.focusedLevelId);
@@ -173,20 +193,26 @@ export class LevelSelectScene extends Phaser.Scene {
   private layout(width: number, height: number) {
     this.title.setPosition(width * 0.5, height * 0.12);
 
-    const buttonX = width * 0.42;
-    const rankX = width * 0.73;
-    const scoreX = width * 0.87;
-    const completedX = width * 0.18;
-    const baseY = height * 0.28;
-    const rowGap = Math.min(58, height * 0.09);
+    const metrics = this.getLevelRowMetrics(width, height);
 
-    this.levelButtons.forEach((button, index) => {
+    this.levelRows.forEach((row, index) => {
       const localIndex = index % ITEMS_PER_PAGE;
-      const y = baseY + rowGap * localIndex;
-      button.setPosition(buttonX, y);
-      this.tileMetaTexts[index].rankText.setPosition(rankX, y);
-      this.tileMetaTexts[index].scoreText.setPosition(scoreX, y);
-      this.tileMetaTexts[index].completedText.setPosition(completedX, y);
+      const y = metrics.baseY + metrics.rowGap * localIndex;
+      const rowLeft = metrics.rowX - metrics.rowWidth * 0.5;
+      const rowRight = metrics.rowX + metrics.rowWidth * 0.5;
+      const statusX = rowLeft + 18;
+      const labelX = rowLeft + 34;
+      const scoreRight = rowRight - 10;
+      const rankRight = scoreRight - row.scoreText.width - 18;
+
+      row.background.setPosition(metrics.rowX, y);
+      row.background.setSize(metrics.rowWidth, metrics.rowHeight);
+      row.background.setDisplaySize(metrics.rowWidth, metrics.rowHeight);
+      row.background.setStrokeStyle(1, row.focused ? 0xff55ff : 0x55ffff);
+      row.statusMarker.setPosition(statusX, y);
+      row.scoreText.setPosition(scoreRight, y);
+      row.rankText.setPosition(rankRight, y);
+      row.labelText.setPosition(labelX, y);
     });
 
     this.pageText.setPosition(width * 0.5, height * 0.77);
@@ -199,12 +225,19 @@ export class LevelSelectScene extends Phaser.Scene {
     const firstIndex = this.currentPage * ITEMS_PER_PAGE;
     const lastIndex = firstIndex + ITEMS_PER_PAGE;
 
-    this.levelButtons.forEach((button, index) => {
+    this.levelRows.forEach((row, index) => {
       const visible = index >= firstIndex && index < lastIndex;
-      button.setVisible(visible);
-      this.tileMetaTexts[index].rankText.setVisible(visible);
-      this.tileMetaTexts[index].scoreText.setVisible(visible);
-      this.tileMetaTexts[index].completedText.setVisible(visible);
+      row.background.setVisible(visible);
+      row.labelText.setVisible(visible);
+      row.statusMarker.setVisible(visible);
+      row.rankText.setVisible(visible);
+      row.scoreText.setVisible(visible);
+
+      if (visible) {
+        row.background.setInteractive({ useHandCursor: true });
+      } else {
+        row.background.disableInteractive();
+      }
     });
 
     this.pageText.setText(`PAGE ${this.currentPage + 1}/${this.totalPages}`);
@@ -216,18 +249,27 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   private shutdown() {
-    this.levelButtons.forEach((button) => {
-      button.destroy();
-    });
-    this.tileMetaTexts.forEach((tile) => {
-      tile.rankText.destroy();
-      tile.scoreText.destroy();
-      tile.completedText.destroy();
+    this.levelRows.forEach((row) => {
+      row.background.destroy();
+      row.statusMarker.destroy();
+      row.labelText.destroy();
+      row.rankText.destroy();
+      row.scoreText.destroy();
     });
     this.pageText.destroy();
     this.prevButton.destroy();
     this.nextButton.destroy();
     this.backButton.destroy();
     this.scale.off('resize', this.onResize, this);
+  }
+
+  private getLevelRowMetrics(width: number, height: number) {
+    return {
+      rowX: width * 0.5,
+      rowWidth: Math.min(420, width * 0.74),
+      rowHeight: Math.max(34, Math.min(42, height * 0.055)),
+      baseY: height * 0.28,
+      rowGap: Math.min(58, height * 0.09)
+    };
   }
 }
