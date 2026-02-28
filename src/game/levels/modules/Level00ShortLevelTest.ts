@@ -12,7 +12,8 @@ export const levelModule: LevelDefinition = {
       { powerupId: 'switch-bulwark', count: 1 },
       { powerupId: 'switch-interceptor', count: 1 },
       { powerupId: 'switch-lancer', count: 1 },
-      { powerupId: 'switch-solar-spiral', count: 1 }
+      { powerupId: 'switch-solar-spiral', count: 1 },
+      { powerupId: 'switch-flamethrower', count: 1 }
     ],
   phases: [
     {
