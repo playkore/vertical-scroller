@@ -1,3 +1,5 @@
+import type { ScoreConfig } from '../stats/ScoreConfig';
+
 // Weighted enemy entry used for random picks within a phase.
 export type LevelEnemyPoolEntry = {
   // Registry id of the enemy module to spawn.
@@ -41,6 +43,8 @@ export interface LevelDefinition {
   // Minimum share of spawned wave enemies that must be destroyed for a perfect clear.
   // Use null to ignore kill coverage and require only no-hit + boss clear.
   perfectKillThreshold?: number | null;
+  // Optional score-chain tuning override applied on top of the global defaults.
+  scoreConfig?: Partial<ScoreConfig>;
   // Drop quotas used by the powerup drop director for this level.
   powerups: LevelPowerupDropEntry[];
   // Ordered phase list defining spawn pacing and composition over time.

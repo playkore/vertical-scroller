@@ -33,6 +33,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `LevelDirector.ts`: Level timeline controller that deploys enemy waves/phases.
   - `LevelProgressBar.ts`: Level progress UI renderer in the side panel.
   - `AutoFireSystem.ts`: Automated player firing system.
+  - `ScoreDirector.ts`: Score/multiplier runtime controller with combo HUD state.
   - `CollisionSystem.ts`: Hit/collision resolution pipeline.
   - `PowerupSpawner.ts`: Runtime pool/spawn manager for falling powerup pickups.
   - `PowerupDropDirector.ts`: Quota-aware algorithm that decides which enemies drop powerups.
@@ -86,6 +87,7 @@ This file documents the architecture of the `src/` codebase and should be kept i
   - `CgaPalette.ts`: Canonical CGA 4-color palette constants.
 - `stats/`: Shared stats payload contracts and progression persistence helpers.
   - `LevelStats.ts`: Runtime collision counters and summary payload types passed between scenes.
+  - `ScoreConfig.ts`: Shared score-chain tuning defaults and level override contract.
   - `Progression.ts`: Rank calculation, localStorage persistence, PB selection rules, level achievements, and continue-flow targeting.
 
 ## Dependency Direction (Expected)

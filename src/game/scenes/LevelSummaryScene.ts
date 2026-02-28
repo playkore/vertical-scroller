@@ -32,6 +32,8 @@ export class LevelSummaryScene extends Phaser.Scene {
     enemiesDestroyed: 0,
     bossesDefeated: 0,
     hitsTaken: 0,
+    maxMultiplier: 1,
+    maxChainCount: 0,
     durationMs: 0,
     bossConfigured: false,
     enemiesSpawned: 0,
@@ -77,18 +79,20 @@ export class LevelSummaryScene extends Phaser.Scene {
       .setDepth(120);
 
     this.addSummaryLine('SCORE', this.stats.score.toString().padStart(5, '0'), 0.30);
-    this.addSummaryLine('RANK', persisted.rank, 0.35);
-    this.addSummaryLine('ENEMIES', String(this.stats.enemiesDestroyed), 0.4);
-    this.addSummaryLine('BOSSES', String(this.stats.bossesDefeated), 0.45);
-    this.addSummaryLine('HITS TAKEN', String(this.stats.hitsTaken), 0.5);
+    this.addSummaryLine('RANK', persisted.rank, 0.34);
+    this.addSummaryLine('ENEMIES', String(this.stats.enemiesDestroyed), 0.38);
+    this.addSummaryLine('BOSSES', String(this.stats.bossesDefeated), 0.42);
+    this.addSummaryLine('HITS TAKEN', String(this.stats.hitsTaken), 0.46);
+    this.addSummaryLine('MAX MULTI', `x${this.stats.maxMultiplier.toFixed(1)}`, 0.50);
+    this.addSummaryLine('MAX CHAIN', String(this.stats.maxChainCount), 0.54);
 
-    this.addSummaryLine('PB SCORE', pb.bestScore.toString().padStart(5, '0'), 0.58);
-    this.addSummaryLine('PB RANK', pb.bestRank, 0.63);
+    this.addSummaryLine('PB SCORE', pb.bestScore.toString().padStart(5, '0'), 0.60);
+    this.addSummaryLine('PB RANK', pb.bestRank, 0.64);
 
     this.add
       .text(
         this.scale.width * 0.5,
-        this.scale.height * 0.69,
+        this.scale.height * 0.71,
         persisted.isNewRecord ? 'NEW RECORD!' : 'NO NEW RECORD',
         {
           fontFamily: 'Courier New, monospace',
@@ -104,21 +108,21 @@ export class LevelSummaryScene extends Phaser.Scene {
       persisted.updatedAchievements.noHit,
       persisted.unlockedAchievements.includes('noHit'),
       0.33,
-      0.75
+      0.78
     );
     this.addAchievementBadge(
       'PERFECT',
       persisted.updatedAchievements.perfect,
       persisted.unlockedAchievements.includes('perfect'),
       0.67,
-      0.75
+      0.78
     );
 
     this.buttons = [
       new MenuButton(this, {
         label: 'NEXT LEVEL',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.83,
+        y: this.scale.height * 0.86,
         width: 145,
         height: 32,
         enabled: Boolean(this.nextLevelId),
@@ -133,7 +137,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'RETRY LEVEL',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.83,
+        y: this.scale.height * 0.86,
         width: 145,
         height: 32,
         enabled: true,
@@ -144,7 +148,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'LEVEL SELECT',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.9,
+        y: this.scale.height * 0.93,
         width: 145,
         height: 32,
         enabled: true,
@@ -155,7 +159,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'MAIN MENU',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.9,
+        y: this.scale.height * 0.93,
         width: 145,
         height: 32,
         enabled: true,
@@ -241,10 +245,10 @@ export class LevelSummaryScene extends Phaser.Scene {
       );
     }
 
-    this.buttons[0].setPosition(gameSize.width * 0.28, gameSize.height * 0.83);
-    this.buttons[1].setPosition(gameSize.width * 0.72, gameSize.height * 0.83);
-    this.buttons[2].setPosition(gameSize.width * 0.28, gameSize.height * 0.9);
-    this.buttons[3].setPosition(gameSize.width * 0.72, gameSize.height * 0.9);
+    this.buttons[0].setPosition(gameSize.width * 0.28, gameSize.height * 0.86);
+    this.buttons[1].setPosition(gameSize.width * 0.72, gameSize.height * 0.86);
+    this.buttons[2].setPosition(gameSize.width * 0.28, gameSize.height * 0.93);
+    this.buttons[3].setPosition(gameSize.width * 0.72, gameSize.height * 0.93);
   }
 
   private shutdown() {

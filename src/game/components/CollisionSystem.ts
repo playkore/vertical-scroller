@@ -1,41 +1,28 @@
 import Phaser from 'phaser';
 import { BossShip } from '../objects/BossShip';
-import { getPlayfieldBounds } from '../layout/Playfield';
 import { PlayerShip } from '../objects/PlayerShip';
 import { PowerupPickup } from '../objects/PowerupPickup';
 import { LevelStats } from '../stats/LevelStats';
 import { PowerupDropDirector } from './PowerupDropDirector';
+import { ScoreDirector } from './ScoreDirector';
 
 export class CollisionSystem {
-  private stats: LevelStats = {
-    score: 0,
+  private stats = {
     enemiesDestroyed: 0,
     bossesDefeated: 0,
     hitsTaken: 0
   };
 
-  private readonly scoreText: Phaser.GameObjects.Text;
-
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly player: PlayerShip,
+    private readonly scoreDirector: ScoreDirector,
     bullets: Phaser.Physics.Arcade.Group,
     enemies: Phaser.Physics.Arcade.Group,
     bosses: Phaser.Physics.Arcade.Group,
     powerups: Phaser.Physics.Arcade.Group,
     powerupDropDirector: PowerupDropDirector
   ) {
-    const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
-
-    this.scoreText = this.scene.add
-      .text(bounds.left + 10, 10, 'SCORE 00000', {
-        fontFamily: 'Courier New, monospace',
-        fontSize: '14px',
-        color: '#ffffff'
-      })
-      .setDepth(100)
-      .setScrollFactor(0);
-
     this.scene.physics.add.overlap(
       bullets,
       enemies,
@@ -49,7 +36,7 @@ export class CollisionSystem {
         enemy.disableBody(true, true);
         powerupDropDirector.onEnemyDestroyed(dropX, dropY);
         this.stats.enemiesDestroyed += 1;
-        this.addScore(10);
+        this.scoreDirector.onEnemyKilled('wave', false);
       },
       undefined,
       this
@@ -66,7 +53,7 @@ export class CollisionSystem {
         const defeated = boss.takeHit(1);
         if (defeated) {
           this.stats.bossesDefeated += 1;
-          this.addScore(500);
+          this.scoreDirector.onEnemyKilled('boss', true);
         }
       },
       undefined,
@@ -109,16 +96,19 @@ export class CollisionSystem {
   }
 
   getStatsSnapshot(): LevelStats {
-    return { ...this.stats };
-  }
-
-  private addScore(points: number) {
-    this.stats.score += points;
-    this.scoreText.setText(`SCORE ${this.stats.score.toString().padStart(5, '0')}`);
+    return {
+      score: this.scoreDirector.getScore(),
+      enemiesDestroyed: this.stats.enemiesDestroyed,
+      bossesDefeated: this.stats.bossesDefeated,
+      hitsTaken: this.stats.hitsTaken,
+      maxMultiplier: this.scoreDirector.getMaxMultiplier(),
+      maxChainCount: this.scoreDirector.getMaxChainCount()
+    };
   }
 
   private onPlayerHit() {
     this.stats.hitsTaken += 1;
+    this.scoreDirector.onPlayerHit();
     this.scene.cameras.main.shake(200, 0.01);
     this.player.setTint(0xff55ff);
     this.scene.time.delayedCall(120, () => {

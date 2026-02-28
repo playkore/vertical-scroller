@@ -8,6 +8,7 @@ import { LevelDirector } from '../components/LevelDirector';
 import { LevelProgressBar } from '../components/LevelProgressBar';
 import { PowerupDropDirector } from '../components/PowerupDropDirector';
 import { PowerupSpawner } from '../components/PowerupSpawner';
+import { ScoreDirector } from '../components/ScoreDirector';
 import { TouchController } from '../components/TouchController';
 import { BossShip } from '../objects/BossShip';
 import { EnemyShip } from '../objects/EnemyShip';
@@ -38,6 +39,7 @@ export class GameScene extends Phaser.Scene {
   private bossSpawner!: BossSpawner;
   private levelDirector!: LevelDirector;
   private collisionSystem!: CollisionSystem;
+  private scoreDirector!: ScoreDirector;
   private levelProgressBar!: LevelProgressBar;
   private bossHealthBar!: BossHealthBar;
   private arenaFrame!: Phaser.GameObjects.Graphics;
@@ -102,6 +104,7 @@ export class GameScene extends Phaser.Scene {
     this.powerupSpawner = new PowerupSpawner(this);
     this.bossSpawner = new BossSpawner(this);
     const powerupDropDirector = new PowerupDropDirector(this.selectedLevel, this.powerupSpawner);
+    this.scoreDirector = new ScoreDirector(this, this.selectedLevel.scoreConfig);
 
     this.levelDirector = new LevelDirector(
       this,
@@ -113,6 +116,7 @@ export class GameScene extends Phaser.Scene {
     this.collisionSystem = new CollisionSystem(
       this,
       this.player,
+      this.scoreDirector,
       this.autoFire.getGroup(),
       this.enemySpawner.getGroup(),
       this.bossSpawner.getGroup(),
@@ -144,6 +148,7 @@ export class GameScene extends Phaser.Scene {
       this.touchController.update(deltaSeconds);
       this.autoFire.update(deltaSeconds);
       this.levelDirector.update(deltaSeconds);
+      this.scoreDirector.update(delta);
     }
 
     this.levelProgressBar.update(this.levelDirector.getProgressRatio());
@@ -159,6 +164,7 @@ export class GameScene extends Phaser.Scene {
     this.levelDirector.destroy();
     this.levelProgressBar.destroy();
     this.bossHealthBar.destroy();
+    this.scoreDirector.destroy();
     this.menuButtonBg.destroy();
     this.menuButtonIcon.destroy();
     this.weaponLevelText.destroy();
@@ -186,6 +192,7 @@ export class GameScene extends Phaser.Scene {
     this.player.x = Phaser.Math.Clamp(this.player.x, bounds.left + 16, bounds.right - 16);
     this.player.y = Phaser.Math.Clamp(this.player.y, 12, gameSize.height - BOTTOM_SAFE_PADDING);
     this.levelDirector.onResize(gameSize.width, gameSize.height);
+    this.scoreDirector.onResize(gameSize.width, gameSize.height);
     this.layoutMenuButton(gameSize.width, gameSize.height);
     this.layoutWeaponLevelText(gameSize.width);
 
@@ -246,6 +253,8 @@ export class GameScene extends Phaser.Scene {
       hitsTaken: stats.hitsTaken,
       enemiesDestroyed: stats.enemiesDestroyed,
       bossesDefeated: stats.bossesDefeated,
+      maxMultiplier: stats.maxMultiplier,
+      maxChainCount: stats.maxChainCount,
       durationMs: Math.max(0, Math.round(this.time.now - this.levelStartTimeMs)),
       bossConfigured: this.selectedLevel.bossId !== null,
       enemiesSpawned: this.levelDirector.getEnemiesSpawned(),

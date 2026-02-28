@@ -4,6 +4,8 @@ export interface LevelStats {
   enemiesDestroyed: number;
   bossesDefeated: number;
   hitsTaken: number;
+  maxMultiplier: number;
+  maxChainCount: number;
 }
 
 // Complete run payload passed from the gameplay scene to the summary scene.

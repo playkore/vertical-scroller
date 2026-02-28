@@ -20,6 +20,8 @@ export interface LevelResult {
   hitsTaken: number;
   enemiesDestroyed: number;
   bossesDefeated: number;
+  maxMultiplier: number;
+  maxChainCount: number;
   durationMs: number;
   bossConfigured: boolean;
   enemiesSpawned: number;
