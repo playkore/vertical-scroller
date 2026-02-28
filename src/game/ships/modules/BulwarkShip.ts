@@ -1,11 +1,6 @@
 import Phaser from 'phaser';
 import { ShipDefinition } from '../ShipDefinition';
-
-const CGA = {
-  cyan: 0x55ffff,
-  magenta: 0xff55ff,
-  white: 0xffffff
-};
+import { CGA_NUM } from '../../style/CgaPalette';
 
 export const shipModule: ShipDefinition = {
   id: 'bulwark',
@@ -31,18 +26,18 @@ export const shipModule: ShipDefinition = {
   registerAssets: (scene: Phaser.Scene) => {
     const g = scene.add.graphics();
 
-    g.fillStyle(CGA.white, 1);
+    g.fillStyle(CGA_NUM.white, 1);
     g.fillRect(1, 4, 14, 9);
-    g.fillStyle(CGA.cyan, 1);
+    g.fillStyle(CGA_NUM.cyan, 1);
     g.fillRect(0, 7, 16, 3);
-    g.fillStyle(CGA.magenta, 1);
+    g.fillStyle(CGA_NUM.magenta, 1);
     g.fillRect(6, 1, 4, 3);
     g.generateTexture('ship-bulwark', 16, 16);
     g.clear();
 
-    g.fillStyle(CGA.white, 1);
+    g.fillStyle(CGA_NUM.white, 1);
     g.fillRect(1, 1, 5, 5);
-    g.fillStyle(CGA.cyan, 1);
+    g.fillStyle(CGA_NUM.cyan, 1);
     g.fillRect(2, 2, 3, 3);
     g.generateTexture('bullet-orb', 7, 7);
 
