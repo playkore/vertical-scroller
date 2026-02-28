@@ -10,16 +10,32 @@ type FlameState = {
   endScale: number;
 };
 
+const STRAIGHT_UP_ANGLE_DEG = -90;
+const MAX_FLAME_ANGLE_OFFSET_DEG = Phaser.Math.RadToDeg(Math.atan2(36, 186));
+
 const flameBehavior: BulletBehaviorDefinition = {
   id: 'flame-stream',
   onFire: ({ bullet, spawnY, params }) => {
     const velocityX = params.velocityX ?? 0;
     const velocityY = params.velocityY ?? -170;
-    const maxDistance = Math.max(36, params.maxDistance ?? 120);
+    const angleJitterDeg = Math.max(0, params.angleJitterDeg ?? 0);
+    const maxDistance = Math.max(36, params.maxDistance ?? 120)* Math.random() + 0.5;
     const startScale = params.startScale ?? bullet.scaleX;
     const endScale = Math.max(startScale, params.endScale ?? startScale + 1.1);
+    const speed = Math.sqrt((velocityX * velocityX) + (velocityY * velocityY));
+    const baseAngleDeg = Phaser.Math.RadToDeg(Math.atan2(velocityY, velocityX));
+    const angleOffsetDeg = Phaser.Math.FloatBetween(-angleJitterDeg, angleJitterDeg);
+    const nextAngleDeg = Phaser.Math.Clamp(
+      baseAngleDeg + angleOffsetDeg,
+      STRAIGHT_UP_ANGLE_DEG - MAX_FLAME_ANGLE_OFFSET_DEG,
+      STRAIGHT_UP_ANGLE_DEG + MAX_FLAME_ANGLE_OFFSET_DEG
+    );
+    const nextAngleRad = Phaser.Math.DegToRad(nextAngleDeg);
 
-    bullet.setVelocity(velocityX, velocityY);
+    bullet.setVelocity(
+      Math.cos(nextAngleRad) * speed,
+      Math.sin(nextAngleRad) * speed
+    );
 
     return {
       spawnY,
@@ -61,9 +77,25 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: 0,
           velocityY: -170,
+          angleJitterDeg: 6,
           startScale: 0.5,
           endScale: 1.4,
-          maxDistance: 70
+          maxDistance: 98
+        }
+      },
+      {
+        offsetX: 0,
+        offsetY: -12,
+        textureKey: 'bullet-flame',
+        scale: 0.58,
+        behaviorId: 'flame-stream',
+        behaviorParams: {
+          velocityX: 0,
+          velocityY: -176,
+          angleJitterDeg: 4.5,
+          startScale: 0.58,
+          endScale: 1.48,
+          maxDistance: 98
         }
       },
       {
@@ -75,9 +107,10 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: -24,
           velocityY: -178,
+          angleJitterDeg: 3,
           startScale: 0.62,
           endScale: 1.52,
-          maxDistance: 84
+          maxDistance: 98
         }
       },
       {
@@ -89,9 +122,10 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: 24,
           velocityY: -178,
+          angleJitterDeg: 3,
           startScale: 0.62,
           endScale: 1.52,
-          maxDistance: 84
+          maxDistance: 98
         }
       },
       {
@@ -103,6 +137,7 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: -36,
           velocityY: -186,
+          angleJitterDeg: 2.5,
           startScale: 0.76,
           endScale: 1.68,
           maxDistance: 98
@@ -117,6 +152,7 @@ export const shipModule: ShipDefinition = {
         behaviorParams: {
           velocityX: 36,
           velocityY: -186,
+          angleJitterDeg: 2.5,
           startScale: 0.76,
           endScale: 1.68,
           maxDistance: 98
