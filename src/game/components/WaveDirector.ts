@@ -1,8 +1,6 @@
 import Phaser from 'phaser';
-import { BossSpawner } from './BossSpawner';
 import { EnemySpawner } from './EnemySpawner';
 import { PowerupSpawner } from './PowerupSpawner';
-import { getBossById } from '../bosses/BossRegistry';
 import { getEnemyById } from '../enemies/EnemyRegistry';
 import {
   LevelDefinition,
@@ -30,13 +28,11 @@ export class WaveDirector {
   private spawnAccumulator = 0;
   private interwaveTimer = 0;
   private state: WaveDirectorState = 'DONE';
-  private bossSpawned = false;
   private levelComplete = false;
 
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly enemySpawner: EnemySpawner,
-    private readonly bossSpawner: BossSpawner,
     private readonly powerupSpawner: PowerupSpawner,
     private readonly level: LevelDefinition
   ) {
@@ -68,20 +64,12 @@ export class WaveDirector {
     if (this.waves.length > 0) {
       this.startWave(0);
     } else {
-      this.startBossOrComplete();
+      this.completeLevel();
     }
   }
 
   update(deltaSeconds: number) {
     if (this.levelComplete) {
-      return;
-    }
-
-    if (this.bossSpawned) {
-      if (!this.bossSpawner.hasActiveBoss()) {
-        this.levelComplete = true;
-        this.statusText.setText('LEVEL CLEAR');
-      }
       return;
     }
 
@@ -99,7 +87,7 @@ export class WaveDirector {
         if (this.currentWaveIndex < this.waves.length) {
           this.startWave(this.currentWaveIndex);
         } else {
-          this.startBossOrComplete();
+          this.completeLevel();
         }
       }
     }
@@ -124,15 +112,7 @@ export class WaveDirector {
     }
 
     const enemyRatio = this.totalEnemies > 0 ? this.defeatedEnemies / this.totalEnemies : 1;
-    if (!this.level.bossId) {
-      return Phaser.Math.Clamp(enemyRatio, 0, 1);
-    }
-
-    if (this.bossSpawned) {
-      return 0.95;
-    }
-
-    return Phaser.Math.Clamp(enemyRatio * 0.9, 0, 0.9);
+    return Phaser.Math.Clamp(enemyRatio, 0, 1);
   }
 
   getTotalEnemies(): number {
@@ -195,18 +175,10 @@ export class WaveDirector {
     this.statusText.setText(`WAVE ${index + 1}/${this.waves.length}`);
   }
 
-  private startBossOrComplete() {
+  private completeLevel() {
     this.state = 'DONE';
-
-    if (!this.level.bossId) {
-      this.levelComplete = true;
-      this.statusText.setText('LEVEL CLEAR');
-      return;
-    }
-
-    this.bossSpawned = true;
-    this.bossSpawner.spawnBoss(getBossById(this.level.bossId));
-    this.statusText.setText('BOSS ALERT');
+    this.levelComplete = true;
+    this.statusText.setText('LEVEL CLEAR');
   }
 
   private resolveEnemyDeparture(

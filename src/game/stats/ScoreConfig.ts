@@ -10,8 +10,6 @@ export interface ScoreConfig {
   minMultiplier: number;
   // Base score awarded for a regular enemy kill before multiplier.
   baseKillScore: number;
-  // Base score awarded for a boss kill before multiplier.
-  bossKillScore: number;
 }
 
 export const DEFAULT_SCORE_CONFIG: ScoreConfig = {
@@ -19,8 +17,7 @@ export const DEFAULT_SCORE_CONFIG: ScoreConfig = {
   multiplierStep: 0.1,
   maxMultiplier: 5,
   minMultiplier: 1,
-  baseKillScore: 10,
-  bossKillScore: 500
+  baseKillScore: 10
 };
 
 export function resolveScoreConfig(overrides?: Partial<ScoreConfig>): ScoreConfig {

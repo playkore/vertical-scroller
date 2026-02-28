@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-10',
   name: 'FINAL GAUNTLET',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 3.6,
     interWaveDelaySeconds: 3

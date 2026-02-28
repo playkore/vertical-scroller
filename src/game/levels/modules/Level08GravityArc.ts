@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-08',
   name: 'GRAVITY ARC',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 3.3,
     interWaveDelaySeconds: 3

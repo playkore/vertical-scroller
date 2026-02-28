@@ -69,7 +69,7 @@ export class ScoreDirector {
     this.refreshHud();
   }
 
-  onEnemyKilled(_enemyType: string, isBoss: boolean) {
+  onEnemyKilled() {
     this.chainCount = this.chainTimerMs > 0 ? this.chainCount + 1 : 1;
     this.chainTimerMs = this.config.chainWindowMs;
     this.multiplier = Phaser.Math.Clamp(
@@ -78,8 +78,7 @@ export class ScoreDirector {
       this.config.maxMultiplier
     );
 
-    const baseScore = isBoss ? this.config.bossKillScore : this.config.baseKillScore;
-    this.score += Math.floor(baseScore);
+    this.score += Math.floor(this.config.baseKillScore);
     this.maxMultiplier = Math.max(this.maxMultiplier, this.multiplier);
     this.maxChainCount = Math.max(this.maxChainCount, this.chainCount);
 

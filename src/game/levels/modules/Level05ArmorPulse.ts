@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-05',
   name: 'ARMOR PULSE',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 2.8,
     interWaveDelaySeconds: 3

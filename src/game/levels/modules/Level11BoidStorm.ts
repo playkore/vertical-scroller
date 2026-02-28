@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-11',
   name: 'BOID STORM',
-  bossId: null,
   waveMode: {
     spawnRatePerSecond: 2.2,
     interWaveDelaySeconds: 2

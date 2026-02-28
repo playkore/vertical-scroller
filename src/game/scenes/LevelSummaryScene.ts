@@ -30,12 +30,10 @@ export class LevelSummaryScene extends Phaser.Scene {
     levelId: '',
     score: 0,
     enemiesDestroyed: 0,
-    bossesDefeated: 0,
     hitsTaken: 0,
     maxMultiplier: 1,
     maxChainCount: 0,
     durationMs: 0,
-    bossConfigured: false,
     enemiesSpawned: 0,
     perfectKillThreshold: 1
   };
@@ -81,18 +79,17 @@ export class LevelSummaryScene extends Phaser.Scene {
     this.addSummaryLine('SCORE', this.stats.score.toString().padStart(5, '0'), 0.30);
     this.addSummaryLine('RANK', persisted.rank, 0.34);
     this.addSummaryLine('ENEMIES', String(this.stats.enemiesDestroyed), 0.38);
-    this.addSummaryLine('BOSSES', String(this.stats.bossesDefeated), 0.42);
-    this.addSummaryLine('HITS TAKEN', String(this.stats.hitsTaken), 0.46);
-    this.addSummaryLine('MAX MULTI', `x${this.stats.maxMultiplier.toFixed(1)}`, 0.50);
-    this.addSummaryLine('MAX CHAIN', String(this.stats.maxChainCount), 0.54);
+    this.addSummaryLine('HITS TAKEN', String(this.stats.hitsTaken), 0.42);
+    this.addSummaryLine('MAX MULTI', `x${this.stats.maxMultiplier.toFixed(1)}`, 0.46);
+    this.addSummaryLine('MAX CHAIN', String(this.stats.maxChainCount), 0.50);
 
-    this.addSummaryLine('PB SCORE', pb.bestScore.toString().padStart(5, '0'), 0.60);
-    this.addSummaryLine('PB RANK', pb.bestRank, 0.64);
+    this.addSummaryLine('PB SCORE', pb.bestScore.toString().padStart(5, '0'), 0.56);
+    this.addSummaryLine('PB RANK', pb.bestRank, 0.60);
 
     this.add
       .text(
         this.scale.width * 0.5,
-        this.scale.height * 0.71,
+        this.scale.height * 0.67,
         persisted.isNewRecord ? 'NEW RECORD!' : 'NO NEW RECORD',
         {
           fontFamily: 'Courier New, monospace',
@@ -108,21 +105,21 @@ export class LevelSummaryScene extends Phaser.Scene {
       persisted.updatedAchievements.noHit,
       persisted.unlockedAchievements.includes('noHit'),
       0.33,
-      0.78
+      0.74
     );
     this.addAchievementBadge(
       'PERFECT',
       persisted.updatedAchievements.perfect,
       persisted.unlockedAchievements.includes('perfect'),
       0.67,
-      0.78
+      0.74
     );
 
     this.buttons = [
       new MenuButton(this, {
         label: 'NEXT LEVEL',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.86,
+        y: this.scale.height * 0.84,
         width: 145,
         height: 32,
         enabled: Boolean(this.nextLevelId),
@@ -137,7 +134,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'RETRY LEVEL',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.86,
+        y: this.scale.height * 0.84,
         width: 145,
         height: 32,
         enabled: true,
@@ -148,7 +145,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'LEVEL SELECT',
         x: this.scale.width * 0.28,
-        y: this.scale.height * 0.93,
+        y: this.scale.height * 0.91,
         width: 145,
         height: 32,
         enabled: true,
@@ -159,7 +156,7 @@ export class LevelSummaryScene extends Phaser.Scene {
       new MenuButton(this, {
         label: 'MAIN MENU',
         x: this.scale.width * 0.72,
-        y: this.scale.height * 0.93,
+        y: this.scale.height * 0.91,
         width: 145,
         height: 32,
         enabled: true,

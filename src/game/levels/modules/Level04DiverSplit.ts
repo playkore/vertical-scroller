@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-04',
   name: 'DIVER SPLIT',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 2.6,
     interWaveDelaySeconds: 3

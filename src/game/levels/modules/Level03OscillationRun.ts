@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-03',
   name: 'OSCILLATION RUN',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 2.5,
     interWaveDelaySeconds: 3

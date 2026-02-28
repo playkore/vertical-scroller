@@ -1,7 +1,5 @@
 import Phaser from 'phaser';
-import { BossSpawner } from './BossSpawner';
 import { EnemySpawner } from './EnemySpawner';
-import { getBossById } from '../bosses/BossRegistry';
 import { getEnemyById } from '../enemies/EnemyRegistry';
 import { LevelDefinition, LevelPhase } from '../levels/LevelDefinition';
 import { getPlayfieldBounds } from '../layout/Playfield';
@@ -12,8 +10,6 @@ export class LevelDirector {
   private elapsedSeconds = 0;
   // Countdown until the next enemy roll is allowed in the active phase.
   private spawnCooldown = 0;
-  // Prevents repeated boss deployment after timeline completion.
-  private bossSpawned = false;
   private levelComplete = false;
   private enemiesSpawned = 0;
 
@@ -23,7 +19,6 @@ export class LevelDirector {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly enemySpawner: EnemySpawner,
-    private readonly bossSpawner: BossSpawner,
     private readonly level: LevelDefinition
   ) {
     const bounds = getPlayfieldBounds(this.scene.scale.width, this.scene.scale.height);
@@ -47,28 +42,20 @@ export class LevelDirector {
       .setScrollFactor(0);
   }
 
-  // Advances level pacing, handles phased spawns, and triggers boss handoff.
+  // Advances level pacing and handles phased spawns.
   update(deltaSeconds: number) {
     const durationSeconds = this.level.durationSeconds ?? 0;
     if (this.levelComplete) {
       return;
     }
 
-    if (this.bossSpawned) {
-      // Once boss is deployed, all regular wave spawning is paused.
-      if (!this.bossSpawner.hasActiveBoss()) {
-        this.levelComplete = true;
-        this.statusText.setText('LEVEL CLEAR');
-      }
-      return;
-    }
-
     this.elapsedSeconds += deltaSeconds;
 
-    // End of wave timeline: lock waves and deploy boss once.
+    // End of wave timeline: lock waves and finish the level.
     if (this.elapsedSeconds >= durationSeconds) {
       this.elapsedSeconds = durationSeconds;
-      this.spawnBossIfConfigured();
+      this.levelComplete = true;
+      this.statusText.setText('LEVEL CLEAR');
       return;
     }
 
@@ -114,20 +101,6 @@ export class LevelDirector {
   destroy() {
     this.levelText.destroy();
     this.statusText.destroy();
-  }
-
-  private spawnBossIfConfigured() {
-    this.bossSpawned = true;
-
-    if (!this.level.bossId) {
-      this.levelComplete = true;
-      this.statusText.setText('LEVEL CLEAR');
-      return;
-    }
-
-    const boss = getBossById(this.level.bossId);
-    this.bossSpawner.spawnBoss(boss);
-    this.statusText.setText('BOSS ALERT');
   }
 
   private getActivePhase(elapsedSeconds: number): LevelPhase | null {

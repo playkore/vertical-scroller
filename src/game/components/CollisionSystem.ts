@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { BossShip } from '../objects/BossShip';
 import { EnemyShip } from '../objects/EnemyShip';
 import { PlayerShip } from '../objects/PlayerShip';
 import { PowerupPickup } from '../objects/PowerupPickup';
@@ -9,7 +8,6 @@ import { ScoreDirector } from './ScoreDirector';
 export class CollisionSystem {
   private stats = {
     enemiesDestroyed: 0,
-    bossesDefeated: 0,
     hitsTaken: 0
   };
 
@@ -19,7 +17,6 @@ export class CollisionSystem {
     private readonly scoreDirector: ScoreDirector,
     bullets: Phaser.Physics.Arcade.Group,
     enemies: Phaser.Physics.Arcade.Group,
-    bosses: Phaser.Physics.Arcade.Group,
     powerups: Phaser.Physics.Arcade.Group,
     private readonly onEnemyKilled?: (x: number, y: number) => void,
     private readonly onEnemyRemoved?: () => void
@@ -37,26 +34,8 @@ export class CollisionSystem {
         const defeated = enemy.takeHit(1);
         if (defeated) {
           this.stats.enemiesDestroyed += 1;
-          this.scoreDirector.onEnemyKilled('wave', false);
+          this.scoreDirector.onEnemyKilled();
           this.onEnemyKilled?.(dropX, dropY);
-        }
-      },
-      undefined,
-      this
-    );
-
-    this.scene.physics.add.overlap(
-      bullets,
-      bosses,
-      (bulletObj, bossObj) => {
-        const bullet = bulletObj as Phaser.Physics.Arcade.Image;
-        const boss = bossObj as BossShip;
-
-        bullet.disableBody(true, true);
-        const defeated = boss.takeHit(1);
-        if (defeated) {
-          this.stats.bossesDefeated += 1;
-          this.scoreDirector.onEnemyKilled('boss', true);
         }
       },
       undefined,
@@ -70,16 +49,6 @@ export class CollisionSystem {
         const enemy = enemyObj as EnemyShip;
         enemy.despawn();
         this.onEnemyRemoved?.();
-        this.onPlayerHit();
-      },
-      undefined,
-      this
-    );
-
-    this.scene.physics.add.overlap(
-      this.player,
-      bosses,
-      () => {
         this.onPlayerHit();
       },
       undefined,
@@ -103,7 +72,6 @@ export class CollisionSystem {
     return {
       score: this.scoreDirector.getScore(),
       enemiesDestroyed: this.stats.enemiesDestroyed,
-      bossesDefeated: this.stats.bossesDefeated,
       hitsTaken: this.stats.hitsTaken,
       maxMultiplier: this.scoreDirector.getMaxMultiplier(),
       maxChainCount: this.scoreDirector.getMaxChainCount()

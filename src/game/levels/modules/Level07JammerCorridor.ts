@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-07',
   name: 'JAMMER CORRIDOR',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 3.2,
     interWaveDelaySeconds: 3

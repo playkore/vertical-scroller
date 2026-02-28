@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-01',
   name: 'NEON FRONTIER',
-  bossId: 'boss-alpha-core',
   perfectKillThreshold: 1,
   waveMode: {
     spawnRatePerSecond: 1.8,

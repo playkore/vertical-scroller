@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-02',
   name: 'HUNTER WAKE',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 2.1,
     interWaveDelaySeconds: 3

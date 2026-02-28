@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { BOSS_REGISTRY } from '../bosses/BossRegistry';
 import { ENEMY_REGISTRY } from '../enemies/EnemyRegistry';
 import { POWERUP_REGISTRY } from '../powerups/PowerupRegistry';
 import { SHIP_REGISTRY } from '../ships/ShipRegistry';
@@ -13,7 +12,6 @@ export class BootScene extends Phaser.Scene {
   create() {
     this.createShipAssets();
     this.createEnemyAssets();
-    this.createBossAssets();
     this.createPowerupAssets();
     this.createStarTextures();
 
@@ -29,12 +27,6 @@ export class BootScene extends Phaser.Scene {
   private createEnemyAssets() {
     ENEMY_REGISTRY.forEach((enemy) => {
       enemy.registerAssets(this);
-    });
-  }
-
-  private createBossAssets() {
-    BOSS_REGISTRY.forEach((boss) => {
-      boss.registerAssets(this);
     });
   }
 

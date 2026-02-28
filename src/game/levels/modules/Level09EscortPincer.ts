@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-09',
   name: 'ESCORT PINCER',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 3.4,
     interWaveDelaySeconds: 3

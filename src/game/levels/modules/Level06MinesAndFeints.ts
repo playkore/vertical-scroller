@@ -3,7 +3,6 @@ import { LevelDefinition } from '../LevelDefinition';
 export const levelModule: LevelDefinition = {
   id: 'level-06',
   name: 'MINES AND FEINTS',
-  bossId: 'boss-alpha-core',
   waveMode: {
     spawnRatePerSecond: 3,
     interWaveDelaySeconds: 3

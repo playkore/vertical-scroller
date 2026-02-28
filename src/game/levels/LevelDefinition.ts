@@ -5,7 +5,7 @@ import type { ScoreConfig } from '../stats/ScoreConfig';
 export type LevelWaveMode = {
   // Enemies spawned per second while the current wave is still dequeuing.
   spawnRatePerSecond: number;
-  // Pause between clearing a wave and starting the next one (or boss).
+  // Pause between clearing a wave and starting the next one.
   interWaveDelaySeconds: number;
 };
 
@@ -71,10 +71,8 @@ export interface LevelDefinition {
   id: string;
   // Human-readable name shown in HUD/menu UI.
   name: string;
-  // Optional boss id spawned when timeline reaches duration.
-  bossId: string | null;
   // Minimum share of spawned wave enemies that must be destroyed for a perfect clear.
-  // Use null to ignore kill coverage and require only no-hit + boss clear.
+  // Use null to ignore kill coverage and require only a no-hit run.
   perfectKillThreshold?: number | null;
   // Optional score-chain tuning override applied on top of the global defaults.
   scoreConfig?: Partial<ScoreConfig>;

@@ -2,7 +2,6 @@
 export interface LevelStats {
   score: number;
   enemiesDestroyed: number;
-  bossesDefeated: number;
   hitsTaken: number;
   maxMultiplier: number;
   maxChainCount: number;
@@ -12,7 +11,6 @@ export interface LevelStats {
 export interface LevelRunSummaryData extends LevelStats {
   levelId: string;
   durationMs: number;
-  bossConfigured: boolean;
   enemiesSpawned: number;
   perfectKillThreshold: number | null;
 }

@@ -19,11 +19,9 @@ export interface LevelResult {
   score: number;
   hitsTaken: number;
   enemiesDestroyed: number;
-  bossesDefeated: number;
   maxMultiplier: number;
   maxChainCount: number;
   durationMs: number;
-  bossConfigured: boolean;
   enemiesSpawned: number;
   perfectKillThreshold: number | null;
 }
@@ -34,7 +32,6 @@ export interface StoredBestRun {
   rank: Rank;
   hitsTaken: number;
   enemiesDestroyed: number;
-  bossesDefeated: number;
   durationMs: number;
   endedAtIso: string;
 }
@@ -78,7 +75,7 @@ const DEFAULT_PROGRESS: PlayerProgress = {
   levels: {}
 };
 
-export function calculateRank(result: Pick<LevelResult, 'hitsTaken' | 'bossConfigured' | 'bossesDefeated'>): Rank {
+export function calculateRank(result: Pick<LevelResult, 'hitsTaken'>): Rank {
   let rank: Rank;
 
   if (result.hitsTaken === 0) {
@@ -91,10 +88,6 @@ export function calculateRank(result: Pick<LevelResult, 'hitsTaken' | 'bossConfi
     rank = 'C';
   } else {
     rank = 'D';
-  }
-
-  if (result.bossConfigured && result.bossesDefeated === 0 && compareRanks(rank, 'C') < 0) {
-    return 'C';
   }
 
   return rank;
@@ -143,7 +136,6 @@ export function saveLevelResult(result: LevelResult): PersistedRunResult {
     rank,
     hitsTaken: result.hitsTaken,
     enemiesDestroyed: result.enemiesDestroyed,
-    bossesDefeated: result.bossesDefeated,
     durationMs: result.durationMs,
     endedAtIso
   };
@@ -228,12 +220,11 @@ function rankToScore(rank: Rank): number {
 
 function calculateAchievements(result: LevelResult): Record<AchievementCode, boolean> {
   const noHit = result.hitsTaken === 0;
-  const bossClearSatisfied = !result.bossConfigured || result.bossesDefeated > 0;
   const killThresholdSatisfied = isPerfectKillThresholdSatisfied(result);
 
   return {
     noHit,
-    perfect: noHit && bossClearSatisfied && killThresholdSatisfied
+    perfect: noHit && killThresholdSatisfied
   };
 }
 
@@ -279,7 +270,6 @@ function sanitizeProgress(progress: PlayerProgress): PlayerProgress {
         rank: levelRecord.bestRun.rank,
         hitsTaken: Number(levelRecord.bestRun.hitsTaken) || 0,
         enemiesDestroyed: Number(levelRecord.bestRun.enemiesDestroyed) || 0,
-        bossesDefeated: Number(levelRecord.bestRun.bossesDefeated) || 0,
         durationMs: Number(levelRecord.bestRun.durationMs) || 0,
         endedAtIso: String(levelRecord.bestRun.endedAtIso || '')
       },
